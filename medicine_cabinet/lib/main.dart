@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/widget_library/schedule_row.dart';
+import 'package:medicine_cabinet/detail_page.dart';
+import 'package:medicine_cabinet/profile.dart';
+import 'package:medicine_cabinet/widgets/chip_filter.dart';
+import 'package:medicine_cabinet/widgets/drug_grid_item.dart';
+import 'package:medicine_cabinet/widgets/search_bar.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,9 +15,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Not Demo Home Page'),
+          primaryColor: Color(0xff06BCC1),
+          primaryColorDark: Color(0xff12263A),
+          primarySwatch: Colors.teal,
+          iconTheme: IconThemeData(color: Colors.white)),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -28,39 +34,124 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ScheduleRow(),
-            ScheduleRow(),
-            Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(child: Text("Menu")),
+            ListTile(
+              title: Text("Profile"),
+              onTap: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Profile())),
             ),
+            ListTile(
+              title: Text("Schedule"),
+              onTap: () {},
+            )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            floating: true,
+            flexibleSpace: const FlexibleSpaceBar(
+              centerTitle: true,
+              title: Text(
+                "Home cabinet",
+                textScaleFactor: 1.23,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            expandedHeight: 120,
+            collapsedHeight: 60,
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              padding: EdgeInsets.zero,
+              height: 150,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).primaryColor,
+                    blurRadius: 0,
+                    spreadRadius: 0,
+                    offset: Offset(0, -2),
+                  )
+                ],
+              ),
+              child: Column(
+                children: [
+                  SearchBar(),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    child: SizedBox(
+                      height: 60,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          ChipFilter(name: "Filter"),
+                          ChipFilter(name: "Filter"),
+                          ChipFilter(name: "Filter"),
+                          ChipFilter(name: "Filter"),
+                          ChipFilter(name: "Filter"),
+                          ChipFilter(name: "Filter"),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.all(15),
+            sliver: SliverGrid.count(
+              crossAxisCount: 2,
+              childAspectRatio: 1.1,
+              crossAxisSpacing: 15,
+              mainAxisSpacing: 15,
+              children: [
+                DrugGridItem(),
+                DrugGridItem(),
+                DrugGridItem(),
+                DrugGridItem(),
+                DrugGridItem(),
+                DrugGridItem(),
+                DrugGridItem(),
+                DrugGridItem(),
+                DrugGridItem(),
+                DrugGridItem(),
+                DrugGridItem(),
+                DrugGridItem(),
+              ],
+            ),
+          ),
+        ],
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {},
+        backgroundColor: Theme.of(context).primaryColor,
+        tooltip: 'Add medication',
+        icon: Icon(
+          Icons.add,
+          size: 30,
+        ),
+        label: Text(
+          "Add",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
