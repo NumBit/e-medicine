@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/page/medicine_cabinet_page.dart';
+import 'cabinet/medicine_cabinet_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
