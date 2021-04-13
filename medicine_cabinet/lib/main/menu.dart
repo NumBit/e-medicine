@@ -17,7 +17,7 @@ class Menu extends StatelessWidget {
           ),
           ListTile(
             title: Text("Schedule"),
-            onTap: () => Navigator.pushNamed(context, "/schedule"),,
+            onTap: () => Navigator.pushNamed(context, "/schedule"),
           ),
           ListTile(
             title: Text("Login"),
