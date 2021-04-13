@@ -11,4 +11,11 @@ class UserCubit extends Cubit<UserState> {
     final newAuth = UserState(auth);
     emit(newAuth);
   }
+  /*
+  void register(auth,email, password) {
+    emit(UserState(auth)
+        .auth
+        .signInWithEmailAndPassword(email: email, password: password));
+  }
+  */
 }
