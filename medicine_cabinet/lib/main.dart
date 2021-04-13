@@ -1,11 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/detail_page.dart';
+import 'package:medicine_cabinet/page/login.dart';
 import 'package:medicine_cabinet/profile.dart';
 import 'package:medicine_cabinet/widgets/chip_filter.dart';
 import 'package:medicine_cabinet/widgets/drug_grid_item.dart';
 import 'package:medicine_cabinet/widgets/search_bar.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -49,6 +51,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               title: Text("Schedule"),
               onTap: () {},
+            ),
+            ListTile(
+              title: Text("Login - Test"),
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Login())), //Login()
             )
           ],
         ),
