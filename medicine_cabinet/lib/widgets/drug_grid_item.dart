@@ -27,13 +27,10 @@ class DrugGridItem extends StatelessWidget {
               children: [
                 Container(
                     child: Center(
-                  child: Hero(
-                    tag: "icon",
-                    child: Icon(
-                      Icons.medical_services_outlined,
-                      color: Color(0xff12263a),
-                      size: 50,
-                    ),
+                  child: Icon(
+                    Icons.medical_services_outlined,
+                    color: Color(0xff12263a),
+                    size: 50,
                   ),
                 )),
                 Container(
