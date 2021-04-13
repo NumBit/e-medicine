@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/drug/drug_detail_page.dart';
+import 'package:medicine_cabinet/profile/login_page.dart';
+import 'package:medicine_cabinet/profile/profile_page.dart';
 import 'cabinet/medicine_cabinet_page.dart';
 
 void main() {
@@ -16,7 +19,13 @@ class MyApp extends StatelessWidget {
           primaryColorDark: Color(0xff12263A),
           primarySwatch: Colors.teal,
           iconTheme: IconThemeData(color: Colors.white)),
-      home: MedicineCabinetPage(),
+      initialRoute: "/",
+      routes: {
+        "/": (context) => MedicineCabinetPage(),
+        "/login": (context) => LoginPage(),
+        "/profile": (context) => ProfilePage(),
+        "/drug": (context) => DrugDetailPage(),
+      },
     );
   }
 }
