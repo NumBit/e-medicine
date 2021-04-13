@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Profile extends StatelessWidget {
+class ProfilePage extends StatelessWidget {
   final String name;
   final String email;
   final int cabinets;
   final int drugs;
   final int pills;
 
-  const Profile({
+  const ProfilePage({
     Key key,
     this.name = "John Oliviers",
     this.email = "oliverjohn@mail.com",

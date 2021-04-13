@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/cubit/user_cubit.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterForm extends StatelessWidget {
   final FirebaseAuth auth;

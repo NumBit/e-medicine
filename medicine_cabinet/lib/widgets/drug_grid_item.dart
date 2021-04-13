@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../detail_page.dart';
+import 'package:medicine_cabinet/page/drug_detail_page.dart';
 
 class DrugGridItem extends StatelessWidget {
   final String name = "Paralen ultra deluxe";
@@ -68,7 +67,7 @@ class DrugGridItem extends StatelessWidget {
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (BuildContext context) => DetailPage(
+                      builder: (BuildContext context) => DrugDetailPage(
                             name: name,
                           ))),
             ),

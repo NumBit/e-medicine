@@ -1,16 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:expandable_text/expandable_text.dart';
 import 'package:medicine_cabinet/widgets/description.dart';
 
-class DetailPage extends StatelessWidget {
+class DrugDetailPage extends StatelessWidget {
   final String name;
   final String chemical;
   final List<String> categories;
   final List<String> dosages;
   final String description =
       "Nam ultricies metus ut dolor hendrerit, sit amet volutpat justo hendrerit. Aenean pretium, massa eget varius sagittis, mi lorem malesuada turpis, id ultricies purus erat at arcu. Proin egestas risus non ex faucibus interdum. Ut sagittis magna at ex ullamcorper, sed varius lorem condimentum. Nunc dignissim velit gravida rhoncus feugiat. Mauris ligula tortor, ornare dapibus efficitur a, fringilla nec neque. Pellentesque vel ante odio. Duis efficitur malesuada tempor. Aliquam maximus, libero bibendum tristique fermentum, quam metus maximus elit, ut fermentum magna turpis vel urna. Mauris non metus augue. Mauris lectus massa, sodales non lacus id, sollicitudin semper felis. Donec porta leo quis diam hendrerit, sed bibendum arcu scelerisque.";
-  const DetailPage({
+  const DrugDetailPage({
     Key key,
     this.name = "Paralen",
     this.chemical = "Paracetamol",
@@ -43,79 +42,70 @@ class DetailPage extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate([
               Container(
-                height: MediaQuery.of(context).size.height * 0.30,
+                height: MediaQuery.of(context).size.height * 0.35,
                 color: Colors.white,
-                child: Column(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              child: Text(
-                                name,
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.w300),
-                              ),
+                        /*SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: Text(
+                            name,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 30,
+                                fontWeight: FontWeight.w300),
+                          ),
+                        ),*/
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: Text(
+                            chemical,
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w200,
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              child: Text(
-                                chemical,
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w200,
-                                ),
-                              ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: Wrap(
+                              spacing: 5,
+                              direction: Axis.horizontal,
+                              children: categories
+                                  .map((category) => Container(
+                                        child: Chip(
+                                          elevation: 5,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          backgroundColor: Theme.of(context)
+                                              .primaryColorDark,
+                                          label: Text(
+                                            category,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10.0),
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                child: Wrap(
-                                  spacing: 5,
-                                  direction: Axis.horizontal,
-                                  children: categories
-                                      .map((category) => Container(
-                                            child: Chip(
-                                              elevation: 5,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              backgroundColor: Theme.of(context)
-                                                  .primaryColorDark,
-                                              label: Text(
-                                                category,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                          ))
-                                      .toList(),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        Icon(
-                          Icons.medical_services_outlined,
-                          color: Color(0xff12263a),
-                          size: 100,
-                        ),
+                          ),
+                        )
                       ],
                     ),
-                    Container(
-                      color: Theme.of(context).primaryColor,
+                    Icon(
+                      Icons.medical_services_outlined,
+                      color: Color(0xff12263a),
+                      size: 100,
                     ),
                   ],
                 ),
