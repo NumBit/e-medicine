@@ -75,7 +75,6 @@ class MedicineCabinetPage extends StatelessWidget {
             padding: EdgeInsets.all(15),
             sliver: SliverGrid.count(
               crossAxisCount: 2,
-              childAspectRatio: 1.1,
               crossAxisSpacing: 15,
               mainAxisSpacing: 15,
               children: [
