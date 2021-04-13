@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "76806700303",
+    "project_id": "e-medicine-3338c",
+    "storage_bucket": "e-medicine-3338c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:76806700303:android:9902bff8f04a288ad5927a",
+        "android_client_info": {
+          "package_name": "cz.pbmm.emedicine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "76806700303-s7dsi5hf107139hsm9ipqv5cbb7t80hf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZRO8eDb_LXSZToMdasosJrqsS8BZCF3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "76806700303-s7dsi5hf107139hsm9ipqv5cbb7t80hf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
