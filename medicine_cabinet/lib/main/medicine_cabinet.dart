@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/cabinet/medicine_cabinet_page.dart';
 import 'package:medicine_cabinet/drug/drug_detail_page.dart';
+import 'package:medicine_cabinet/experiment/experiment_page.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
 import 'package:medicine_cabinet/profile/profile_page.dart';
 
@@ -24,6 +25,7 @@ class MedicineCabinet extends StatelessWidget {
         "/login": (context) => LoginPage(),
         "/profile": (context) => ProfilePage(),
         "/drug": (context) => DrugDetailPage(),
+        "/experiment": (context) => ExperimentPage(),
       },
     );
   }

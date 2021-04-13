@@ -1,16 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
-  final String name;
-  final String email;
   final int cabinets;
   final int drugs;
   final int pills;
 
   const ProfilePage({
     Key key,
-    this.name = "John Oliviers",
-    this.email = "oliverjohn@mail.com",
     this.cabinets = 3,
     this.drugs = 21,
     this.pills = 190,
@@ -48,7 +45,6 @@ class ProfilePage extends StatelessWidget {
               ),
               color: Colors.white,
             ),
-            height: MediaQuery.of(context).size.height * 0.55,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -77,20 +73,11 @@ class ProfilePage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Text(
-                    name,
+                    FirebaseAuth.instance.currentUser.email,
                     textScaleFactor: 1.2,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).primaryColorDark),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Text(
-                    email,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColorDark,
-                    ),
                   ),
                 ),
                 Padding(
@@ -103,7 +90,7 @@ class ProfilePage extends StatelessWidget {
                       _getColumn(context, "Pills", pills),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'error/error_page.dart';
 import 'error/loading_page.dart';
-import 'medicine_cabinet.dart';
+import 'main/medicine_cabinet.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
