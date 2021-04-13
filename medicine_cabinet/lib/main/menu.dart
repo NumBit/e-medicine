@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
 import 'package:medicine_cabinet/profile/profile_page.dart';
+import 'package:medicine_cabinet/schedule/schedule_page.dart';
 
 class Menu extends StatelessWidget {
   const Menu({
@@ -20,7 +21,8 @@ class Menu extends StatelessWidget {
           ),
           ListTile(
             title: Text("Schedule"),
-            onTap: () {},
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => SchedulePage())),
           ),
           ListTile(
             title: Text("Login"),
