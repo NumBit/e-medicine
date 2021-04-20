@@ -10,7 +10,7 @@ class LoadingPage extends StatelessWidget {
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
-              title: Text('Something went wrong'),
+              title: Text('Please wait'),
             ),
             body: Center(
               child: Padding(
