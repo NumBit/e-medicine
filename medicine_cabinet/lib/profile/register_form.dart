@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/main/snack_bar_message.dart';
 
 class RegisterForm extends StatelessWidget {
   const RegisterForm();
@@ -48,11 +49,11 @@ class RegisterForm extends StatelessWidget {
 
 void _register(context, String email, String pass, String passSecond) async {
   if (email.isEmpty || pass.isEmpty || passSecond.isEmpty) {
-    _displaySnackBarMessage(context, "Empty field!");
+    snackBarMessage(context, "Empty field!");
     return;
   }
   if (pass != passSecond) {
-    _displaySnackBarMessage(context, "Passwords are not same!");
+    snackBarMessage(context, "Passwords are not same!");
     return;
   }
   try {
@@ -60,25 +61,16 @@ void _register(context, String email, String pass, String passSecond) async {
         .createUserWithEmailAndPassword(email: email, password: pass);
   } on FirebaseAuthException catch (e) {
     if (e.code == "weak-password") {
-      _displaySnackBarMessage(context, "The password provided is too weak.");
+      snackBarMessage(context, "The password provided is too weak.");
       return;
     } else if (e.code == "email-already-in-use") {
-      _displaySnackBarMessage(
-          context, "The account already exists for that email.");
+      snackBarMessage(context, "The account already exists for that email.");
       return;
     }
   } catch (e) {
     print(e);
-    _displaySnackBarMessage(context, "Unknown error occured.");
+    snackBarMessage(context, "Unknown error occured.");
     return;
   }
-  _displaySnackBarMessage(context, "Account created.");
-}
-
-void _displaySnackBarMessage(context, String message) {
-  final snackBar = SnackBar(
-    content: Text(message),
-    duration: Duration(seconds: 5),
-  );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  snackBarMessage(context, "Account created.");
 }
