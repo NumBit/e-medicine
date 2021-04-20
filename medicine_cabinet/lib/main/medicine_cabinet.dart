@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/cabinet/medicine_cabinet_page.dart';
+import 'package:medicine_cabinet/cabinets/cabinets_list_page.dart';
 import 'package:medicine_cabinet/drug/drug_detail_page.dart';
 import 'package:medicine_cabinet/experiment/experiment_page.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
@@ -28,6 +29,7 @@ class MedicineCabinet extends StatelessWidget {
         "/drug": (context) => DrugDetailPage(),
         "/schedule": (context) => SchedulePage(),
         "/experiment": (context) => ExperimentPage(),
+        "/cabinets_list": (context) => CabinetsListPage(),
       },
     );
   }
