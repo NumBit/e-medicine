@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'description.dart';
+import 'description_scroll_list.dart';
+import 'drug_header.dart';
 
 class DrugDetailPage extends StatelessWidget {
   final String name;
@@ -22,194 +23,13 @@ class DrugDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Theme.of(context).primaryColor,
-        child: CustomScrollView(slivers: [
-          SliverAppBar(
-            pinned: true,
-            //floating: true,
-            //snap: true,
-
-            title: Text(
-              name,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 30,
-                  fontWeight: FontWeight.w300),
-            ),
-            backgroundColor: Colors.white,
-            flexibleSpace: FlexibleSpaceBar(),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              Container(
-                height: MediaQuery.of(context).size.height * 0.35,
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        /*SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          child: Text(
-                            name,
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 30,
-                                fontWeight: FontWeight.w300),
-                          ),
-                        ),*/
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          child: Text(
-                            chemical,
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w200,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            child: Wrap(
-                              spacing: 5,
-                              direction: Axis.horizontal,
-                              children: categories
-                                  .map((category) => Container(
-                                        child: Chip(
-                                          elevation: 5,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          backgroundColor: Theme.of(context)
-                                              .primaryColorDark,
-                                          label: Text(
-                                            category,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ))
-                                  .toList(),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Icon(
-                      Icons.medical_services_outlined,
-                      color: Color(0xff12263a),
-                      size: 100,
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                color: Colors.white,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context).primaryColor,
-                        blurRadius: 0.0,
-                        spreadRadius: 0.0,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                      padding: const EdgeInsets.fromLTRB(25, 20, 25, 20),
-                      child: Description(
-                        description: description,
-                      )),
-                ),
-              ),
-              Divider(
-                height: 20,
-                thickness: 5,
-                indent: 20,
-                endIndent: 20,
-              ),
-              ItemCard(),
-              ItemCard(),
-              ItemCard(),
-              ItemCard(),
-            ]),
-          )
-        ]),
-      ),
-    );
-  }
-}
-
-class ItemCard extends StatelessWidget {
-  const ItemCard({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ExpansionTile(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        color: Colors.white,
+        child: Stack(
           children: [
-            Text(
-              "50mg",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text("Exp. 12/2021"),
-            Text(
-              "40 ks",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            DrugHeader(chemical: chemical, categories: categories),
+            DescriptionScrollList(name: name, description: description),
           ],
         ),
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              InkWell(
-                onTap: () {},
-                borderRadius: BorderRadius.circular(50),
-                child: Icon(
-                  Icons.add,
-                  color: Colors.red,
-                  size: 50,
-                ),
-              ),
-              Text(
-                "40 Ks",
-                textScaleFactor: 1.8,
-              ),
-              InkWell(
-                borderRadius: BorderRadius.circular(50),
-                onTap: () {},
-                child: Icon(
-                  Icons.remove,
-                  color: Colors.black,
-                  size: 50,
-                ),
-              ),
-            ],
-          )
-        ],
       ),
     );
   }
