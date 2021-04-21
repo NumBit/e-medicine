@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/cabinet/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/cabinet_repository.dart';
 import 'package:medicine_cabinet/category/category_model.dart';
 import 'package:medicine_cabinet/category/category_repository.dart';
@@ -35,7 +36,7 @@ class ExperimentPage extends StatelessWidget {
               return Text("Loading");
             }
             return ListView(
-              children: snapshot.data.docs.map((DocumentSnapshot document) {
+              children: snapshot.data.docs.map((list) => list.data().map((doc) => CabinetModel.fromFirestore(doc)) {
                 return Container(
                   child: Column(
                     children: [
@@ -62,4 +63,7 @@ class ExperimentPage extends StatelessWidget {
       ),
     );
   }
+}
+
+class ( {
 }
