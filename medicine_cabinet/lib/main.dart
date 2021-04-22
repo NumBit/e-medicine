@@ -16,8 +16,6 @@ class MedicineCabinetApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
-
     return FutureBuilder(
       future: _initialization,
       builder: (context, snapshot) {

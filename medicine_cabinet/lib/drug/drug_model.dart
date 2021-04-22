@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:medicine_cabinet/firebase/model.dart';
 
-class DrugModel {
+class DrugModel extends Model {
   final String id;
   final String name;
   final String latinName;
@@ -17,6 +18,7 @@ class DrugModel {
         description = snapshot.data()["description"] ?? "",
         icon = snapshot.data()["icon"] ?? ""; //TODO default icon path
 
+  @override
   Map<String, dynamic> toJson() => {
         "name": name,
         "latin_name": latinName,
