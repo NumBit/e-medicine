@@ -14,16 +14,19 @@ class DetailAppBar extends StatelessWidget {
       pinned: true,
       floating: true,
       snap: true,
-      title: Text(
-        name,
-        textAlign: TextAlign.start,
-        style: TextStyle(
-            color: Theme.of(context).primaryColor,
-            fontSize: 30,
-            fontWeight: FontWeight.w300),
+      title: Tooltip(
+        message: name,
+        child: Text(
+          name,
+          textAlign: TextAlign.start,
+          overflow: TextOverflow.fade,
+          style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontWeight: FontWeight.w300,
+              fontSize: 30),
+        ),
       ),
       backgroundColor: Colors.white,
-      flexibleSpace: FlexibleSpaceBar(),
     );
   }
 }

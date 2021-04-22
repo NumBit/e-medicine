@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/cabinet/cabinet_model.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
-
-import 'cabinet_model.dart';
 
 class CabinetRepository {
   BuildContext context;
