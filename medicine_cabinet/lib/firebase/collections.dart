@@ -1,10 +1,10 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 
-//TODO
-
-class Global {
-  // App Data
-  static final String title = 'Fireship';
+class Collections {
+  // Collection names
+  static final String drugsCollection = "drugs";
+  static final String cabinetsCollection = "cabinets";
+  static final String categoriesCollection = "categories";
 
   // Services
   static final FirebaseAnalytics analytics = FirebaseAnalytics();

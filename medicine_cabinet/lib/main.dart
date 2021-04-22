@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -15,6 +16,8 @@ class MedicineCabinetApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
+
     return FutureBuilder(
       future: _initialization,
       builder: (context, snapshot) {

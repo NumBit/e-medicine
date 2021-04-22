@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/firebase/collections.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 
 import 'drug_model.dart';
@@ -11,34 +12,27 @@ class DrugRepository {
   DrugRepository(BuildContext context, String cabinetId) {
     this.context = context;
     this.collection = FirebaseFirestore.instance
-        .collection("cabinets")
+        .collection(Collections.cabinetsCollection)
         .doc(cabinetId)
-        .collection("drugs");
+        .collection(Collections.drugsCollection);
   }
 
   CollectionReference getCollection() {
     return collection;
   }
 
-  Future<void> add(String name) {
+  Future<void> add(DrugModel model) {
     return collection
-        .add({
-          'name': name,
-        })
+        .add(model.toJson())
         .then((value) => print("Operation success."))
         .catchError(
             (error) => snackBarMessage(context, "Something went wrong"));
   }
 
-  Future<void> update(String docId, DrugModel model) {
+  Future<void> update(DrugModel model) {
     return collection
-        .doc(docId)
-        .update({
-          "name": model.name,
-          "latin_name": model.latinName,
-          "description": model.description,
-          "icon": model.icon
-        })
+        .doc(model.id)
+        .update(model.toJson())
         .then((value) => print("Operation success."))
         .catchError(
             (error) => snackBarMessage(context, "Something went wrong"));

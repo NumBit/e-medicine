@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
+import 'package:medicine_cabinet/firebase/collections.dart';
 
 import 'category_model.dart';
 
@@ -11,9 +12,9 @@ class CategoryRepository {
   CategoryRepository(BuildContext context, String cabinetId) {
     this.context = context;
     this.collection = FirebaseFirestore.instance
-        .collection("cabinets")
+        .collection(Collections.cabinetsCollection)
         .doc(cabinetId)
-        .collection("categories");
+        .collection(Collections.categoriesCollection);
   }
 
   CollectionReference getCollection() {

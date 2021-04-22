@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
+import 'package:medicine_cabinet/firebase/collections.dart';
 
 import 'cabinet_model.dart';
 
@@ -12,7 +13,7 @@ class CabinetRepository {
   }
 
   CollectionReference collection =
-      FirebaseFirestore.instance.collection('cabinets');
+      FirebaseFirestore.instance.collection(Collections.cabinetsCollection);
 
   CollectionReference getCollection() {
     return collection;
