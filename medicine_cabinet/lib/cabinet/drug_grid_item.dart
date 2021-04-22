@@ -1,78 +1,62 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/drug/drug_detail_page.dart';
 
 class DrugGridItem extends StatelessWidget {
-  final String name = "Paralen ultra deluxe";
+  final String name = "Paralen ultra delddsgsdgdsgdsgdsg dgsd guxe";
   final Icon icon = Icon(Icons.medical_services_outlined);
   final List<String> categories = ["Fever"];
   final int count = 3;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return Card(
       elevation: 5,
-      borderRadius: BorderRadius.all(Radius.circular(20)),
-      child: Stack(
-        children: [
-          Container(
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                    child: Center(
-                  child: Icon(
-                    Icons.medical_services_outlined,
-                    color: Color(0xff12263a),
-                    size: 50,
-                  ),
-                )),
-                Container(
-                    child: Text(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: InkWell(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        onTap: () =>
+            Navigator.pushNamed(context, "drug_detail", arguments: name),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Center(
+                child: Icon(
+                  Icons.medical_services_outlined,
+                  color: Color(0xff12263a),
+                  size: 50,
+                ),
+              ),
+              Flexible(
+                child: Text(
                   name,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                   textScaleFactor: 1.5,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Color(0xff12263a),
                     fontWeight: FontWeight.w400,
                   ),
-                )),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          categories.first,
-                          textScaleFactor: 1.2,
-                        ),
-                      ),
-                      Container(child: getCounterText(count))
-                    ],
-                  ),
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      categories.first,
+                      textScaleFactor: 1.2,
+                    ),
+                    getCounterText(count)
+                  ],
+                ),
+              ),
+            ],
           ),
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => DrugDetailPage(
-                            name: name,
-                          ))),
-            ),
-          )
-        ],
+        ),
       ),
     );
   }

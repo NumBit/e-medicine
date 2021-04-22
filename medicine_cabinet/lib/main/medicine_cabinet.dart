@@ -30,6 +30,7 @@ class MedicineCabinet extends StatelessWidget {
         "/schedule": (context) => SchedulePage(),
         "/experiment": (context) => ExperimentPage(),
         "/cabinets_list": (context) => CabinetsListPage(),
+        "drug_detail": (context) => DrugDetailPage(),
       },
     );
   }

@@ -5,7 +5,6 @@ import 'description_scroll_list.dart';
 import 'drug_header.dart';
 
 class DrugDetailPage extends StatelessWidget {
-  final String name;
   final String chemical;
   final List<String> categories;
   final List<String> dosages;
@@ -13,7 +12,6 @@ class DrugDetailPage extends StatelessWidget {
       "Nam ultricies metus ut dolor hendrerit, sit amet volutpat justo hendrerit. Aenean pretium, massa eget varius sagittis, mi lorem malesuada turpis, id ultricies purus erat at arcu. Proin egestas risus non ex faucibus interdum. Ut sagittis magna at ex ullamcorper, sed varius lorem condimentum. Nunc dignissim velit gravida rhoncus feugiat. Mauris ligula tortor, ornare dapibus efficitur a, fringilla nec neque. Pellentesque vel ante odio. Duis efficitur malesuada tempor. Aliquam maximus, libero bibendum tristique fermentum, quam metus maximus elit, ut fermentum magna turpis vel urna. Mauris non metus augue. Mauris lectus massa, sodales non lacus id, sollicitudin semper felis. Donec porta leo quis diam hendrerit, sed bibendum arcu scelerisque.";
   const DrugDetailPage({
     Key key,
-    this.name = "Paralen",
     this.chemical = "Paracetamol",
     this.categories = const ["Fever", "Pain", "Pain", "Pain", "Pain"],
     this.dosages = const ["50mg", "100mg"],
@@ -21,6 +19,8 @@ class DrugDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String name =
+        ModalRoute.of(context).settings.arguments as String ?? "";
     return Scaffold(
       body: Container(
         color: Colors.white,
