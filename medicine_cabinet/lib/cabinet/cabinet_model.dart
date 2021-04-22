@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CabinetModel {
+  final String id;
   final String name;
-  CabinetModel({this.name});
 
-  factory CabinetModel.fromFirestore(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data();
+  CabinetModel({this.id = "", this.name});
 
-    return CabinetModel(
-      name: data['name'] ?? '',
-    );
-  }
+  CabinetModel.fromMap(QueryDocumentSnapshot snapshot)
+      : id = snapshot.id ?? "",
+        name = snapshot.data()["name"] ?? "";
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+      };
 }

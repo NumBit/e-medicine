@@ -20,20 +20,18 @@ class CategoryRepository {
     return collection;
   }
 
-  Future<void> add(String name) {
+  Future<void> add(CategoryModel model) {
     return collection
-        .add({
-          'name': name,
-        })
+        .add(model.toJson())
         .then((value) => print("Operation success."))
         .catchError(
             (error) => snackBarMessage(context, "Something went wrong"));
   }
 
-  Future<void> update(String docId, CategoryModel model) {
+  Future<void> update(CategoryModel model) {
     return collection
-        .doc(docId)
-        .update({"name": model.name})
+        .doc(model.id)
+        .update(model.toJson())
         .then((value) => print("Operation success."))
         .catchError(
             (error) => snackBarMessage(context, "Something went wrong"));

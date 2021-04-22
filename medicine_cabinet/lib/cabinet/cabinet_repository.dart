@@ -18,20 +18,22 @@ class CabinetRepository {
     return collection;
   }
 
-  Future<void> add(String name) {
+  Stream getStream() {
+    return collection.snapshots();
+  }
+
+  Future<void> add(CabinetModel model) {
     return collection
-        .add({
-          'name': name,
-        })
+        .add(model.toJson())
         .then((value) => print("Operation success."))
         .catchError(
             (error) => snackBarMessage(context, "Something went wrong"));
   }
 
-  Future<void> update(String docId, CabinetModel model) {
+  Future<void> update(CabinetModel model) {
     return collection
-        .doc(docId)
-        .update({"name": model.name})
+        .doc(model.id)
+        .update(model.toJson())
         .then((value) => print("Operation success."))
         .catchError(
             (error) => snackBarMessage(context, "Something went wrong"));
