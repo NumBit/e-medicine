@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -22,7 +23,17 @@ class MedicineCabinetApp extends StatelessWidget {
           return ErrorPage();
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          return MedicineCabinet();
+          print('neni loading');
+          FirebaseAuth.instance.authStateChanges().listen((User user) {
+            if (user == null) {
+              print('User is currently signed out!');
+              return Navigator.pushNamed(context, "/login");
+            } else {
+              print('User is signed in!');
+              return MedicineCabinet();
+              //return Navigator.pushNamed(context, "/");
+            }
+          });
         }
         return LoadingPage();
       },

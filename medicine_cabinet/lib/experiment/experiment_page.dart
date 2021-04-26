@@ -18,7 +18,8 @@ class ExperimentPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          CabinetRepository(context).add(CabinetModel(name: "Special Cab"));
+          //CabinetRepository(context).add(CabinetModel(name: "Special Cab"));
+          //UserRepository(context).add(UserModel())
         },
         label: const Icon(Icons.add),
       ),
@@ -34,11 +35,6 @@ class ExperimentPage extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Text("Loading");
             }
-            /*if (snapshot.hasData) {
-                cabinets = snapshot.data.docs
-                    .map((doc) => CabinetModel.fromMap(doc, doc.id))
-                    .toList();
-            }*/
             return ListView(
               children: snapshot.data.docs
                   .map((doc) => CabinetModel.fromMap(doc))

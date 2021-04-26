@@ -9,6 +9,7 @@ import 'package:medicine_cabinet/drug/drug_repository.dart';
 import 'package:medicine_cabinet/experiment/experiment_page.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
 import 'package:medicine_cabinet/profile/profile_page.dart';
+import 'package:medicine_cabinet/profile/register_page.dart';
 import 'package:medicine_cabinet/schedule/schedule_page.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +37,7 @@ class MedicineCabinet extends StatelessWidget {
               child: MedicineCabinetPage(),
             ),
         "/login": (context) => LoginPage(),
+        "/register": (context) => RegisterPage(),
         "/profile": (context) => ProfilePage(),
         "/drug": (context) => DrugDetailPage(),
         "/schedule": (context) => SchedulePage(),

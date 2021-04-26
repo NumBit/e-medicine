@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 
-class RegisterForm extends StatelessWidget {
-  const RegisterForm();
+class RegisterPage extends StatelessWidget {
+  const RegisterPage();
 
   @override
   Widget build(BuildContext context) {

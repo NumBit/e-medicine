@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/cabinet/search_bar.dart';
 import 'package:medicine_cabinet/drug/drug_model.dart';
 import 'package:medicine_cabinet/drug/drug_repository.dart';
 import 'package:medicine_cabinet/main/menu.dart';
+import 'package:medicine_cabinet/profile/register_page.dart';
 import 'package:provider/provider.dart';
 
 import 'chip_filter.dart';
@@ -15,6 +17,7 @@ class MedicineCabinetPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final id = "75KfFkAlO6ftGLpFJldV";
     var drugs = Provider.of<List<DrugModel>>(context);
+
     return Scaffold(
       drawer: Menu(),
       body: CustomScrollView(
