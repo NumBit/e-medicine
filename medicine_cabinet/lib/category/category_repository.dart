@@ -1,50 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/main/snack_bar_message.dart';
+import 'package:medicine_cabinet/firebase/repository.dart';
+import 'package:medicine_cabinet/firebase/collections.dart';
 
 import 'category_model.dart';
 
-class CategoryRepository {
-  CollectionReference collection;
-  BuildContext context;
-
-  CategoryRepository(BuildContext context, String cabinetId) {
-    this.context = context;
-    this.collection = FirebaseFirestore.instance
-        .collection("cabinets")
-        .doc(cabinetId)
-        .collection("categories");
-  }
-
-  CollectionReference getCollection() {
-    return collection;
-  }
-
-  Future<void> add(String name) {
-    return collection
-        .add({
-          'name': name,
-        })
-        .then((value) => print("Operation success."))
-        .catchError(
-            (error) => snackBarMessage(context, "Something went wrong"));
-  }
-
-  Future<void> update(String docId, CategoryModel model) {
-    return collection
-        .doc(docId)
-        .update({"name": model.name})
-        .then((value) => print("Operation success."))
-        .catchError(
-            (error) => snackBarMessage(context, "Something went wrong"));
-  }
-
-  Future<void> remove(String docId) {
-    return collection
-        .doc(docId)
-        .delete()
-        .then((value) => print("Operation success."))
-        .catchError(
-            (error) => snackBarMessage(context, "Something went wrong"));
-  }
+class CategoryRepository extends Repository<CategoryModel> {
+  CategoryRepository(BuildContext context, String cabinetId)
+      : super(
+          context,
+          FirebaseFirestore.instance
+              .collection(Collections.cabinetsCollection)
+              .doc(cabinetId)
+              .collection(Collections.categoriesCollection),
+        );
 }

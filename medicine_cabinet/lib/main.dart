@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'error/error_page.dart';
 import 'error/loading_page.dart';
 import 'main/medicine_cabinet.dart';

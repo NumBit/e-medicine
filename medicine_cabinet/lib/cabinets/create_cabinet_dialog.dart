@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/cabinet/cabinet_model.dart';
 
 import 'cabinet_repository.dart';
 
@@ -43,7 +44,8 @@ class CreateCabinetDialog extends StatelessWidget {
               ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
-                      CabinetRepository(context).add(nameController.text);
+                      CabinetRepository(context)
+                          .add(CabinetModel(id: "", name: nameController.text));
                       Navigator.pop(context);
                     }
                   },
