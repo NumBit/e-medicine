@@ -36,6 +36,16 @@ class LoginPage extends StatelessWidget {
                     child: Text('Login'),
                     onPressed: () => [
                           shouldPop = _login(context, email.text, pass.text),
+                        ]),
+                ElevatedButton(
+                    child: Text('Register'),
+                    onPressed: () => [
+                          Navigator.pushNamed(context, "/register"),
+                        ]),
+                ElevatedButton(
+                    child: Text('Logout'),
+                    onPressed: () => [
+                          FirebaseAuth.instance.signOut(),
                         ])
               ]))),
     );
