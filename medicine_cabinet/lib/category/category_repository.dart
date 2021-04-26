@@ -14,4 +14,10 @@ class CategoryRepository extends Repository<CategoryModel> {
               .doc(cabinetId)
               .collection(Collections.categoriesCollection),
         );
+
+  @override
+  Stream<CategoryModel> streamModel(String id) {
+    // TODO: implement streamModel
+    throw UnimplementedError();
+  }
 }

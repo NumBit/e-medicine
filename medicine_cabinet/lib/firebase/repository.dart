@@ -16,6 +16,8 @@ abstract class Repository<T extends Model> {
     return collection;
   }
 
+  Stream<T> streamModel(String id);
+
   Stream getStream() {
     return collection.snapshots();
   }

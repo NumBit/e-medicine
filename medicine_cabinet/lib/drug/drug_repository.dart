@@ -14,4 +14,17 @@ class DrugRepository extends Repository<DrugModel> {
               .doc(cabinetId)
               .collection(Collections.drugsCollection),
         );
+
+  @override
+  Stream<DrugModel> streamModel(String id) {
+    throw UnimplementedError();
+  }
+
+  Stream<List<DrugModel>> streamModels() {
+    return collection.snapshots().map((snap) {
+      return snap.docs.map((e) {
+        return DrugModel.fromMap(e);
+      }).toList();
+    });
+  }
 }

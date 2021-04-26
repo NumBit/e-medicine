@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/cabinet/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinets/cabinet_repository.dart';
 
 import 'cabinet_card.dart';
@@ -22,22 +22,21 @@ class CabinetsListPage extends StatelessWidget {
             Icons.add,
             size: 30,
           )),
-      body: StreamBuilder<QuerySnapshot>(
-          stream: CabinetRepository(context).getCollection().snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      body: StreamBuilder<List<CabinetModel>>(
+          stream: CabinetRepository(context).streamModels(),
+          builder: (BuildContext context, snapshot) {
             if (snapshot.hasError) {
-              return Text('Something went wrong');
+              return Text(snapshot.error.toString());
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Text("Loading");
             }
             return ListView(
-                children: snapshot.data.docs
-                    .map((DocumentSnapshot document) => CabinetCard(
-                          name: document.data()['name'],
-                          id: document.id,
+                children: snapshot.data
+                    .map((cab) => CabinetCard(
+                          name: cab.name,
+                          id: cab.id,
                           isSelected: true,
                         ))
                     .toList());

@@ -36,6 +36,7 @@ dependencies:
   flutter_calendar_carousel: ^2.0.0
   expandable: ^5.0.1
   get_it: ^6.1.1
+  provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:

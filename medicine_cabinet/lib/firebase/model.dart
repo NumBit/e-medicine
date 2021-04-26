@@ -3,4 +3,6 @@ abstract class Model {
 
   Model({this.id = ""});
   toJson();
+
+  Model.fromMap({this.id = "", data});
 }

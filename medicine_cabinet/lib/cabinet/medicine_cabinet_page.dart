@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/cabinet/search_bar.dart';
+import 'package:medicine_cabinet/drug/drug_model.dart';
+import 'package:medicine_cabinet/drug/drug_repository.dart';
 import 'package:medicine_cabinet/main/menu.dart';
 
 import 'chip_filter.dart';
@@ -10,6 +13,7 @@ class MedicineCabinetPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final id = "75KfFkAlO6ftGLpFJldV";
     return Scaffold(
       drawer: Menu(),
       body: CustomScrollView(
@@ -54,17 +58,21 @@ class MedicineCabinetPage extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                     child: SizedBox(
                       height: 60,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          ChipFilter(name: "Filter"),
-                          ChipFilter(name: "Filter"),
-                          ChipFilter(name: "Filter"),
-                          ChipFilter(name: "Filter"),
-                          ChipFilter(name: "Filter"),
-                          ChipFilter(name: "Filter"),
-                        ],
-                      ),
+                      child: StreamBuilder<Object>(
+                          stream: null,
+                          builder: (context, snapshot) {
+                            return ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                ChipFilter(name: "Filter"),
+                                ChipFilter(name: "Filter"),
+                                ChipFilter(name: "Filter"),
+                                ChipFilter(name: "Filter"),
+                                ChipFilter(name: "Filter"),
+                                ChipFilter(name: "Filter"),
+                              ],
+                            );
+                          }),
                     ),
                   )
                 ],
@@ -73,30 +81,34 @@ class MedicineCabinetPage extends StatelessWidget {
           ),
           SliverPadding(
             padding: EdgeInsets.all(15),
-            sliver: SliverGrid.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 15,
-              mainAxisSpacing: 15,
-              children: [
-                DrugGridItem(),
-                DrugGridItem(),
-                DrugGridItem(),
-                DrugGridItem(),
-                DrugGridItem(),
-                DrugGridItem(),
-                DrugGridItem(),
-                DrugGridItem(),
-                DrugGridItem(),
-                DrugGridItem(),
-                DrugGridItem(),
-                DrugGridItem(),
-              ],
-            ),
+            sliver: StreamBuilder<List<DrugModel>>(
+                stream: DrugRepository(context, id).streamModels(),
+                builder: (context, snapshot) {
+                  return SliverGrid.count(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 15,
+                      mainAxisSpacing: 15,
+                      children:
+                          snapshot.data.map((drug) => DrugGridItem()).toList()
+                      // snapshot.data.docs
+                      //     .map((doc) => DrugModel.fromMap(doc))
+                      //     .toList()
+                      //     .map((DrugModel item) => DrugGridItem())
+                      //     .toList(),
+                      );
+                }),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          DrugRepository(context, id).add(DrugModel(
+              description: "desc",
+              id: "",
+              latinName: "paracetam",
+              name: "Paralen",
+              icon: "ico"));
+        },
         backgroundColor: Theme.of(context).primaryColor,
         tooltip: 'Add medication',
         icon: Icon(

@@ -10,4 +10,19 @@ class CabinetRepository extends Repository<CabinetModel> {
           context,
           FirebaseFirestore.instance.collection(Collections.cabinetsCollection),
         );
+
+  @override
+  Stream<CabinetModel> streamModel(String id) {
+    return collection
+        .snapshots()
+        .map((snap) => snap.docs.map((e) => CabinetModel.fromMap(e)).first);
+  }
+
+  Stream<List<CabinetModel>> streamModels() {
+    return collection.snapshots().map((snap) {
+      return snap.docs.map((e) {
+        return CabinetModel.fromMap(e);
+      }).toList();
+    });
+  }
 }
