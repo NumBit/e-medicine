@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/cabinet/search_bar.dart';
 import 'package:medicine_cabinet/drug/drug_model.dart';
-import 'package:medicine_cabinet/drug/drug_repository.dart';
 import 'package:medicine_cabinet/main/menu.dart';
 import 'package:medicine_cabinet/profile/register_page.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +14,6 @@ class MedicineCabinetPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final id = "75KfFkAlO6ftGLpFJldV";
     var drugs = Provider.of<List<DrugModel>>(context);
 
     return Scaffold(
@@ -89,18 +87,16 @@ class MedicineCabinetPage extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
-                children: drugs.map((drug) => DrugGridItem()).toList(),
+                children: drugs
+                    .map((drug) => Provider<DrugModel>.value(
+                        value: drug, child: DrugGridItem()))
+                    .toList(),
               )),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          DrugRepository(context, id).add(DrugModel(
-              description: "desc",
-              id: "",
-              latinName: "paracetam",
-              name: "Paralen",
-              icon: "ico"));
+          Navigator.pushNamed(context, "/add_drug");
         },
         backgroundColor: Theme.of(context).primaryColor,
         tooltip: 'Add medication',
