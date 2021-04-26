@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/cabinet/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/medicine_cabinet_page.dart';
+import 'package:medicine_cabinet/cabinets/cabinet_repository.dart';
 import 'package:medicine_cabinet/cabinets/cabinets_list_page.dart';
 import 'package:medicine_cabinet/drug/drug_detail_page.dart';
+import 'package:medicine_cabinet/drug/drug_model.dart';
+import 'package:medicine_cabinet/drug/drug_repository.dart';
 import 'package:medicine_cabinet/experiment/experiment_page.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
 import 'package:medicine_cabinet/profile/profile_page.dart';
 import 'package:medicine_cabinet/schedule/schedule_page.dart';
+import 'package:provider/provider.dart';
 
 class MedicineCabinet extends StatelessWidget {
   const MedicineCabinet({
@@ -24,13 +29,24 @@ class MedicineCabinet extends StatelessWidget {
           iconTheme: IconThemeData(color: Colors.white)),
       initialRoute: "/",
       routes: {
-        "/": (context) => MedicineCabinetPage(),
+        "/": (context) => StreamProvider<List<DrugModel>>.value(
+              value: DrugRepository(context, "75KfFkAlO6ftGLpFJldV")
+                  .streamModels(),
+              initialData: [],
+              child: MedicineCabinetPage(),
+            ),
         "/login": (context) => LoginPage(),
         "/profile": (context) => ProfilePage(),
         "/drug": (context) => DrugDetailPage(),
         "/schedule": (context) => SchedulePage(),
         "/experiment": (context) => ExperimentPage(),
-        "/cabinets_list": (context) => CabinetsListPage(),
+        "/cabinets_list": (context) => StreamProvider<List<CabinetModel>>.value(
+              value: CabinetRepository(
+                context,
+              ).streamModels(),
+              initialData: [],
+              child: CabinetsListPage(),
+            ),
         "drug_detail": (context) => DrugDetailPage(),
       },
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/cabinet/cabinet_model.dart';
-import 'package:medicine_cabinet/cabinets/cabinet_repository.dart';
+import 'package:provider/provider.dart';
 
 import 'cabinet_card.dart';
 import 'create_cabinet_dialog.dart';
@@ -10,6 +10,7 @@ class CabinetsListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cabinets = Provider.of<List<CabinetModel>>(context);
     return Scaffold(
       appBar: AppBar(title: Text('My Cabinets')),
       floatingActionButton: FloatingActionButton(
@@ -22,25 +23,14 @@ class CabinetsListPage extends StatelessWidget {
             Icons.add,
             size: 30,
           )),
-      body: StreamBuilder<List<CabinetModel>>(
-          stream: CabinetRepository(context).streamModels(),
-          builder: (BuildContext context, snapshot) {
-            if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            }
-
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text("Loading");
-            }
-            return ListView(
-                children: snapshot.data
-                    .map((cab) => CabinetCard(
-                          name: cab.name,
-                          id: cab.id,
-                          isSelected: true,
-                        ))
-                    .toList());
-          }),
+      body: ListView(
+          children: cabinets
+              .map((cab) => CabinetCard(
+                    name: cab.name,
+                    id: cab.id,
+                    isSelected: true,
+                  ))
+              .toList()),
     );
   }
 }

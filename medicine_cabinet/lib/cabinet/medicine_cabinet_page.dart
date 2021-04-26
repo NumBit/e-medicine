@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/cabinet/search_bar.dart';
 import 'package:medicine_cabinet/drug/drug_model.dart';
 import 'package:medicine_cabinet/drug/drug_repository.dart';
 import 'package:medicine_cabinet/main/menu.dart';
+import 'package:provider/provider.dart';
 
 import 'chip_filter.dart';
 import 'drug_grid_item.dart';
@@ -14,6 +14,7 @@ class MedicineCabinetPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final id = "75KfFkAlO6ftGLpFJldV";
+    var drugs = Provider.of<List<DrugModel>>(context);
     return Scaffold(
       drawer: Menu(),
       body: CustomScrollView(
@@ -80,24 +81,13 @@ class MedicineCabinetPage extends StatelessWidget {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.all(15),
-            sliver: StreamBuilder<List<DrugModel>>(
-                stream: DrugRepository(context, id).streamModels(),
-                builder: (context, snapshot) {
-                  return SliverGrid.count(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 15,
-                      mainAxisSpacing: 15,
-                      children:
-                          snapshot.data.map((drug) => DrugGridItem()).toList()
-                      // snapshot.data.docs
-                      //     .map((doc) => DrugModel.fromMap(doc))
-                      //     .toList()
-                      //     .map((DrugModel item) => DrugGridItem())
-                      //     .toList(),
-                      );
-                }),
-          ),
+              padding: EdgeInsets.all(15),
+              sliver: SliverGrid.count(
+                crossAxisCount: 2,
+                crossAxisSpacing: 15,
+                mainAxisSpacing: 15,
+                children: drugs.map((drug) => DrugGridItem()).toList(),
+              )),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
