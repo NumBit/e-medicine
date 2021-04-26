@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/drug/drug_model.dart';
+import 'package:medicine_cabinet/main/app_state.dart';
+import 'package:provider/provider.dart';
 
 import 'description_scroll_list.dart';
 import 'drug_header.dart';
@@ -19,15 +22,15 @@ class DrugDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String name =
-        ModalRoute.of(context).settings.arguments as String ?? "";
+    var drug = Provider.of<AppState>(context).selectedDrug;
     return Scaffold(
       body: Container(
         color: Colors.white,
         child: Stack(
           children: [
-            DrugHeader(chemical: chemical, categories: categories),
-            DescriptionScrollList(name: name, description: description),
+            DrugHeader(categories: categories),
+            DescriptionScrollList(
+                name: drug.name, description: drug.description),
           ],
         ),
       ),

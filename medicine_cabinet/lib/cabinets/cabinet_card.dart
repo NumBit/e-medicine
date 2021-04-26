@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/main/app_state.dart';
+import 'package:provider/provider.dart';
 
 import 'cabinet_repository.dart';
 
@@ -35,7 +37,7 @@ class CabinetCard extends StatelessWidget {
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-              if (isSelected)
+              if (Provider.of<AppState>(context).cabinetId == id)
                 Tooltip(
                   message: "Opened cabinet",
                   child: Icon(
@@ -67,7 +69,11 @@ class CabinetCard extends StatelessWidget {
                           TextStyle(color: Theme.of(context).primaryColorDark),
                     )),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      var state = Provider.of<AppState>(context, listen: false);
+                      state.cabinetId = id;
+                      Navigator.popUntil(context, ModalRoute.withName("/"));
+                    },
                     child: Text(
                       "Open",
                       style:
