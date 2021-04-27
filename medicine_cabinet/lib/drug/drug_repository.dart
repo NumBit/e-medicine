@@ -10,9 +10,9 @@ class DrugRepository extends Repository<DrugModel> {
       : super(
           context,
           FirebaseFirestore.instance
-              .collection(Collections.cabinetsCollection)
+              .collection(Collections.cabinets)
               .doc(cabinetId)
-              .collection(Collections.drugsCollection),
+              .collection(Collections.drugs),
         );
 
   @override
@@ -26,5 +26,11 @@ class DrugRepository extends Repository<DrugModel> {
         return DrugModel.fromMap(e);
       }).toList();
     });
+  }
+
+  @override
+  DrugModel get(String id) {
+    // TODO: implement get
+    throw UnimplementedError();
   }
 }

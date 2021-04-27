@@ -10,14 +10,20 @@ class CategoryRepository extends Repository<CategoryModel> {
       : super(
           context,
           FirebaseFirestore.instance
-              .collection(Collections.cabinetsCollection)
+              .collection(Collections.cabinets)
               .doc(cabinetId)
-              .collection(Collections.categoriesCollection),
+              .collection(Collections.categories),
         );
 
   @override
   Stream<CategoryModel> streamModel(String id) {
     // TODO: implement streamModel
+    throw UnimplementedError();
+  }
+
+  @override
+  CategoryModel get(String id) {
+    // TODO: implement get
     throw UnimplementedError();
   }
 }

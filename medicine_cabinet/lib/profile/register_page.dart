@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/firebase/user_model.dart';
+import 'package:medicine_cabinet/firebase/user_repository.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -56,8 +58,13 @@ class RegisterPage extends StatelessWidget {
       return;
     }
     try {
-      await FirebaseAuth.instance
+      var doc = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: pass);
+      UserRepository(context).add(UserModel(
+          id: doc.user.uid,
+          name: "Your Name",
+          email: email,
+          defaultCabinet: ""));
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
         snackBarMessage(context, "The password provided is too weak.");

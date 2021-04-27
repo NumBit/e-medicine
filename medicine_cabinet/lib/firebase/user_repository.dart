@@ -9,7 +9,7 @@ class UserRepository extends Repository<UserModel> {
   UserRepository(BuildContext context)
       : super(
           context,
-          FirebaseFirestore.instance.collection(Collections.cabinetsCollection),
+          FirebaseFirestore.instance.collection(Collections.users),
         );
 
   @override
@@ -25,5 +25,30 @@ class UserRepository extends Repository<UserModel> {
         return UserModel.fromMap(e);
       }).toList();
     });
+  }
+
+  Stream<UserModel> get(String id) {
+    return collection
+        .doc(id)
+        .snapshots()
+        .map((snap) => UserModel.fromMap(snap));
+  }
+
+  Stream<UserModel> getByEmail(String email) {
+    return collection.where({"email": email}).snapshots().map((snap) {
+          return snap.docs
+              .map((e) {
+                return UserModel.fromMap(e);
+              })
+              .toList()
+              .first;
+        });
+
+    /*return collection
+        .where({"email": email})
+        .get()
+        .then((value) => UserModel.fromMap(value))+
+        .asStream()
+        .map((snap) => UserModel.fromMap(snap.docs));*/
   }
 }
