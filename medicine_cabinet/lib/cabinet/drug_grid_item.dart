@@ -16,7 +16,6 @@ class DrugGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var drug = Provider.of<DrugModel>(context);
-    Provider.of<AppState>(context, listen: false).selectedDrug = drug;
     return OpenContainer(
         closedShape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -36,7 +35,7 @@ class DrugGridItem extends StatelessWidget {
                   Center(
                     child: Icon(
                       mapToIconData(jsonDecode(drug.icon)),
-                      color: Color(0xff12263a),
+                      color: Theme.of(context).primaryColorDark,
                       size: 50,
                     ),
                   ),
@@ -48,7 +47,7 @@ class DrugGridItem extends StatelessWidget {
                       textScaleFactor: 1.5,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Color(0xff12263a),
+                        color: Theme.of(context).primaryColorDark,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -72,6 +71,7 @@ class DrugGridItem extends StatelessWidget {
           );
         },
         openBuilder: (context, action) {
+          Provider.of<AppState>(context, listen: false).selectedDrug = drug;
           return DrugDetailPage();
         });
   }

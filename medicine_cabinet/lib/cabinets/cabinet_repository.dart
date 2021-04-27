@@ -16,9 +16,10 @@ class CabinetRepository extends Repository<CabinetModel> {
 
   @override
   Stream<CabinetModel> streamModel(String id) {
-    return collection
-        .snapshots()
-        .map((snap) => snap.docs.map((e) => CabinetModel.fromMap(e)).first);
+    return collection.snapshots().map((snap) => snap.docs
+        .where((element) => element.id == id)
+        .map((e) => CabinetModel.fromMap(e))
+        .first);
   }
 
   @override

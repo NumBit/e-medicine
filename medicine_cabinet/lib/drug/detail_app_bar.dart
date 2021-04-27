@@ -16,14 +16,29 @@ class DetailAppBar extends StatelessWidget {
       snap: true,
       title: Tooltip(
         message: name,
-        child: Text(
-          name,
-          textAlign: TextAlign.start,
-          overflow: TextOverflow.fade,
-          style: TextStyle(
-              color: Theme.of(context).primaryColor,
-              fontWeight: FontWeight.w300,
-              fontSize: 30),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              name,
+              textAlign: TextAlign.start,
+              overflow: TextOverflow.fade,
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 30),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, "/edit_drug");
+              },
+              borderRadius: BorderRadius.circular(50),
+              child: Icon(
+                Icons.more_horiz,
+                color: Theme.of(context).primaryColorDark,
+              ),
+            )
+          ],
         ),
       ),
       backgroundColor: Colors.white,

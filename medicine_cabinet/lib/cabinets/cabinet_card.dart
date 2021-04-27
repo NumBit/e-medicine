@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/cabinet/cabinet_model.dart';
+import 'package:medicine_cabinet/cabinets/edit_cabinet.dart';
 import 'package:medicine_cabinet/main/app_state.dart';
 import 'package:provider/provider.dart';
-
-import 'cabinet_repository.dart';
 
 class CabinetCard extends StatelessWidget {
   final String name;
@@ -37,7 +37,7 @@ class CabinetCard extends StatelessWidget {
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-              if (Provider.of<AppState>(context).cabinetId == id)
+              if (Provider.of<AppState>(context).cabinet.id == id)
                 Tooltip(
                   message: "Opened cabinet",
                   child: Icon(
@@ -54,7 +54,10 @@ class CabinetCard extends StatelessWidget {
               children: [
                 TextButton(
                     onPressed: () {
-                      CabinetRepository(context).remove(id);
+                      showDialog(
+                        context: context,
+                        builder: (context) => EditCabinet(id: id),
+                      );
                     },
                     child: Text(
                       "Edit",
@@ -71,7 +74,7 @@ class CabinetCard extends StatelessWidget {
                 TextButton(
                     onPressed: () {
                       var state = Provider.of<AppState>(context, listen: false);
-                      state.cabinetId = id;
+                      state.cabinet = CabinetModel(id: id, name: "bohaaa");
                       Navigator.popUntil(context, ModalRoute.withName("/"));
                     },
                     child: Text(
