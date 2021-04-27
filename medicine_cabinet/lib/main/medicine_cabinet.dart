@@ -5,10 +5,10 @@ import 'package:medicine_cabinet/cabinet/medicine_cabinet_page.dart';
 import 'package:medicine_cabinet/cabinets/cabinets_list_page.dart';
 import 'package:medicine_cabinet/drug/add_drug.dart';
 import 'package:medicine_cabinet/drug/drug_detail_page.dart';
-import 'package:medicine_cabinet/drug/data/drug_model.dart';
-import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/drug/edit_drug.dart';
 import 'package:medicine_cabinet/experiment/experiment_page.dart';
+import 'package:medicine_cabinet/firebase/user_model.dart';
+import 'package:medicine_cabinet/firebase/user_repository.dart';
 import 'package:medicine_cabinet/main/app_state.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
 import 'package:medicine_cabinet/profile/profile_page.dart';
@@ -23,8 +23,10 @@ class MedicineCabinet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AppState>(
-      create: (context) => AppState(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AppState>(create: (context) => AppState()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Medicine cabinet',
@@ -36,14 +38,7 @@ class MedicineCabinet extends StatelessWidget {
             iconTheme: IconThemeData(color: Colors.white)),
         initialRoute: "/",
         routes: {
-          "/": (context) => StreamProvider<List<DrugModel>>.value(
-                value: DrugRepository(
-                        context, Provider.of<AppState>(context).cabinet)
-                    .streamModels(
-                        filter: Provider.of<AppState>(context).filter),
-                initialData: [],
-                child: MedicineCabinetPage(),
-              ),
+          "/": (context) => MedicineCabinetPage(),
           "/login": (context) => LoginPage(),
           "/register": (context) => RegisterPage(),
           "/profile": (context) => ProfilePage(),

@@ -50,13 +50,6 @@ class ExperimentPage extends StatelessWidget {
                                 .add(CategoryModel(name: "Special"));
                           },
                           child: Text("Add category")),
-                      ElevatedButton(
-                          onPressed: () {
-                            CategoryRepository(context, item.id).update(
-                                CategoryModel(
-                                    id: "8gP8Qf6F4JPDLUjGSBS9", name: "Covid"));
-                          },
-                          child: Text("Delete me"))
                     ],
                   ),
                 );

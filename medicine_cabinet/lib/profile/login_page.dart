@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/main/app_state.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage();
@@ -56,9 +54,6 @@ class LoginPage extends StatelessWidget {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: pass);
-      var state = Provider.of<AppState>(context, listen: false);
-      //state.cabinet = cabId;
-      // TODO
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
         snackBarMessage(context, "Account not found.");
@@ -68,6 +63,7 @@ class LoginPage extends StatelessWidget {
         return false;
       }
     } catch (e) {
+      print("Error occured in login:");
       print(e);
       snackBarMessage(context, "Unknown error occured.");
       return false;
