@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:medicine_cabinet/cabinet/cabinet_model.dart';
-import 'package:medicine_cabinet/cabinets/cabinet_repository.dart';
+import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
+import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 
 class EditCabinet extends StatelessWidget {
   final String id;

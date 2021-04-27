@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:medicine_cabinet/cabinet/cabinet_model.dart';
-import 'package:medicine_cabinet/drug/drug_model.dart';
+import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
+import 'package:medicine_cabinet/drug/data/drug_model.dart';
 
 class AppState extends ChangeNotifier {
   CabinetModel _cabinet =
