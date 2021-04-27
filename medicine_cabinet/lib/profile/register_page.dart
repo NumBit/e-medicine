@@ -45,32 +45,32 @@ class RegisterPage extends StatelessWidget {
                       ])
             ])));
   }
-}
 
-void _register(context, String email, String pass, String passSecond) async {
-  if (email.isEmpty || pass.isEmpty || passSecond.isEmpty) {
-    snackBarMessage(context, "Empty field!");
-    return;
-  }
-  if (pass != passSecond) {
-    snackBarMessage(context, "Passwords are not same!");
-    return;
-  }
-  try {
-    await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: pass);
-  } on FirebaseAuthException catch (e) {
-    if (e.code == "weak-password") {
-      snackBarMessage(context, "The password provided is too weak.");
-      return;
-    } else if (e.code == "email-already-in-use") {
-      snackBarMessage(context, "The account already exists for that email.");
+  void _register(context, String email, String pass, String passSecond) async {
+    if (email.isEmpty || pass.isEmpty || passSecond.isEmpty) {
+      snackBarMessage(context, "Empty field!");
       return;
     }
-  } catch (e) {
-    print(e);
-    snackBarMessage(context, "Unknown error occured.");
-    return;
+    if (pass != passSecond) {
+      snackBarMessage(context, "Passwords are not same!");
+      return;
+    }
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: pass);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "weak-password") {
+        snackBarMessage(context, "The password provided is too weak.");
+        return;
+      } else if (e.code == "email-already-in-use") {
+        snackBarMessage(context, "The account already exists for that email.");
+        return;
+      }
+    } catch (e) {
+      print(e);
+      snackBarMessage(context, "Unknown error occured.");
+      return;
+    }
+    snackBarMessage(context, "Account created.");
   }
-  snackBarMessage(context, "Account created.");
 }

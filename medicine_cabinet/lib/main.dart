@@ -24,18 +24,18 @@ class MedicineCabinetApp extends StatelessWidget {
           return ErrorPage();
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          print('neni loading');
-          return StreamBuilder(
+          return MedicineCabinet();
+          /*return StreamBuilder(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
-                if (snapshot == null) {
+                if (FirebaseAuth.instance.currentUser == null) {
                   print('User is currently signed out!');
                   return LoginPage();
                 } else {
                   print('User is signed in!');
                   return MedicineCabinet();
                 }
-              });
+              });*/
 
           /*FirebaseAuth.instance.authStateChanges().listen((User user) {
             if (user == null) {

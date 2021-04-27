@@ -12,7 +12,7 @@ class LoginPage extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        return true;
+        return shouldPop;
       },
       child: Scaffold(
           appBar: AppBar(
@@ -42,36 +42,35 @@ class LoginPage extends StatelessWidget {
                     onPressed: () => [
                           Navigator.pushNamed(context, "/register"),
                         ]),
-                ElevatedButton(
-                    child: Text('Logout'),
-                    onPressed: () => [
-                          FirebaseAuth.instance.signOut(),
-                        ])
               ]))),
     );
   }
-}
 
-Future<bool> _login(context, String email, String pass) async {
-  if (email.isEmpty || pass.isEmpty) {
-    snackBarMessage(context, "Empty field!");
-    return false;
+  Future<bool> _unlock() async {
+    return true;
   }
-  try {
-    await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: pass);
-  } on FirebaseAuthException catch (e) {
-    if (e.code == "user-not-found") {
-      snackBarMessage(context, "Account not found.");
-      return false;
-    } else if (e.code == "wrong-password") {
-      snackBarMessage(context, "Wrong password.");
+
+  Future<bool> _login(context, String email, String pass) async {
+    if (email.isEmpty || pass.isEmpty) {
+      snackBarMessage(context, "Empty field!");
+      return true;
+    }
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: pass);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "user-not-found") {
+        snackBarMessage(context, "Account not found.");
+        return false;
+      } else if (e.code == "wrong-password") {
+        snackBarMessage(context, "Wrong password.");
+        return false;
+      }
+    } catch (e) {
+      print(e);
+      snackBarMessage(context, "Unknown error occured.");
       return false;
     }
-  } catch (e) {
-    print(e);
-    snackBarMessage(context, "Unknown error occured.");
-    return false;
+    return true;
   }
-  return true;
 }
