@@ -23,20 +23,17 @@ class CabinetRepository extends Repository<CabinetModel> {
   }
 
   @override
-  Future<void> add(CabinetModel model) async {
+  Future<String> add(CabinetModel model) async {
+    DocumentReference cabinet;
     try {
-      var cabinet = collection.add(model.toJson());
-      cabinet.then((doc) => collection
-              .doc(doc.id)
-              .collection(Collections.owners)
-              .add({
-            "user_id": FirebaseAuth.instance.currentUser.uid,
-            "admin": true
-          }));
+      cabinet = await collection.add(model.toJson());
+      collection.doc(cabinet.id).collection(Collections.owners).add(
+          {"user_id": FirebaseAuth.instance.currentUser.uid, "admin": true});
     } catch (error) {
       snackBarMessage(context, "Something went wrong");
     }
     print("Operation success.");
+    return cabinet.id;
   }
 
   Stream<List<CabinetModel>> streamModels() {

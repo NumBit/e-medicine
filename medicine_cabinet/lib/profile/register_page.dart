@@ -1,8 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
+import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 import 'package:medicine_cabinet/firebase/user_model.dart';
 import 'package:medicine_cabinet/firebase/user_repository.dart';
+import 'package:medicine_cabinet/main/app_state.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage();
@@ -61,11 +65,15 @@ class RegisterPage extends StatelessWidget {
     try {
       var doc = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: pass);
+      var cabId = await CabinetRepository(context)
+          .add(CabinetModel(name: "Default cabinet"));
       UserRepository(context).add(UserModel(
           id: doc.user.uid,
           name: "Your Name",
           email: email,
-          defaultCabinet: ""));
+          defaultCabinet: cabId));
+      var state = Provider.of<AppState>(context, listen: false);
+      state.cabinet = cabId;
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
         snackBarMessage(context, "The password provided is too weak.");

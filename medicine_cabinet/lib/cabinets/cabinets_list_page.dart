@@ -26,9 +26,7 @@ class CabinetsListPage extends StatelessWidget {
       body: ListView(
           children: cabinets
               .map((cab) => CabinetCard(
-                    name: cab.name,
-                    id: cab.id,
-                    isSelected: true,
+                    model: cab,
                   ))
               .toList()),
     );

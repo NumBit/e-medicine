@@ -117,8 +117,7 @@ class AddDrug extends StatelessWidget {
                           DrugRepository(
                                   context,
                                   Provider.of<AppState>(context, listen: false)
-                                      .cabinet
-                                      .id)
+                                      .cabinet)
                               .add(drug);
                           Navigator.pop(context);
                         }
