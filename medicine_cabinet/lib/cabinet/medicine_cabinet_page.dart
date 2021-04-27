@@ -23,7 +23,7 @@ class MedicineCabinetPage extends StatelessWidget {
             flexibleSpace: const FlexibleSpaceBar(
               centerTitle: true,
               title: Text(
-                "Medicine cabinet",
+                "cabinet;",
                 textScaleFactor: 1.23,
                 style: TextStyle(color: Colors.white),
               ),

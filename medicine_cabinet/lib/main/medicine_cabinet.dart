@@ -7,6 +7,7 @@ import 'package:medicine_cabinet/drug/add_drug.dart';
 import 'package:medicine_cabinet/drug/drug_detail_page.dart';
 import 'package:medicine_cabinet/drug/drug_model.dart';
 import 'package:medicine_cabinet/drug/drug_repository.dart';
+import 'package:medicine_cabinet/drug/edit_drug.dart';
 import 'package:medicine_cabinet/experiment/experiment_page.dart';
 import 'package:medicine_cabinet/main/app_state.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
@@ -29,14 +30,16 @@ class MedicineCabinet extends StatelessWidget {
         theme: ThemeData(
             primaryColor: Color(0xff06BCC1),
             primaryColorDark: Color(0xff12263A),
+            errorColor: Color(0xffc33149),
             primarySwatch: Colors.teal,
             iconTheme: IconThemeData(color: Colors.white)),
         initialRoute: "/",
         routes: {
           "/": (context) => StreamProvider<List<DrugModel>>.value(
                 value: DrugRepository(
-                        context, Provider.of<AppState>(context).cabinetId)
-                    .streamModels(),
+                        context, Provider.of<AppState>(context).cabinet.id)
+                    .streamModels(
+                        filter: Provider.of<AppState>(context).filter),
                 initialData: [],
                 child: MedicineCabinetPage(),
               ),
@@ -46,6 +49,7 @@ class MedicineCabinet extends StatelessWidget {
           "/schedule": (context) => SchedulePage(),
           "/experiment": (context) => ExperimentPage(),
           "/add_drug": (context) => AddDrug(),
+          "/edit_drug": (context) => EditDrug(),
           "/cabinets_list": (context) =>
               StreamProvider<List<CabinetModel>>.value(
                 value: CabinetRepository(

@@ -8,8 +8,8 @@ import 'package:medicine_cabinet/drug/drug_repository.dart';
 import 'package:medicine_cabinet/main/app_state.dart';
 import 'package:provider/provider.dart';
 
-class AddDrug extends StatelessWidget {
-  const AddDrug({Key key}) : super(key: key);
+class EditDrug extends StatelessWidget {
+  const EditDrug({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class AddDrug extends StatelessWidget {
       child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: Text("Add new drug"),
+            title: Text("Edit drug"),
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -105,25 +105,32 @@ class AddDrug extends StatelessWidget {
                       ],
                     ),
                   ),
-                  ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          var drug = DrugModel(
-                            name: nameController.text,
-                            latinName: substanceController.text,
-                            description: descriptionController.text,
-                            icon: jsonEncode(iconDataToMap(icon)),
-                          );
-                          DrugRepository(
-                                  context,
-                                  Provider.of<AppState>(context, listen: false)
-                                      .cabinet
-                                      .id)
-                              .add(drug);
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: Text("Create"))
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              primary: Theme.of(context).errorColor),
+                          child: Text("Delete")),
+                      ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState.validate()) {
+                              var drug = DrugModel(
+                                name: nameController.text,
+                                latinName: substanceController.text,
+                                description: descriptionController.text,
+                                icon: jsonEncode(iconDataToMap(icon)),
+                              );
+
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Text("Save")),
+                    ],
+                  )
                 ],
               ),
             ),

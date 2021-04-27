@@ -20,9 +20,15 @@ class DrugRepository extends Repository<DrugModel> {
     throw UnimplementedError();
   }
 
-  Stream<List<DrugModel>> streamModels() {
+  Stream<List<DrugModel>> streamModels({String filter = ""}) {
     return collection.snapshots().map((snap) {
-      return snap.docs.map((e) {
+      return snap.docs
+          .where((element) => element
+              .data()['name']
+              .toString()
+              .toLowerCase()
+              .contains(filter.toLowerCase()))
+          .map((e) {
         return DrugModel.fromMap(e);
       }).toList();
     });

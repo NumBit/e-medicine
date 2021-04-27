@@ -21,7 +21,7 @@ class DrugHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 50),
       child: Container(
-        height: 250,
+        height: 300,
         color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -45,7 +45,7 @@ class DrugHeader extends StatelessWidget {
             ),
             Icon(
               mapToIconData(jsonDecode(drug.icon)),
-              color: Color(0xff12263a),
+              color: Theme.of(context).primaryColorDark,
               size: 100,
             ),
           ],

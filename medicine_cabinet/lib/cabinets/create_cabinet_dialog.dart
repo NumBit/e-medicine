@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:medicine_cabinet/cabinet/cabinet_model.dart';
 
 import 'cabinet_repository.dart';
@@ -21,20 +22,28 @@ class CreateCabinetDialog extends StatelessWidget {
           key: _formKey,
           child: Column(children: [
             Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: SizedBox(
-                    height: 100,
-                    child: TextFormField(
-                        onChanged: (value) {
-                          _formKey.currentState.validate();
-                        },
-                        controller: nameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Name cannot be empty';
-                          }
-                          return null;
-                        }))),
+              padding: const EdgeInsets.all(15.0),
+              child: TextFormField(
+                  onChanged: (value) {
+                    _formKey.currentState.validate();
+                  },
+                  maxLength: 40,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: InputDecoration(
+                    labelText: 'Name',
+                    labelStyle: TextStyle(
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    border: OutlineInputBorder(),
+                  ),
+                  controller: nameController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Name cannot be empty';
+                    }
+                    return null;
+                  }),
+            ),
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
               ElevatedButton(
                   onPressed: () => Navigator.pop(context),
