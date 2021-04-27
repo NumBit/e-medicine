@@ -4,16 +4,13 @@ import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 import 'package:medicine_cabinet/firebase/user_model.dart';
 import 'package:medicine_cabinet/firebase/user_repository.dart';
-import 'package:medicine_cabinet/main/app_state.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
-import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage();
 
   @override
   Widget build(BuildContext context) {
-    //final user = context.read<UserCubit>();
     final email = TextEditingController();
     final pass = TextEditingController();
     final passSecond = TextEditingController();
@@ -72,8 +69,6 @@ class RegisterPage extends StatelessWidget {
           name: "Your Name",
           email: email,
           defaultCabinet: cabId));
-      var state = Provider.of<AppState>(context, listen: false);
-      state.cabinet = cabId;
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
         snackBarMessage(context, "The password provided is too weak.");
@@ -83,6 +78,7 @@ class RegisterPage extends StatelessWidget {
         return;
       }
     } catch (e) {
+      print("Error occured in register:");
       print(e);
       snackBarMessage(context, "Unknown error occured.");
       return;
