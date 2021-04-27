@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/cabinet/cabinet_model.dart';
+import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:provider/provider.dart';
 
 import 'cabinet_card.dart';

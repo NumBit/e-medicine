@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/cabinet/cabinet_model.dart';
+import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
+import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 import 'package:medicine_cabinet/cabinet/medicine_cabinet_page.dart';
-import 'package:medicine_cabinet/cabinets/cabinet_repository.dart';
 import 'package:medicine_cabinet/cabinets/cabinets_list_page.dart';
 import 'package:medicine_cabinet/drug/add_drug.dart';
 import 'package:medicine_cabinet/drug/drug_detail_page.dart';
-import 'package:medicine_cabinet/drug/drug_model.dart';
-import 'package:medicine_cabinet/drug/drug_repository.dart';
+import 'package:medicine_cabinet/drug/data/drug_model.dart';
+import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/drug/edit_drug.dart';
 import 'package:medicine_cabinet/experiment/experiment_page.dart';
 import 'package:medicine_cabinet/main/app_state.dart';

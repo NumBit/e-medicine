@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/drug/drug_model.dart';
+import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/main/app_state.dart';
 import 'package:provider/provider.dart';
 

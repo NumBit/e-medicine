@@ -44,6 +44,7 @@ class RegisterPage extends StatelessWidget {
                   onPressed: () => [
                         _register(
                             context, email.text, pass.text, passSecond.text),
+                        Navigator.pop(context)
                       ])
             ])));
   }
@@ -78,6 +79,5 @@ class RegisterPage extends StatelessWidget {
       snackBarMessage(context, "Unknown error occured.");
       return;
     }
-    snackBarMessage(context, "Account created.");
   }
 }

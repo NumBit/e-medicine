@@ -46,10 +46,6 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Future<bool> _unlock() async {
-    return true;
-  }
-
   Future<bool> _login(context, String email, String pass) async {
     if (email.isEmpty || pass.isEmpty) {
       snackBarMessage(context, "Empty field!");

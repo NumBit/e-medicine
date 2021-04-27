@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
-import 'package:medicine_cabinet/drug/drug_model.dart';
-import 'package:medicine_cabinet/drug/drug_repository.dart';
+import 'package:medicine_cabinet/drug/data/drug_model.dart';
+import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/main/app_state.dart';
 import 'package:provider/provider.dart';
 

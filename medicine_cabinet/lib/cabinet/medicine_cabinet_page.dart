@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/cabinet/search_bar.dart';
-import 'package:medicine_cabinet/drug/drug_model.dart';
+import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/main/menu.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
 import 'package:medicine_cabinet/profile/register_page.dart';
