@@ -20,7 +20,7 @@ class DescriptionScrollList extends StatelessWidget {
       DetailAppBar(name: name),
       SliverToBoxAdapter(
         child: SizedBox(
-          height: 220,
+          height: 250,
         ),
       ),
       SliverList(

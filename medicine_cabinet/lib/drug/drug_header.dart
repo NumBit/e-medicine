@@ -1,23 +1,27 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:medicine_cabinet/main/app_state.dart';
+import 'package:provider/provider.dart';
 
 import 'drug_categories.dart';
 
 class DrugHeader extends StatelessWidget {
   const DrugHeader({
     Key key,
-    @required this.chemical,
     @required this.categories,
   }) : super(key: key);
 
-  final String chemical;
   final List<String> categories;
 
   @override
   Widget build(BuildContext context) {
+    var drug = Provider.of<AppState>(context).selectedDrug;
     return Padding(
       padding: const EdgeInsets.only(top: 50),
       child: Container(
-        height: 250,
+        height: 300,
         color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -29,7 +33,7 @@ class DrugHeader extends StatelessWidget {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.5,
                   child: Text(
-                    chemical,
+                    drug.latinName,
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w200,
@@ -40,8 +44,8 @@ class DrugHeader extends StatelessWidget {
               ],
             ),
             Icon(
-              Icons.medical_services_outlined,
-              color: Color(0xff12263a),
+              mapToIconData(jsonDecode(drug.icon)),
+              color: Theme.of(context).primaryColorDark,
               size: 100,
             ),
           ],

@@ -1,55 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/main/snack_bar_message.dart';
+import 'package:medicine_cabinet/firebase/collections.dart';
+import 'package:medicine_cabinet/firebase/repository.dart';
 
 import 'drug_model.dart';
 
-class DrugRepository {
-  CollectionReference collection;
-  BuildContext context;
+class DrugRepository extends Repository<DrugModel> {
+  DrugRepository(BuildContext context, String cabinetId)
+      : super(
+          context,
+          FirebaseFirestore.instance
+              .collection(Collections.cabinets)
+              .doc(cabinetId)
+              .collection(Collections.drugs),
+        );
 
-  DrugRepository(BuildContext context, String cabinetId) {
-    this.context = context;
-    this.collection = FirebaseFirestore.instance
-        .collection("cabinets")
-        .doc(cabinetId)
-        .collection("drugs");
+  @override
+  Stream<DrugModel> streamModel(String id) {
+    throw UnimplementedError();
   }
 
-  CollectionReference getCollection() {
-    return collection;
+  Stream<List<DrugModel>> streamModels({String filter = ""}) {
+    return collection.snapshots().map((snap) {
+      return snap.docs
+          .where((element) => element
+              .data()['name']
+              .toString()
+              .toLowerCase()
+              .contains(filter.toLowerCase()))
+          .map((e) {
+        return DrugModel.fromMap(e);
+      }).toList();
+    });
   }
 
-  Future<void> add(String name) {
-    return collection
-        .add({
-          'name': name,
-        })
-        .then((value) => print("Operation success."))
-        .catchError(
-            (error) => snackBarMessage(context, "Something went wrong"));
-  }
-
-  Future<void> update(String docId, DrugModel model) {
-    return collection
-        .doc(docId)
-        .update({
-          "name": model.name,
-          "latin_name": model.latinName,
-          "description": model.description,
-          "icon": model.icon
-        })
-        .then((value) => print("Operation success."))
-        .catchError(
-            (error) => snackBarMessage(context, "Something went wrong"));
-  }
-
-  Future<void> remove(String docId) {
-    return collection
-        .doc(docId)
-        .delete()
-        .then((value) => print("Operation success."))
-        .catchError(
-            (error) => snackBarMessage(context, "Something went wrong"));
+  @override
+  DrugModel get(String id) {
+    // TODO: implement get
+    throw UnimplementedError();
   }
 }
