@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 import 'package:medicine_cabinet/firebase/user_model.dart';
 
@@ -19,19 +21,20 @@ class UserRepository extends Repository<UserModel> {
         .map((snap) => snap.docs.map((e) => UserModel.fromMap(e)).first);
   }
 
-  Stream<List<UserModel>> streamModels() {
-    return collection.snapshots().map((snap) {
-      return snap.docs.map((e) {
-        return UserModel.fromMap(e);
-      }).toList();
-    });
-  }
-
   Stream<UserModel> get(String id) {
     return collection
         .doc(id)
         .snapshots()
         .map((snap) => UserModel.fromMap(snap));
+  }
+
+  Future<UserModel> getMyUser() {
+    var myUid = FirebaseAuth.instance.currentUser.uid;
+    return collection
+        .where("id", isEqualTo: myUid)
+        .snapshots()
+        .map((e) => UserModel.fromMap(e.docs.first))
+        .first;
   }
 
   Stream<UserModel> getByEmail(String email) {
@@ -43,12 +46,12 @@ class UserRepository extends Repository<UserModel> {
               .toList()
               .first;
         });
+  }
 
-    /*return collection
+  /*return collection
         .where({"email": email})
         .get()
         .then((value) => UserModel.fromMap(value))+
         .asStream()
         .map((snap) => UserModel.fromMap(snap.docs));*/
-  }
 }

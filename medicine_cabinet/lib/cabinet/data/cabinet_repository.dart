@@ -44,6 +44,10 @@ class CabinetRepository extends Repository<CabinetModel> {
     });
   }
 
+  Stream<CabinetModel> getDefaultCabinet(String id) {
+    return collection.doc(id).snapshots().map((e) => CabinetModel.fromMap(e));
+  }
+
   Future<void> addOwner(String cabinetId, String newOwnerEmail) async {
     try {
       var newOwner =
