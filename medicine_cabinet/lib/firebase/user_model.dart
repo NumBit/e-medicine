@@ -18,6 +18,7 @@ class UserModel extends Model {
 
   @override
   Map<String, dynamic> toJson() => {
+        "id": id,
         "name": name,
         "email": email,
         "default_cabinet": defaultCabinet,
