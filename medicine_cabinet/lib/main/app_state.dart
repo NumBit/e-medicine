@@ -1,17 +1,16 @@
 import 'package:flutter/widgets.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 
 class AppState extends ChangeNotifier {
-  CabinetModel _cabinet =
-      CabinetModel(id: "75KfFkAlO6ftGLpFJldV", name: "Lekarnicka");
+  String _openCabinet;
   DrugModel _selectedDrug;
   String _filter = "";
 
-  CabinetModel get cabinet => _cabinet;
+  String get cabinet => _openCabinet;
 
-  set cabinet(CabinetModel value) {
-    _cabinet = value;
+  set cabinet(String value) {
+    print("object" + value);
+    _openCabinet = value;
     notifyListeners();
   }
 

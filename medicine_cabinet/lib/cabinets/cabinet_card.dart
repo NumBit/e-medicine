@@ -5,14 +5,10 @@ import 'package:medicine_cabinet/main/app_state.dart';
 import 'package:provider/provider.dart';
 
 class CabinetCard extends StatelessWidget {
-  final String name;
-  final String id;
-  final bool isSelected;
+  final CabinetModel model;
   const CabinetCard({
     Key key,
-    this.name,
-    this.isSelected,
-    this.id,
+    this.model,
   }) : super(key: key);
 
   @override
@@ -22,7 +18,7 @@ class CabinetCard extends StatelessWidget {
       child: Card(
         elevation: 5,
         child: ExpansionTile(
-          key: ObjectKey(id),
+          key: ObjectKey(model.id),
           leading: Icon(
             Icons.medical_services_outlined,
             color: Theme.of(context).primaryColorDark,
@@ -32,12 +28,12 @@ class CabinetCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  name,
+                  model.name,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-              if (Provider.of<AppState>(context).cabinet.id == id)
+              if (Provider.of<AppState>(context).cabinet == model.id)
                 Tooltip(
                   message: "Opened cabinet",
                   child: Icon(
@@ -56,7 +52,7 @@ class CabinetCard extends StatelessWidget {
                     onPressed: () {
                       showDialog(
                         context: context,
-                        builder: (context) => EditCabinet(id: id),
+                        builder: (context) => EditCabinet(model: model),
                       );
                     },
                     child: Text(
@@ -74,7 +70,7 @@ class CabinetCard extends StatelessWidget {
                 TextButton(
                     onPressed: () {
                       var state = Provider.of<AppState>(context, listen: false);
-                      state.cabinet = CabinetModel(id: id, name: "bohaaa");
+                      state.cabinet = model.id;
                       Navigator.popUntil(context, ModalRoute.withName("/"));
                     },
                     child: Text(

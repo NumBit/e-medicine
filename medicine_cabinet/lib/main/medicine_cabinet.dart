@@ -38,7 +38,7 @@ class MedicineCabinet extends StatelessWidget {
         routes: {
           "/": (context) => StreamProvider<List<DrugModel>>.value(
                 value: DrugRepository(
-                        context, Provider.of<AppState>(context).cabinet.id)
+                        context, Provider.of<AppState>(context).cabinet)
                     .streamModels(
                         filter: Provider.of<AppState>(context).filter),
                 initialData: [],
