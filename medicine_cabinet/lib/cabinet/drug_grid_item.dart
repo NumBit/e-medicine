@@ -4,18 +4,25 @@ import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:get/get.dart';
+import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/drug/drug_detail_page.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/main/app_state.dart';
-import 'package:provider/provider.dart';
+import 'package:medicine_cabinet/main/cabinet_id.dart';
 
 class DrugGridItem extends StatelessWidget {
   final List<String> categories = ["Fever"];
   final int count = 3;
+  final DrugModel model;
+
+  DrugGridItem({Key key, this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var drug = Provider.of<DrugModel>(context);
+    CabinetId cabId = Get.find();
+    print(cabId.id.value);
+    print(model);
     return OpenContainer(
         closedShape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -34,14 +41,14 @@ class DrugGridItem extends StatelessWidget {
                 children: [
                   Center(
                     child: Icon(
-                      mapToIconData(jsonDecode(drug.icon)),
+                      mapToIconData(jsonDecode(model.icon)),
                       color: Theme.of(context).primaryColorDark,
                       size: 50,
                     ),
                   ),
                   Flexible(
                     child: Text(
-                      drug.name,
+                      model.name,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       textScaleFactor: 1.5,
@@ -71,7 +78,6 @@ class DrugGridItem extends StatelessWidget {
           );
         },
         openBuilder: (context, action) {
-          Provider.of<AppState>(context, listen: false).selectedDrug = drug;
           return DrugDetailPage();
         });
   }

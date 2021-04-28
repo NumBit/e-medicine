@@ -17,7 +17,10 @@ class DrugRepository extends Repository<DrugModel> {
 
   @override
   Stream<DrugModel> streamModel(String id) {
-    throw UnimplementedError();
+    return collection
+        .where("id", isEqualTo: id)
+        .snapshots()
+        .map((snap) => snap.docs.map((e) => DrugModel.fromMap(e)).first);
   }
 
   Stream<List<DrugModel>> streamModels({String filter = ""}) {

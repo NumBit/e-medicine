@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:medicine_cabinet/main/app_state.dart';
-import 'package:provider/provider.dart';
 
 import 'drug_categories.dart';
 
@@ -17,7 +16,7 @@ class DrugHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var drug = Provider.of<AppState>(context).selectedDrug;
+    var drug = null; //TODO
     return Padding(
       padding: const EdgeInsets.only(top: 50),
       child: Container(

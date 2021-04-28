@@ -11,7 +11,7 @@ class AppState extends ChangeNotifier {
   set cabinet(String value) {
     print("object" + value);
     _openCabinet = value;
-    notifyListeners();
+    //notifyListeners();
   }
 
   DrugModel get selectedDrug => _selectedDrug;

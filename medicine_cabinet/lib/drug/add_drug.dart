@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:get/get.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/main/app_state.dart';
-import 'package:provider/provider.dart';
+import 'package:medicine_cabinet/main/cabinet_id.dart';
 
 class AddDrug extends StatelessWidget {
   const AddDrug({Key key}) : super(key: key);
@@ -114,11 +115,8 @@ class AddDrug extends StatelessWidget {
                             description: descriptionController.text,
                             icon: jsonEncode(iconDataToMap(icon)),
                           );
-                          DrugRepository(
-                                  context,
-                                  Provider.of<AppState>(context, listen: false)
-                                      .cabinet)
-                              .add(drug);
+                          CabinetId d = Get.find();
+                          DrugRepository(context, d.id.value).add(drug);
                           Navigator.pop(context);
                         }
                       },

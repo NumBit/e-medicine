@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/main/app_state.dart';
-import 'package:provider/provider.dart';
 
 import 'description_scroll_list.dart';
 import 'drug_header.dart';
@@ -18,7 +17,7 @@ class DrugDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var drug = Provider.of<AppState>(context).selectedDrug;
+    var drug = null; //TODO
     return Scaffold(
       body: Container(
         color: Colors.white,

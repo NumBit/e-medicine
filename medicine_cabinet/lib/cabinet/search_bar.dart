@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/main/app_state.dart';
-import 'package:provider/provider.dart';
 
 class SearchBar extends StatelessWidget {
   const SearchBar({
@@ -12,8 +11,7 @@ class SearchBar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: TextField(
-        onChanged: (value) =>
-            Provider.of<AppState>(context, listen: false).filter = value,
+        onChanged: (value) {},
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
