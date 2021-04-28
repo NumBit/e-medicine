@@ -18,9 +18,10 @@ class DrugRepository extends Repository<DrugModel> {
   @override
   Stream<DrugModel> streamModel(String id) {
     return collection
-        .where("id", isEqualTo: id)
         .snapshots()
-        .map((snap) => snap.docs.map((e) => DrugModel.fromMap(e)).first);
+        .map((snap) => snap.docs.where((element) => element.id == id).map((e) {
+              return DrugModel.fromMap(e);
+            }).first);
   }
 
   Stream<List<DrugModel>> streamModels({String filter = ""}) {

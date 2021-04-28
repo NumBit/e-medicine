@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/drug/package_card.dart';
+import 'package:medicine_cabinet/drug/data/drug_model.dart';
+import 'package:medicine_cabinet/drug/detail/package_card.dart';
 
 import 'description.dart';
 import 'detail_app_bar.dart';
 
-class DescriptionScrollList extends StatelessWidget {
-  const DescriptionScrollList({
+class PackagesList extends StatelessWidget {
+  const PackagesList({
     Key key,
-    @required this.name,
-    @required this.description,
+    this.model,
   }) : super(key: key);
 
-  final String name;
-  final String description;
+  final DrugModel model;
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(slivers: [
-      DetailAppBar(name: name),
+      DetailAppBar(
+        model: model,
+      ),
       SliverToBoxAdapter(
         child: SizedBox(
           height: 250,
@@ -25,7 +26,7 @@ class DescriptionScrollList extends StatelessWidget {
       ),
       SliverList(
         delegate: SliverChildListDelegate([
-          Description(description: description),
+          Description(description: model.description),
           Container(
             color: Theme.of(context).primaryColor,
             child: Divider(

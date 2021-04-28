@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 import 'package:medicine_cabinet/cabinet/medicine_cabinet_page.dart';
 import 'package:medicine_cabinet/cabinets/cabinets_list_page.dart';
-import 'package:medicine_cabinet/drug/add_drug.dart';
-import 'package:medicine_cabinet/drug/drug_detail_page.dart';
-import 'package:medicine_cabinet/drug/edit_drug.dart';
+import 'package:medicine_cabinet/drug/add_edit/add_drug.dart';
+import 'package:medicine_cabinet/drug/add_edit/edit_drug.dart';
+import 'package:medicine_cabinet/drug/detail/drug_detail_page.dart';
 import 'package:medicine_cabinet/experiment/experiment_page.dart';
 import 'package:medicine_cabinet/main/main_page.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
@@ -37,7 +35,6 @@ class MedicineCabinet extends StatelessWidget {
         "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),
         "/profile": (context) => ProfilePage(),
-        "/drug": (context) => DrugDetailPage(),
         "/schedule": (context) => SchedulePage(),
         "/experiment": (context) => ExperimentPage(),
         "/add_drug": (context) => AddDrug(),

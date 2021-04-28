@@ -14,6 +14,7 @@ class CabinetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CabinetId cab = Get.find();
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Card(
@@ -34,7 +35,7 @@ class CabinetCard extends StatelessWidget {
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-              if ("id" == model.id)
+              if (cab.id.value == model.id)
                 Tooltip(
                   message: "Opened cabinet",
                   child: Icon(
@@ -70,7 +71,6 @@ class CabinetCard extends StatelessWidget {
                     )),
                 TextButton(
                     onPressed: () {
-                      CabinetId cab = Get.find();
                       print("Before open" + cab.id.value);
                       cab.id.value = model.id;
                       Navigator.popUntil(context, ModalRoute.withName("/"));

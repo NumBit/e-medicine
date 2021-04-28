@@ -6,24 +6,27 @@ import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
-import 'package:medicine_cabinet/main/app_state.dart';
 import 'package:medicine_cabinet/main/cabinet_id.dart';
 
-class AddDrug extends StatelessWidget {
-  const AddDrug({Key key}) : super(key: key);
+class EditDrug extends StatelessWidget {
+  const EditDrug({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final DrugModel model =
+        ModalRoute.of(context).settings.arguments as DrugModel;
     final _formKey = GlobalKey<FormState>();
-    final nameController = TextEditingController();
-    final substanceController = TextEditingController();
-    final descriptionController = TextEditingController();
+    final nameController = TextEditingController(text: model.name);
+    final substanceController = TextEditingController(text: model.latinName);
+    final descriptionController =
+        TextEditingController(text: model.description);
     var icon = Icons.ac_unit;
+    CabinetId cabId = Get.find();
     return Container(
       child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: Text("Add new drug"),
+            title: Text("Edit drug"),
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -106,21 +109,37 @@ class AddDrug extends StatelessWidget {
                       ],
                     ),
                   ),
-                  ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          var drug = DrugModel(
-                            name: nameController.text,
-                            latinName: substanceController.text,
-                            description: descriptionController.text,
-                            icon: jsonEncode(iconDataToMap(icon)),
-                          );
-                          CabinetId d = Get.find();
-                          DrugRepository(context, d.id.value).add(drug);
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: Text("Create"))
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, "/", (Route<dynamic> route) => false);
+                            DrugRepository(context, cabId.id.value)
+                                .remove(model.id);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              primary: Theme.of(context).errorColor),
+                          child: Text("Delete")),
+                      ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState.validate()) {
+                              var drug = DrugModel(
+                                id: model.id,
+                                name: nameController.text,
+                                latinName: substanceController.text,
+                                description: descriptionController.text,
+                                icon: jsonEncode(iconDataToMap(icon)),
+                              );
+                              DrugRepository(context, cabId.id.value)
+                                  .update(drug);
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Text("Save")),
+                    ],
+                  )
                 ],
               ),
             ),

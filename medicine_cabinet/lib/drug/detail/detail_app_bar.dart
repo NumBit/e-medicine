@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/drug/data/drug_model.dart';
 
 class DetailAppBar extends StatelessWidget {
   const DetailAppBar({
     Key key,
-    @required this.name,
+    this.model,
   }) : super(key: key);
 
-  final String name;
+  final DrugModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -15,22 +16,24 @@ class DetailAppBar extends StatelessWidget {
       floating: true,
       snap: true,
       title: Tooltip(
-        message: name,
+        message: model.name,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              name,
-              textAlign: TextAlign.start,
-              overflow: TextOverflow.fade,
-              style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: 30),
+            Flexible(
+              child: Text(
+                model.name,
+                textAlign: TextAlign.start,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 30),
+              ),
             ),
             InkWell(
               onTap: () {
-                Navigator.pushNamed(context, "/edit_drug");
+                Navigator.pushNamed(context, "/edit_drug", arguments: model);
               },
               borderRadius: BorderRadius.circular(50),
               child: Icon(

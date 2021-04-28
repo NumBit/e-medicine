@@ -33,7 +33,7 @@ class MainPage extends StatelessWidget {
                 }
                 if (snapshot.connectionState == ConnectionState.done) {
                   CabinetId cabId = Get.put(CabinetId());
-                  cabId.setId(snapshot.data.defaultCabinet);
+                  cabId.id.value = snapshot.data.defaultCabinet;
                   return MedicineCabinetPage();
                   //return Container(child: Text("Test"));
                 }

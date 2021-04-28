@@ -2,21 +2,22 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
-import 'package:medicine_cabinet/main/app_state.dart';
+import 'package:medicine_cabinet/drug/data/drug_model.dart';
 
 import 'drug_categories.dart';
 
 class DrugHeader extends StatelessWidget {
+  final List<String> categories;
+  final DrugModel model;
   const DrugHeader({
     Key key,
     @required this.categories,
+    this.model,
   }) : super(key: key);
-
-  final List<String> categories;
 
   @override
   Widget build(BuildContext context) {
-    var drug = null; //TODO
+    var drug = model;
     return Padding(
       padding: const EdgeInsets.only(top: 50),
       child: Container(
@@ -33,6 +34,8 @@ class DrugHeader extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.5,
                   child: Text(
                     drug.latinName,
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w200,
@@ -42,11 +45,12 @@ class DrugHeader extends StatelessWidget {
                 DrugCategories(categories: categories)
               ],
             ),
-            Icon(
-              mapToIconData(jsonDecode(drug.icon)),
-              color: Theme.of(context).primaryColorDark,
-              size: 100,
-            ),
+            if (drug.icon.isNotEmpty)
+              Icon(
+                mapToIconData(jsonDecode(drug.icon)),
+                color: Theme.of(context).primaryColorDark,
+                size: 100,
+              ),
           ],
         ),
       ),
