@@ -22,6 +22,10 @@ class MainPage extends StatelessWidget {
           return LoginPage();
         } else {
           print('User is signed in!');
+          UserState userState = Get.put(UserState());
+          if (userState.id.value.isNotEmpty) {
+            return CabinetPage();
+          }
           return FutureBuilder<UserModel>(
               future: UserRepository(context).getMyUser(),
               builder: (context, snapshot) {
@@ -29,7 +33,6 @@ class MainPage extends StatelessWidget {
                   return ErrorPage();
                 }
                 if (snapshot.connectionState == ConnectionState.done) {
-                  UserState userState = Get.put(UserState());
                   userState.id.value = snapshot.data.id;
                   userState.email.value = snapshot.data.email;
                   userState.name.value = snapshot.data.name;
