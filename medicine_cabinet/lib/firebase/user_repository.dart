@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 import 'package:medicine_cabinet/firebase/user_model.dart';
 
@@ -30,28 +29,32 @@ class UserRepository extends Repository<UserModel> {
 
   Future<UserModel> getMyUser() {
     var myUid = FirebaseAuth.instance.currentUser.uid;
-    return collection
-        .where("id", isEqualTo: myUid)
-        .snapshots()
-        .map((e) => UserModel.fromMap(e.docs.first))
-        .first;
+    return collection.where("id", isEqualTo: myUid).get().then((value) {
+      if (value.size > 0) {
+        return value.docs.map((e) => UserModel.fromMap(e)).toList().first;
+      } else {
+        return null;
+      }
+    }).catchError((error) => null);
   }
 
-  Stream<UserModel> getByEmail(String email) {
-    return collection.where({"email": email}).snapshots().map((snap) {
-          return snap.docs
-              .map((e) {
-                return UserModel.fromMap(e);
-              })
-              .toList()
-              .first;
-        });
+  Future<UserModel> getByEmail(String email) {
+    return collection.where("email", isEqualTo: email).get().then((value) {
+      if (value.size > 0) {
+        return value.docs.map((e) => UserModel.fromMap(e)).toList().first;
+      } else {
+        return null;
+      }
+    }).catchError((error) => null);
   }
-
-  /*return collection
-        .where({"email": email})
-        .get()
-        .then((value) => UserModel.fromMap(value))+
-        .asStream()
-        .map((snap) => UserModel.fromMap(snap.docs));*/
+/*
+    Future<void> addCabinet(String userId, String cabinetId, String cabinetName) {
+    return collection.where("email", isEqualTo: email).get().then((value) {
+      if (value.size > 0) {
+        return value.docs.map((e) => UserModel.fromMap(e)).toList().first;
+      } else {
+        return null;
+      }
+    }).catchError((error) => null);
+  }*/
 }

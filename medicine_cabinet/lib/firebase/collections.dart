@@ -7,7 +7,6 @@ class Collections {
   static final String categories = "categories";
   static final String users = "users";
   static final String owners = "owners";
-
   // Services
   static final FirebaseAnalytics analytics = FirebaseAnalytics();
 
