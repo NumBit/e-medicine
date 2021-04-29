@@ -52,8 +52,8 @@ class ExperimentPage extends StatelessWidget {
                           child: Text("Add category")),
                       ElevatedButton(
                           onPressed: () {
-                            CabinetRepository(context)
-                                .addOwner("mvHtFmG93h39BF7iAsXi", "p@p.sk");
+                            //CabinetRepository(context)
+                            //.addOwner("mvHtFmG93h39BF7iAsXi", "p@p.sk");
                           },
                           child: Text("Add owner")),
                     ],

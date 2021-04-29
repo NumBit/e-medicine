@@ -5,7 +5,7 @@ import 'package:medicine_cabinet/error/error_page.dart';
 import 'package:medicine_cabinet/error/loading_page.dart';
 import 'package:medicine_cabinet/firebase/user_model.dart';
 import 'package:medicine_cabinet/firebase/user_repository.dart';
-import 'package:medicine_cabinet/main/cabinet_id.dart';
+import 'package:medicine_cabinet/main/user_state.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
 import 'package:get/get.dart';
 
@@ -29,8 +29,12 @@ class MainPage extends StatelessWidget {
                   return ErrorPage();
                 }
                 if (snapshot.connectionState == ConnectionState.done) {
-                  CabinetId cabId = Get.put(CabinetId());
-                  cabId.id.value = snapshot.data.defaultCabinet;
+                  UserState userState = Get.put(UserState());
+                  userState.id.value = snapshot.data.id;
+                  userState.email.value = snapshot.data.email;
+                  userState.name.value = snapshot.data.name;
+                  userState.userId.value = snapshot.data.userId;
+                  userState.openCabinetId.value = snapshot.data.openCabinetId;
                   return MedicineCabinetPage();
                 }
                 return LoadingPage();

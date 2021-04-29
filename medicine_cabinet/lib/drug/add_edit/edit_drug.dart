@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/drug/data/selected_icon.dart';
-import 'package:medicine_cabinet/main/cabinet_id.dart';
+import 'package:medicine_cabinet/main/user_state.dart';
 
 import 'custom_form_field.dart';
 import 'icon_field.dart';
@@ -20,12 +20,12 @@ class EditDrug extends StatelessWidget {
         ModalRoute.of(context).settings.arguments as DrugModel;
     final _formKey = GlobalKey<FormState>();
     final nameController = TextEditingController(text: model.name);
-    final substanceController = TextEditingController(text: model.latinName);
+    final substanceController = TextEditingController(text: model.substance);
     final descriptionController =
         TextEditingController(text: model.description);
     SelectedIcon icon = Get.put(SelectedIcon());
     icon.icon.value = mapToIconData(jsonDecode(model.icon));
-    CabinetId cabId = Get.find();
+    UserState userState = Get.find();
     return Container(
       child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -66,7 +66,8 @@ class EditDrug extends StatelessWidget {
                           onPressed: () {
                             Navigator.pushNamedAndRemoveUntil(
                                 context, "/", (Route<dynamic> route) => false);
-                            DrugRepository(context, cabId.id.value)
+                            DrugRepository(context,
+                                    userState.openCabinetId.value)
                                 .remove(model.id);
                           },
                           style: ElevatedButton.styleFrom(
@@ -78,12 +79,13 @@ class EditDrug extends StatelessWidget {
                               var drug = DrugModel(
                                 id: model.id,
                                 name: nameController.text,
-                                latinName: substanceController.text,
+                                substance: substanceController.text,
                                 description: descriptionController.text,
                                 icon:
                                     jsonEncode(iconDataToMap(icon.icon.value)),
                               );
-                              DrugRepository(context, cabId.id.value)
+                              DrugRepository(context,
+                                      userState.openCabinetId.value)
                                   .update(drug);
                               Navigator.pop(context);
                             }

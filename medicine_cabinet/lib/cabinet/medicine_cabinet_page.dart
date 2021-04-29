@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/cabinet_app_bar.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 import 'package:medicine_cabinet/cabinet/drug_grid_item.dart';
 import 'package:medicine_cabinet/cabinet/search_bar.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
-import 'package:medicine_cabinet/main/cabinet_id.dart';
 import 'package:medicine_cabinet/main/filter.dart';
 import 'package:medicine_cabinet/main/menu.dart';
+import 'package:medicine_cabinet/main/user_state.dart';
 
 import 'chip_filter.dart';
 
@@ -57,13 +55,14 @@ class DrugGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CabinetId cabId = Get.find();
+    UserState userState = Get.find();
     Filter filter = Get.find();
     return Obx(() => StreamBuilder<List<DrugModel>>(
-        stream: DrugRepository(context, cabId.id.value)
+        stream: DrugRepository(context, userState.openCabinetId.value)
             .streamModels(filter: filter.filter.value),
         initialData: [],
         builder: (context, snapshot) {
+          print(snapshot.data);
           return SliverPadding(
               padding: EdgeInsets.all(15),
               sliver: SliverGrid.count(

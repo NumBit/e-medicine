@@ -7,7 +7,7 @@ import 'package:medicine_cabinet/drug/detail/add_package.dart';
 import 'package:medicine_cabinet/drug/detail/description.dart';
 import 'package:medicine_cabinet/drug/detail/detail_app_bar.dart';
 import 'package:medicine_cabinet/drug/detail/packages_list.dart';
-import 'package:medicine_cabinet/main/cabinet_id.dart';
+import 'package:medicine_cabinet/main/user_state.dart';
 import 'drug_header.dart';
 
 class DrugDetailPage extends StatelessWidget {
@@ -23,11 +23,11 @@ class DrugDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CabinetId cabId = Get.find();
+    UserState userState = Get.find();
     return StreamBuilder<DrugModel>(
-        stream: DrugRepository(context, cabId.id.value).streamModel(id),
+        stream: DrugRepository(context, userState.openCabinetId.value).streamModel(id),
         initialData: DrugModel(
-            id: "", description: "", icon: "", latinName: "", name: ""),
+            id: "", description: "", icon: "", substance: "", name: ""),
         builder: (context, model) {
           return Scaffold(
             backgroundColor: Theme.of(context).primaryColor,

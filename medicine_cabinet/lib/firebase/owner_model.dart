@@ -17,9 +17,9 @@ class OwnerModel extends Model {
 
   @override
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "user_id": userId,
-        "email": email,
-        "admin": isAdmin,
+        if (id != null) "id": id,
+        if (userId != null) "user_id": userId,
+        if (email != null) "email": email,
+        if (isAdmin != null) "admin": isAdmin,
       };
 }

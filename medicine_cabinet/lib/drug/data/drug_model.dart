@@ -4,15 +4,15 @@ import 'package:medicine_cabinet/firebase/model.dart';
 class DrugModel extends Model {
   final String id;
   final String name;
-  final String latinName;
+  final String substance;
   final String description;
   final String icon;
-  DateTime createdAt = DateTime.now();
+  final Timestamp createdAt;
 
   DrugModel(
       {this.id = "",
       this.name,
-      this.latinName,
+      this.substance,
       this.description,
       this.icon,
       this.createdAt});
@@ -20,18 +20,18 @@ class DrugModel extends Model {
   DrugModel.fromMap(QueryDocumentSnapshot snapshot)
       : id = snapshot.id ?? "",
         name = snapshot.data()["name"] ?? "",
-        latinName = snapshot.data()["latin_name"] ?? "",
+        substance = snapshot.data()["substance"] ?? "",
         description = snapshot.data()["description"] ?? "",
         icon = snapshot.data()["icon"] ??
             "{\"codePoint\":60518,\"fontFamily\":\"MaterialIcons\",\"fontPackage\":null,\"matchTextDirection\":false}",
-        createdAt = snapshot.data()["created_at"] ?? DateTime.now();
+        createdAt = snapshot.data()["created_at"] ?? Timestamp.now();
 
   @override
   Map<String, dynamic> toJson() => {
-        "name": name,
-        "latin_name": latinName,
-        "description": description,
-        "icon": icon,
-        "created_at": DateTime.now(),
+        if (name != null) "name": name,
+        if (substance != null) "substance": substance,
+        if (description != null) "description": description,
+        if (icon != null) "icon": icon,
+        "edited_at": Timestamp.now(),
       };
 }

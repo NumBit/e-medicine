@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:medicine_cabinet/main/cabinet_id.dart';
+import 'package:medicine_cabinet/main/user_state.dart';
 
 import 'data/cabinet_model.dart';
 import 'data/cabinet_repository.dart';
@@ -10,10 +10,11 @@ class CabinetAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CabinetId cabId = Get.find();
+    UserState userState = Get.find();
     return Obx(
       () => StreamBuilder<CabinetModel>(
-        stream: CabinetRepository(context).streamModel(cabId.id.value),
+        stream: CabinetRepository(context)
+            .streamModel(userState.openCabinetId.value),
         initialData: CabinetModel(id: "", name: ""),
         builder: (context, snapshot) => SliverAppBar(
           pinned: true,

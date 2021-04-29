@@ -8,7 +8,7 @@ import 'package:medicine_cabinet/drug/add_edit/icon_field.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/drug/data/selected_icon.dart';
-import 'package:medicine_cabinet/main/cabinet_id.dart';
+import 'package:medicine_cabinet/main/user_state.dart';
 
 class AddDrug extends StatelessWidget {
   const AddDrug({Key key}) : super(key: key);
@@ -59,12 +59,13 @@ class AddDrug extends StatelessWidget {
                       if (_formKey.currentState.validate()) {
                         var drug = DrugModel(
                           name: nameController.text,
-                          latinName: substanceController.text,
+                          substance: substanceController.text,
                           description: descriptionController.text,
                           icon: jsonEncode(iconDataToMap(icon.icon.value)),
                         );
-                        CabinetId cabId = Get.find();
-                        DrugRepository(context, cabId.id.value).add(drug);
+                        UserState userState = Get.find();
+                        DrugRepository(context, userState.openCabinetId.value)
+                            .add(drug);
                         Get.back();
                       }
                     },

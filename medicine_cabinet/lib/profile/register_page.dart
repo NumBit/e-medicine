@@ -60,15 +60,15 @@ class RegisterPage extends StatelessWidget {
       return;
     }
     try {
-      var doc = await FirebaseAuth.instance
+      var userDoc = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: pass);
-      var cabId = await CabinetRepository(context)
-          .add(CabinetModel(name: "Default cabinet"));
+      var cabId = await CabinetRepository(context).add(
+          CabinetModel(name: "Default cabinet", ownerId: userDoc.user.uid));
       UserRepository(context).add(UserModel(
-          id: doc.user.uid,
+          userId: userDoc.user.uid,
           name: "Your Name",
           email: email,
-          defaultCabinet: cabId));
+          openCabinetId: cabId));
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
         snackBarMessage(context, "The password provided is too weak.");

@@ -20,10 +20,4 @@ class CategoryRepository extends Repository<CategoryModel> {
     // TODO: implement streamModel
     throw UnimplementedError();
   }
-
-  @override
-  CategoryModel get(String id) {
-    // TODO: implement get
-    throw UnimplementedError();
-  }
 }

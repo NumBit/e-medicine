@@ -2,10 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
-import 'package:medicine_cabinet/firebase/owner_model.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 import 'package:medicine_cabinet/firebase/collections.dart';
-import 'package:medicine_cabinet/firebase/user_repository.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 
 class CabinetRepository extends Repository<CabinetModel> {
@@ -26,38 +24,33 @@ class CabinetRepository extends Repository<CabinetModel> {
   @override
   Future<String> add(CabinetModel model) async {
     DocumentReference cabinet;
+    var ownerId = FirebaseAuth.instance.currentUser.uid;
+    model = CabinetModel(name: model.name, ownerId: ownerId);
     try {
       cabinet = await collection.add(model.toJson());
-      //TODO add to users cabinets
-      collection.doc(cabinet.id).collection(Collections.owners).add(
-          {"user_id": FirebaseAuth.instance.currentUser.uid, "admin": true});
-    } catch (error) {
+    } catch (e) {
       snackBarMessage(context, "Something went wrong");
     }
-    print("Operation success.");
     return cabinet.id;
   }
 
   Stream<List<CabinetModel>> streamModels() {
-    return collection.snapshots().map((snap) {
-      return snap.docs.map((e) {
-        return CabinetModel.fromMap(e);
-      }).toList();
-    });
-  }
-
-    Stream<List<CabinetModel>> testStreamModels() {
-    return collection.snapshots().map((snap) {
-      return snap.docs.map((e) {
-        return CabinetModel.fromMap(e);
-      }).toList();
+    var myUid = FirebaseAuth.instance.currentUser.uid;
+    return collection
+        .where("owner_id", isEqualTo: myUid)
+        .snapshots()
+        .map((value) {
+      if (value.size > 0) {
+        return value.docs.map((e) => CabinetModel.fromMap(e)).toList();
+      }
+      return [];
     });
   }
 
   Stream<CabinetModel> getDefaultCabinet(String id) {
     return collection.doc(id).snapshots().map((e) => CabinetModel.fromMap(e));
   }
-
+/*
   Stream<List<OwnerModel>> streamOwners(String cabinetId) {
     return collection
         .doc(cabinetId)
@@ -72,7 +65,9 @@ class CabinetRepository extends Repository<CabinetModel> {
           .toList();
     });
   }
-
+  
+  */
+/*
   Future<void> addOwner(String cabinetId, String newOwnerEmail) async {
     try {
       var user = await UserRepository(context).getByEmail(newOwnerEmail);
@@ -94,7 +89,8 @@ class CabinetRepository extends Repository<CabinetModel> {
       snackBarMessage(context, "Something went wrong");
     }
   }
-
+*/
+/*
   Future<OwnerModel> getOwner(String cabinetId, String userId) {
     return collection
         .doc(cabinetId)
@@ -109,7 +105,8 @@ class CabinetRepository extends Repository<CabinetModel> {
       }
     }).catchError((error) => null);
   }
-
+*/
+/*
   Future<void> removeOwner(String cabinetId, String ownerId) async {
     try {
       var owner = await getOwner(cabinetId, ownerId);
@@ -130,5 +127,6 @@ class CabinetRepository extends Repository<CabinetModel> {
     } catch (error) {
       snackBarMessage(context, "Something went wrong");
     }
-  }
+  }*/
+
 }

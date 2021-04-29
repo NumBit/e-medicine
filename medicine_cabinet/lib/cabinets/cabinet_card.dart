@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinets/edit_cabinet.dart';
 import 'package:medicine_cabinet/cabinets/share_cabinet.dart';
-import 'package:medicine_cabinet/main/cabinet_id.dart';
+import 'package:medicine_cabinet/firebase/user_model.dart';
+import 'package:medicine_cabinet/firebase/user_repository.dart';
+import 'package:medicine_cabinet/main/user_state.dart';
 
 class CabinetCard extends StatelessWidget {
   final CabinetModel model;
@@ -14,7 +16,7 @@ class CabinetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CabinetId cab = Get.find();
+    UserState userState = Get.find();
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Card(
@@ -35,7 +37,7 @@ class CabinetCard extends StatelessWidget {
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-              if (cab.id.value == model.id)
+              if (userState.openCabinetId.value == model.id)
                 Tooltip(
                   message: "Opened cabinet",
                   child: Icon(
@@ -70,7 +72,13 @@ class CabinetCard extends StatelessWidget {
                     )),
                 TextButton(
                     onPressed: () {
-                      cab.id.value = model.id;
+                      userState.openCabinetId.value = model.id;
+                      UserRepository(context).update(UserModel(
+                          id: userState.id.value,
+                          openCabinetId: model.id,
+                          userId: userState.userId.value,
+                          email: userState.email.value,
+                          name: userState.name.value));
                       Navigator.popUntil(context, ModalRoute.withName("/"));
                     },
                     child: Text(

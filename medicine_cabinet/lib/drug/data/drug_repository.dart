@@ -37,10 +37,4 @@ class DrugRepository extends Repository<DrugModel> {
       }).toList();
     });
   }
-
-  @override
-  DrugModel get(String id) {
-    // TODO: implement get
-    throw UnimplementedError();
-  }
 }
