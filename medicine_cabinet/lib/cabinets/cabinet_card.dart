@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinets/edit_cabinet.dart';
-import 'package:medicine_cabinet/main/app_state.dart';
+import 'package:medicine_cabinet/cabinets/share_cabinet.dart';
 import 'package:medicine_cabinet/main/cabinet_id.dart';
 
 class CabinetCard extends StatelessWidget {
@@ -52,10 +52,7 @@ class CabinetCard extends StatelessWidget {
               children: [
                 TextButton(
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => EditCabinet(model: model),
-                      );
+                      Get.dialog(EditCabinet(model: model));
                     },
                     child: Text(
                       "Edit",
@@ -63,7 +60,9 @@ class CabinetCard extends StatelessWidget {
                           TextStyle(color: Theme.of(context).primaryColorDark),
                     )),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.dialog(ShareCabinet(model: model));
+                    },
                     child: Text(
                       "Share",
                       style:
@@ -71,7 +70,6 @@ class CabinetCard extends StatelessWidget {
                     )),
                 TextButton(
                     onPressed: () {
-                      print("Before open" + cab.id.value);
                       cab.id.value = model.id;
                       Navigator.popUntil(context, ModalRoute.withName("/"));
                     },

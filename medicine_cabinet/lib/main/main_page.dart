@@ -5,7 +5,6 @@ import 'package:medicine_cabinet/error/error_page.dart';
 import 'package:medicine_cabinet/error/loading_page.dart';
 import 'package:medicine_cabinet/firebase/user_model.dart';
 import 'package:medicine_cabinet/firebase/user_repository.dart';
-import 'package:medicine_cabinet/main/app_state.dart';
 import 'package:medicine_cabinet/main/cabinet_id.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
 import 'package:get/get.dart';
