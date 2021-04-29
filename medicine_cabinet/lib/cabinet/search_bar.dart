@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/main/app_state.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import 'package:medicine_cabinet/main/state/filter_state.dart';
 
 class SearchBar extends StatelessWidget {
   const SearchBar({
@@ -9,11 +9,13 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FilterState filter = Get.find();
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: TextField(
-        onChanged: (value) =>
-            Provider.of<AppState>(context, listen: false).filter = value,
+        onChanged: (value) {
+          filter.filter.value = value;
+        },
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
@@ -26,7 +28,8 @@ class SearchBar extends StatelessWidget {
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black, width: 1),
+            borderSide:
+                BorderSide(color: Theme.of(context).primaryColorDark, width: 1),
             borderRadius: BorderRadius.circular(50),
           ),
           enabledBorder: OutlineInputBorder(

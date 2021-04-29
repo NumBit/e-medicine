@@ -1,56 +1,100 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
-import 'package:medicine_cabinet/firebase/user_model.dart';
-import 'package:medicine_cabinet/firebase/user_repository.dart';
-import 'package:medicine_cabinet/main/app_state.dart';
+import 'package:medicine_cabinet/drug/add_edit/custom_form_field.dart';
+import 'package:medicine_cabinet/drug/add_edit/password_field.dart';
+import 'package:medicine_cabinet/firebase/user/user_model.dart';
+import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
-import 'package:provider/provider.dart';
+import 'package:medicine_cabinet/main/state/user_state.dart';
+import 'package:medicine_cabinet/profile/login_button.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage();
 
   @override
   Widget build(BuildContext context) {
-    //final user = context.read<UserCubit>();
+    final _formKey = GlobalKey<FormState>();
     final email = TextEditingController();
     final pass = TextEditingController();
     final passSecond = TextEditingController();
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text('Register account'),
         ),
         body: Container(
-            padding: EdgeInsets.all(10),
-            child: Column(children: [
-              Text("Email:"),
-              TextField(
-                controller: email,
-              ),
-              Text("Password:"),
-              TextField(
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                controller: pass,
-              ),
-              Text("Repeat password:"),
-              TextField(
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                controller: passSecond,
-              ),
-              ElevatedButton(
-                  child: Text('Register'),
-                  onPressed: () => [
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
+            child: Form(
+              key: _formKey,
+              child: Column(children: [
+                Text(
+                  "Register",
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                CustomFormField(
+                  label: "Email",
+                  controller: email,
+                  inputType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty)
+                      return "Email cannot be empty";
+                    if (!RegExp(
+                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                        .hasMatch(value)) return 'Wrong email format';
+                    return null;
+                  },
+                ),
+                PasswordField(
+                  label: "Password",
+                  controller: pass,
+                  validator: (value) {
+                    if (value == null || value.isEmpty)
+                      return "Password cannot be empty";
+                    if (value.length < 6)
+                      return "Password must be at leat 6 char. long";
+                    if (!value.contains(RegExp(r"[0-9]")))
+                      return "Password must have at least 1 number";
+                    if (value != passSecond.text)
+                      return "Passwords needs to match";
+                    return null;
+                  },
+                ),
+                PasswordField(
+                  label: "Repeat password",
+                  controller: passSecond,
+                  validator: (value) {
+                    if (value == null || value.isEmpty)
+                      return "Password cannot be empty";
+                    if (value.length < 6)
+                      return "Password must be at leat 6 char. long";
+                    if (!value.contains(RegExp(r"[0-9]")))
+                      return "Password must have at least 1 number";
+                    if (value != pass.text) return "Passwords needs to match";
+                    return null;
+                  },
+                ),
+                LoginButton(
+                  text: "Register",
+                  onPressed: () {
+                    {
+                      if (_formKey.currentState.validate()) {
                         _register(
-                            context, email.text, pass.text, passSecond.text),
-                        Navigator.pop(context)
-                      ])
-            ])));
+                            context, email.text, pass.text, passSecond.text);
+                        Get.back();
+                      }
+                    }
+                  },
+                ),
+              ]),
+            )));
   }
 
   void _register(context, String email, String pass, String passSecond) async {
@@ -63,17 +107,21 @@ class RegisterPage extends StatelessWidget {
       return;
     }
     try {
-      var doc = await FirebaseAuth.instance
+      var userDoc = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: pass);
-      var cabId = await CabinetRepository(context)
-          .add(CabinetModel(name: "Default cabinet"));
-      UserRepository(context).add(UserModel(
-          id: doc.user.uid,
+      var cabId = await CabinetRepository(context).add(
+          CabinetModel(name: "Default cabinet", ownerId: userDoc.user.uid));
+      var userDocId = await UserRepository(context).add(UserModel(
+          userId: userDoc.user.uid,
           name: "Your Name",
           email: email,
-          defaultCabinet: cabId));
-      var state = Provider.of<AppState>(context, listen: false);
-      state.cabinet = cabId;
+          openCabinetId: cabId));
+      UserState userState = Get.find();
+      userState.id.value = userDocId;
+      userState.userId.value = userDoc.user.uid;
+      userState.name.value = "Your name";
+      userState.email.value = email;
+      userState.openCabinetId.value = cabId;
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
         snackBarMessage(context, "The password provided is too weak.");
@@ -83,6 +131,7 @@ class RegisterPage extends StatelessWidget {
         return;
       }
     } catch (e) {
+      print("Error occured in register:");
       print(e);
       snackBarMessage(context, "Unknown error occured.");
       return;

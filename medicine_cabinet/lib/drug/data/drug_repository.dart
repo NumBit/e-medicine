@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/firebase/collections.dart';
+import 'package:medicine_cabinet/firebase/constants/collections.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 
 import 'drug_model.dart';
@@ -17,7 +17,11 @@ class DrugRepository extends Repository<DrugModel> {
 
   @override
   Stream<DrugModel> streamModel(String id) {
-    throw UnimplementedError();
+    return collection
+        .snapshots()
+        .map((snap) => snap.docs.where((element) => element.id == id).map((e) {
+              return DrugModel.fromMap(e);
+            }).first);
   }
 
   Stream<List<DrugModel>> streamModels({String filter = ""}) {
@@ -32,11 +36,5 @@ class DrugRepository extends Repository<DrugModel> {
         return DrugModel.fromMap(e);
       }).toList();
     });
-  }
-
-  @override
-  DrugModel get(String id) {
-    // TODO: implement get
-    throw UnimplementedError();
   }
 }

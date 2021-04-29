@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinets/edit_cabinet.dart';
-import 'package:medicine_cabinet/main/app_state.dart';
-import 'package:provider/provider.dart';
+import 'package:medicine_cabinet/cabinets/share_cabinet.dart';
+import 'package:medicine_cabinet/firebase/user/user_model.dart';
+import 'package:medicine_cabinet/firebase/user/user_repository.dart';
+import 'package:medicine_cabinet/main/state/user_state.dart';
 
 class CabinetCard extends StatelessWidget {
   final CabinetModel model;
@@ -13,6 +16,7 @@ class CabinetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserState userState = Get.find();
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Card(
@@ -33,7 +37,7 @@ class CabinetCard extends StatelessWidget {
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-              if (Provider.of<AppState>(context).cabinet == model.id)
+              if (userState.openCabinetId.value == model.id)
                 Tooltip(
                   message: "Opened cabinet",
                   child: Icon(
@@ -50,10 +54,7 @@ class CabinetCard extends StatelessWidget {
               children: [
                 TextButton(
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => EditCabinet(model: model),
-                      );
+                      Get.dialog(EditCabinet(model: model));
                     },
                     child: Text(
                       "Edit",
@@ -61,7 +62,9 @@ class CabinetCard extends StatelessWidget {
                           TextStyle(color: Theme.of(context).primaryColorDark),
                     )),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.dialog(ShareCabinet(model: model));
+                    },
                     child: Text(
                       "Share",
                       style:
@@ -69,9 +72,13 @@ class CabinetCard extends StatelessWidget {
                     )),
                 TextButton(
                     onPressed: () {
-                      var state = Provider.of<AppState>(context, listen: false);
-                      state.cabinet = model.id;
-                      Navigator.popUntil(context, ModalRoute.withName("/"));
+                      userState.openCabinetId.value = model.id;
+                      print(userState);
+                      UserRepository(context).update(UserModel(
+                        id: userState.id.value,
+                        openCabinetId: model.id,
+                      ));
+                      Get.until(ModalRoute.withName("/"));
                     },
                     child: Text(
                       "Open",

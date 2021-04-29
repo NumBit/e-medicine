@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
-import 'package:medicine_cabinet/firebase/collections.dart';
+import 'package:medicine_cabinet/firebase/constants/collections.dart';
 
 import 'data/../category_model.dart';
 
@@ -18,12 +18,6 @@ class CategoryRepository extends Repository<CategoryModel> {
   @override
   Stream<CategoryModel> streamModel(String id) {
     // TODO: implement streamModel
-    throw UnimplementedError();
-  }
-
-  @override
-  CategoryModel get(String id) {
-    // TODO: implement get
     throw UnimplementedError();
   }
 }

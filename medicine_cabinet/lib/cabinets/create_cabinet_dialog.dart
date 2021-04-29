@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 
@@ -46,7 +47,7 @@ class CreateCabinetDialog extends StatelessWidget {
             ),
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
               ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Get.back(),
                   child: Text("Cancel"),
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).primaryColorDark)),
@@ -55,7 +56,7 @@ class CreateCabinetDialog extends StatelessWidget {
                     if (_formKey.currentState.validate()) {
                       CabinetRepository(context)
                           .add(CabinetModel(id: "", name: nameController.text));
-                      Navigator.pop(context);
+                      Get.back();
                     }
                   },
                   child: Text("Save")),

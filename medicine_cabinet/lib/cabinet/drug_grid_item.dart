@@ -4,76 +4,117 @@ import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
-import 'package:medicine_cabinet/drug/drug_detail_page.dart';
+import 'package:medicine_cabinet/drug/detail/drug_detail_page.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
-import 'package:medicine_cabinet/main/app_state.dart';
-import 'package:provider/provider.dart';
 
 class DrugGridItem extends StatelessWidget {
   final List<String> categories = ["Fever"];
   final int count = 3;
+  final DrugModel model;
+
+  DrugGridItem({Key key, this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var drug = Provider.of<DrugModel>(context);
-    return OpenContainer(
+    return OpenContainer<bool>(
+        tappable: false,
         closedShape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         closedElevation: 5,
         transitionType: ContainerTransitionType.fade,
         transitionDuration: Duration(milliseconds: 500),
         closedBuilder: (context, action) {
-          return Card(
-            elevation: 0,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          return InkWellOverlay(
+            openContainer: action,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(15.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Center(
-                    child: Icon(
-                      mapToIconData(jsonDecode(drug.icon)),
-                      color: Theme.of(context).primaryColorDark,
-                      size: 50,
-                    ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      drug.name,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      textScaleFactor: 1.5,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColorDark,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          categories.first,
-                          textScaleFactor: 1.2,
-                        ),
-                        getCounterText(count)
-                      ],
-                    ),
-                  ),
+                  CardIcon(model: model),
+                  CardName(model: model),
+                  CardStats(categories: categories, count: count),
                 ],
               ),
             ),
           );
         },
         openBuilder: (context, action) {
-          Provider.of<AppState>(context, listen: false).selectedDrug = drug;
-          return DrugDetailPage();
+          return DrugDetailPage(
+            id: model.id,
+          );
         });
+  }
+}
+
+class CardStats extends StatelessWidget {
+  const CardStats({
+    Key key,
+    @required this.categories,
+    @required this.count,
+  }) : super(key: key);
+
+  final List<String> categories;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          categories.first,
+          textScaleFactor: 1.2,
+        ),
+        getCounterText(count)
+      ],
+    );
+  }
+}
+
+class CardIcon extends StatelessWidget {
+  const CardIcon({
+    Key key,
+    @required this.model,
+  }) : super(key: key);
+
+  final DrugModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Icon(
+        mapToIconData(jsonDecode(model.icon)),
+        color: Theme.of(context).primaryColorDark,
+        size: 50,
+      ),
+    );
+  }
+}
+
+class CardName extends StatelessWidget {
+  const CardName({
+    Key key,
+    @required this.model,
+  }) : super(key: key);
+
+  final DrugModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      child: Text(
+        model.name,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 2,
+        textScaleFactor: 1.5,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Theme.of(context).primaryColorDark,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+    );
   }
 }
 
@@ -83,4 +124,30 @@ Widget getCounterText(int count) {
       style: TextStyle(
         color: Color(count <= 3 ? 0xffc33149 : 0xff12263a),
       ));
+}
+
+class InkWellOverlay extends StatelessWidget {
+  const InkWellOverlay({
+    this.openContainer,
+    this.width,
+    this.height,
+    this.child,
+  });
+
+  final VoidCallback openContainer;
+  final double width;
+  final double height;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: height,
+      width: width,
+      child: InkWell(
+        onTap: openContainer,
+        child: child,
+      ),
+    );
+  }
 }
