@@ -32,46 +32,45 @@ class DrugDetailPage extends StatelessWidget {
         builder: (context, model) {
           if (model.data == null) {
             return Container();
-          } else {
-            return Scaffold(
-              backgroundColor: Theme.of(context).primaryColor,
-              body: CustomScrollView(
-                slivers: [
-                  DetailAppBar(
-                    model: model.data,
-                  ),
-                  SliverList(
-                      delegate: SliverChildListDelegate([
-                    DrugHeader(categories: categories, model: model.data),
-                    Description(description: model.data.description),
-                    // Divider(
-                    //   color: Theme.of(context).primaryColorDark,
-                    //   height: 20,
-                    //   thickness: 5,
-                    //   indent: 20,
-                    //   endIndent: 20,
-                    // ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Theme.of(context).primaryColorDark),
-                              onPressed: () {
-                                Get.dialog(AddPackage());
-                              },
-                              child: Text("Add Package")),
-                        ),
-                      ],
-                    ),
-                  ])),
-                  PackagesList(model: model.data),
-                ],
-              ),
-            );
           }
+          return Scaffold(
+            backgroundColor: Theme.of(context).primaryColor,
+            body: CustomScrollView(
+              slivers: [
+                DetailAppBar(
+                  model: model.data,
+                ),
+                SliverList(
+                    delegate: SliverChildListDelegate([
+                  DrugHeader(categories: categories, model: model.data),
+                  Description(description: model.data.description),
+                  // Divider(
+                  //   color: Theme.of(context).primaryColorDark,
+                  //   height: 20,
+                  //   thickness: 5,
+                  //   indent: 20,
+                  //   endIndent: 20,
+                  // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                primary: Theme.of(context).primaryColorDark),
+                            onPressed: () {
+                              Get.dialog(AddPackage());
+                            },
+                            child: Text("Add Package")),
+                      ),
+                    ],
+                  ),
+                ])),
+                PackagesList(model: model.data),
+              ],
+            ),
+          );
         });
   }
 }
