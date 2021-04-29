@@ -120,8 +120,7 @@ class RegisterPage extends StatelessWidget {
       userState.id.value = userDocId;
       userState.userId.value = userDoc.user.uid;
       userState.name.value = "Your name";
-      userState.email.value = "userId";
-      userState.id.value = email;
+      userState.email.value = email;
       userState.openCabinetId.value = cabId;
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {

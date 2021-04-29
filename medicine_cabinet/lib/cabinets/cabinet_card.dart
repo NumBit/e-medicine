@@ -73,12 +73,11 @@ class CabinetCard extends StatelessWidget {
                 TextButton(
                     onPressed: () {
                       userState.openCabinetId.value = model.id;
+                      print(userState);
                       UserRepository(context).update(UserModel(
-                          id: userState.id.value,
-                          openCabinetId: model.id,
-                          userId: userState.userId.value,
-                          email: userState.email.value,
-                          name: userState.name.value));
+                        id: userState.id.value,
+                        openCabinetId: model.id,
+                      ));
                       Get.until(ModalRoute.withName("/"));
                     },
                     child: Text(

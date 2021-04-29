@@ -34,7 +34,9 @@ class DetailAppBar extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                Get.toNamed("/edit_drug", arguments: model);
+                print("tap" + model.name);
+                Navigator.pushNamed(context, "/edit_drug", arguments: model);
+                // Get.toNamed("/edit_drug", arguments: model);
               },
               borderRadius: BorderRadius.circular(50),
               child: Icon(
