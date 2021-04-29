@@ -18,16 +18,12 @@ class CabinetAppBar extends StatelessWidget {
         builder: (context, snapshot) => SliverAppBar(
           pinned: true,
           floating: true,
+          centerTitle: true,
           title: Text(
             snapshot.data.name,
             textScaleFactor: 1.23,
             style: TextStyle(color: Colors.white),
           ),
-          flexibleSpace: const FlexibleSpaceBar(
-            centerTitle: true,
-          ),
-          expandedHeight: 120,
-          collapsedHeight: 60,
         ),
       ),
     );

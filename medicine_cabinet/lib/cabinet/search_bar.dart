@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:medicine_cabinet/main/app_state.dart';
 import 'package:medicine_cabinet/main/filter.dart';
 
 class SearchBar extends StatelessWidget {
@@ -29,7 +28,8 @@ class SearchBar extends StatelessWidget {
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black, width: 1),
+            borderSide:
+                BorderSide(color: Theme.of(context).primaryColorDark, width: 1),
             borderRadius: BorderRadius.circular(50),
           ),
           enabledBorder: OutlineInputBorder(

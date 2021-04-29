@@ -1,12 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
+import 'package:medicine_cabinet/drug/data/selected_icon.dart';
 import 'package:medicine_cabinet/main/cabinet_id.dart';
+
+import 'custom_form_field.dart';
+import 'icon_field.dart';
 
 class EditDrug extends StatelessWidget {
   const EditDrug({Key key}) : super(key: key);
@@ -20,7 +23,8 @@ class EditDrug extends StatelessWidget {
     final substanceController = TextEditingController(text: model.latinName);
     final descriptionController =
         TextEditingController(text: model.description);
-    var icon = Icons.ac_unit;
+    SelectedIcon icon = Get.put(SelectedIcon());
+    icon.icon.value = mapToIconData(jsonDecode(model.icon));
     CabinetId cabId = Get.find();
     return Container(
       child: Scaffold(
@@ -34,81 +38,27 @@ class EditDrug extends StatelessWidget {
               key: _formKey,
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      maxLength: 40,
-                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                      decoration: InputDecoration(
-                        labelText: 'Name',
-                        labelStyle: TextStyle(
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                        border: OutlineInputBorder(),
-                        helperText: 'Required',
-                      ),
+                  CustomFormField(
                       controller: nameController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
+                      label: "Name",
+                      helper: "Required",
+                      maxLength: 40,
+                      validator: (String value) {
+                        if (value == null || value.isBlank)
                           return 'Name cannot be empty';
-                        }
                         return null;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      maxLength: 60,
-                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                      decoration: InputDecoration(
-                        labelText: 'Active substance',
-                        labelStyle: TextStyle(
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
+                      }),
+                  CustomFormField(
                       controller: substanceController,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      maxLength: 2000,
-                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                      minLines: 1,
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        labelText: 'Description',
-                        labelStyle: TextStyle(
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
+                      label: "Active substance",
+                      maxLength: 60),
+                  CustomFormField(
                       controller: descriptionController,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Icon(
-                          icon,
-                          size: 40,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                        TextButton(
-                            onPressed: () {
-                              FlutterIconPicker.showIconPicker(context,
-                                      iconColor:
-                                          Theme.of(context).primaryColorDark)
-                                  .then((value) => icon = value);
-                            },
-                            child: Text("Pick icon")),
-                      ],
-                    ),
-                  ),
+                      label: "Description",
+                      minLines: 2,
+                      maxLines: 5,
+                      maxLength: 2000),
+                  IconField(icon: icon),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -130,7 +80,8 @@ class EditDrug extends StatelessWidget {
                                 name: nameController.text,
                                 latinName: substanceController.text,
                                 description: descriptionController.text,
-                                icon: jsonEncode(iconDataToMap(icon)),
+                                icon:
+                                    jsonEncode(iconDataToMap(icon.icon.value)),
                               );
                               DrugRepository(context, cabId.id.value)
                                   .update(drug);

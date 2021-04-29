@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 
-class WeekCalendar extends StatelessWidget {
+class WeekCalendar extends StatefulWidget {
   const WeekCalendar({
     Key key,
   }) : super(key: key);
 
+  @override
+  _WeekCalendarState createState() => _WeekCalendarState();
+}
+
+class _WeekCalendarState extends State<WeekCalendar> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -46,8 +52,92 @@ class WeekCalendar extends StatelessWidget {
           iconColor: Colors.white,
           weekFormat: true,
           height: 180,
+          markedDateShowIcon: true,
+          markedDatesMap: _markedDateMap,
+          markedDateMoreShowTotal: true,
+          markedDateIconMaxShown: 0,
+          onDayPressed: (date, events) => showAboutDialog(
+              context: context,
+              children: [
+                Text(date.toString()),
+                Text(events.asMap().toString())
+              ]),
         ),
       ),
     );
   }
 }
+
+EventList<Event> _markedDateMap = new EventList<Event>(
+  events: {
+    new DateTime(2021, 4, 29): [
+      new Event(
+        date: new DateTime(2021, 4, 29),
+        title: 'Event 1',
+        icon: _eventIcon,
+        dot: Container(
+          margin: EdgeInsets.symmetric(horizontal: 1.0),
+          color: Colors.red,
+          height: 5.0,
+          width: 5.0,
+        ),
+      ),
+      new Event(
+        date: new DateTime(2021, 4, 29),
+        title: 'Event 2',
+        icon: _eventIcon,
+      ),
+      new Event(
+        date: new DateTime(2021, 4, 28),
+        title: 'Event 3',
+        icon: _eventIcon,
+      ),
+      new Event(
+        date: new DateTime(2021, 4, 28),
+        title: 'Event 4',
+        icon: _eventIcon,
+      ),
+      new Event(
+        date: new DateTime(2021, 4, 29),
+        title: 'Event 4',
+        icon: _eventIcon,
+      ),
+    ],
+    new DateTime(2021, 4, 25): [
+      new Event(
+        date: new DateTime(2021, 4, 29),
+        title: 'Event 1',
+        icon: _eventIcon,
+        dot: Container(
+          margin: EdgeInsets.symmetric(horizontal: 1.0),
+          color: Colors.green,
+          height: 5.0,
+          width: 5.0,
+        ),
+      )
+    ],
+    new DateTime(2021, 4, 30): [
+      new Event(
+        date: new DateTime(2021, 4, 29),
+        title: 'Event 1',
+        icon: _eventIcon,
+      ),
+      new Event(
+        date: new DateTime(2021, 4, 29),
+        title: 'Event 2',
+        icon: _eventIcon,
+      ),
+    ],
+  },
+);
+
+Widget _eventIcon = new Container(
+  decoration: new BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.all(Radius.circular(1000)),
+      border: Border.all(color: Colors.blue, width: 2.0)),
+  child: new Icon(
+    Icons.person,
+    color: Colors.amber,
+  ),
+);

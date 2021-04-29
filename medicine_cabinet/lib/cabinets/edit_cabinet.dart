@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 
@@ -12,62 +13,62 @@ class EditCabinet extends StatelessWidget {
     final _formKey = GlobalKey<FormState>();
     final nameController = TextEditingController();
     nameController.text = model.name;
-    return Container(
-      child: SimpleDialog(
-        title: Text("Edit Cabinet"),
-        children: [
-          Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: TextFormField(
-                        onChanged: (value) {
-                          _formKey.currentState.validate();
-                        },
-                        maxLength: 40,
-                        maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                        decoration: InputDecoration(
-                          labelText: 'Name',
-                          labelStyle: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                          border: OutlineInputBorder(),
+    return SimpleDialog(
+      title: Text("Edit Cabinet"),
+      children: [
+        Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: TextFormField(
+                      onChanged: (value) {
+                        _formKey.currentState.validate();
+                      },
+                      maxLength: 40,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: InputDecoration(
+                        labelText: 'Name',
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
                         ),
-                        controller: nameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Name cannot be empty';
-                          }
-                          return null;
-                        }),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          CabinetRepository(context).remove(model.id);
-                        },
-                        style: ElevatedButton.styleFrom(
-                            primary: Theme.of(context).errorColor),
-                        child: Text("Delete"),
+                        border: OutlineInputBorder(),
                       ),
-                      ElevatedButton(
-                          onPressed: () {
+                      controller: nameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Name cannot be empty';
+                        }
+                        return null;
+                      }),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Get.back();
+                        CabinetRepository(context).remove(model.id);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).errorColor),
+                      child: Text("Delete"),
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
                             CabinetRepository(context).update(CabinetModel(
                                 id: model.id, name: nameController.text));
-                            Navigator.pop(context);
-                          },
-                          child: Text("Save")),
-                    ],
-                  ),
-                ],
-              )),
-        ],
-      ),
+                            Get.back();
+                          }
+                        },
+                        child: Text("Save")),
+                  ],
+                ),
+              ],
+            )),
+      ],
     );
   }
 }
