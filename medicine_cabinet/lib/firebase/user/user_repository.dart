@@ -1,14 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
-import 'package:medicine_cabinet/firebase/user_cabinet_model.dart';
-import 'package:medicine_cabinet/firebase/user_model.dart';
-import 'package:medicine_cabinet/main/user_state.dart';
+import 'package:medicine_cabinet/firebase/user/user_model.dart';
 
-import 'collections.dart';
+import '../constants/collections.dart';
 
 class UserRepository extends Repository<UserModel> {
   UserRepository(BuildContext context)
@@ -51,7 +47,9 @@ class UserRepository extends Repository<UserModel> {
       }
     }).catchError((error) => null);
   }
+
 /*
+  TODO sharing of cabinets
   Future<void> addCabinet(String cabinetId, String cabinetName) async {
     UserState docId = Get.find();
     collection
@@ -75,8 +73,7 @@ class UserRepository extends Repository<UserModel> {
     } catch (error) {
       snackBarMessage(context, "Something went wrong");
     }
-  }*/
-
+  }
   Future<bool> addCabinetByEmail(
       String userEmail, String cabinetId, String cabinetName) async {
     var user = await getByEmail(userEmail);
@@ -102,5 +99,5 @@ class UserRepository extends Repository<UserModel> {
         return CabinetModel.fromMap(e);
       }).toList();
     });
-  }
+  }*/
 }

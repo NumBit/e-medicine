@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:medicine_cabinet/main/filter.dart';
+import 'package:medicine_cabinet/main/state/filter_state.dart';
 
 class SearchBar extends StatelessWidget {
   const SearchBar({
@@ -9,7 +9,7 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Filter filter = Get.find();
+    FilterState filter = Get.find();
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: TextField(

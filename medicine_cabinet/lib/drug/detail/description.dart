@@ -93,7 +93,7 @@ class DescriptionDialog extends StatelessWidget {
           Text("Description"),
           InkWell(
             borderRadius: BorderRadius.circular(50),
-            onTap: () => Navigator.pop(context),
+            onTap: () => Get.back(),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Icon(

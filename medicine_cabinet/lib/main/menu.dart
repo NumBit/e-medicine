@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Menu extends StatelessWidget {
   const Menu({
@@ -13,19 +14,19 @@ class Menu extends StatelessWidget {
           DrawerHeader(child: Text("Menu")),
           ListTile(
             title: Text("Profile"),
-            onTap: () => Navigator.pushNamed(context, "/profile"),
+            onTap: () => Get.toNamed("/profile"),
           ),
           ListTile(
             title: Text("Schedule"),
-            onTap: () => Navigator.pushNamed(context, "/schedule"),
+            onTap: () => Get.toNamed("/schedule"),
           ),
           ListTile(
             title: Text("Cabinets"),
-            onTap: () => Navigator.pushNamed(context, "/cabinets_list"),
+            onTap: () => Get.toNamed("/cabinets_list"),
           ),
           ListTile(
             title: Text("Experiment"),
-            onTap: () => Navigator.pushNamed(context, "/experiment"),
+            onTap: () => Get.toNamed("/experiment"),
           )
         ],
       ),

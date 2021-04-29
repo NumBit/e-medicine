@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:medicine_cabinet/main/user_state.dart';
+import 'package:medicine_cabinet/main/state/user_state.dart';
 
 import 'data/cabinet_model.dart';
 import 'data/cabinet_repository.dart';

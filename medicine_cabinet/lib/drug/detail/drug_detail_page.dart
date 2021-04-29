@@ -7,7 +7,7 @@ import 'package:medicine_cabinet/drug/detail/add_package.dart';
 import 'package:medicine_cabinet/drug/detail/description.dart';
 import 'package:medicine_cabinet/drug/detail/detail_app_bar.dart';
 import 'package:medicine_cabinet/drug/detail/packages_list.dart';
-import 'package:medicine_cabinet/main/user_state.dart';
+import 'package:medicine_cabinet/main/state/user_state.dart';
 import 'drug_header.dart';
 
 class DrugDetailPage extends StatelessWidget {
@@ -25,48 +25,53 @@ class DrugDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     UserState userState = Get.find();
     return StreamBuilder<DrugModel>(
-        stream: DrugRepository(context, userState.openCabinetId.value).streamModel(id),
+        stream: DrugRepository(context, userState.openCabinetId.value)
+            .streamModel(id),
         initialData: DrugModel(
             id: "", description: "", icon: "", substance: "", name: ""),
         builder: (context, model) {
-          return Scaffold(
-            backgroundColor: Theme.of(context).primaryColor,
-            body: CustomScrollView(
-              slivers: [
-                DetailAppBar(
-                  model: model.data,
-                ),
-                SliverList(
-                    delegate: SliverChildListDelegate([
-                  DrugHeader(categories: categories, model: model.data),
-                  Description(description: model.data.description),
-                  // Divider(
-                  //   color: Theme.of(context).primaryColorDark,
-                  //   height: 20,
-                  //   thickness: 5,
-                  //   indent: 20,
-                  //   endIndent: 20,
-                  // ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Theme.of(context).primaryColorDark),
-                            onPressed: () {
-                              Get.dialog(AddPackage());
-                            },
-                            child: Text("Add Package")),
-                      ),
-                    ],
+          if (model.data == null) {
+            return Container();
+          } else {
+            return Scaffold(
+              backgroundColor: Theme.of(context).primaryColor,
+              body: CustomScrollView(
+                slivers: [
+                  DetailAppBar(
+                    model: model.data,
                   ),
-                ])),
-                PackagesList(model: model.data),
-              ],
-            ),
-          );
+                  SliverList(
+                      delegate: SliverChildListDelegate([
+                    DrugHeader(categories: categories, model: model.data),
+                    Description(description: model.data.description),
+                    // Divider(
+                    //   color: Theme.of(context).primaryColorDark,
+                    //   height: 20,
+                    //   thickness: 5,
+                    //   indent: 20,
+                    //   endIndent: 20,
+                    // ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).primaryColorDark),
+                              onPressed: () {
+                                Get.dialog(AddPackage());
+                              },
+                              child: Text("Add Package")),
+                        ),
+                      ],
+                    ),
+                  ])),
+                  PackagesList(model: model.data),
+                ],
+              ),
+            );
+          }
         });
   }
 }

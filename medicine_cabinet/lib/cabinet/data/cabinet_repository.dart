@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
-import 'package:medicine_cabinet/firebase/collections.dart';
+import 'package:medicine_cabinet/firebase/constants/collections.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 
 class CabinetRepository extends Repository<CabinetModel> {
@@ -51,6 +51,8 @@ class CabinetRepository extends Repository<CabinetModel> {
     return collection.doc(id).snapshots().map((e) => CabinetModel.fromMap(e));
   }
 /*
+  Future work: cabinet sharring
+
   Stream<List<OwnerModel>> streamOwners(String cabinetId) {
     return collection
         .doc(cabinetId)

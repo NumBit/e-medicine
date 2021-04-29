@@ -5,18 +5,18 @@ import 'package:medicine_cabinet/cabinet/drug_grid_item.dart';
 import 'package:medicine_cabinet/cabinet/search_bar.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
-import 'package:medicine_cabinet/main/filter.dart';
+import 'package:medicine_cabinet/main/state/filter_state.dart';
 import 'package:medicine_cabinet/main/menu.dart';
-import 'package:medicine_cabinet/main/user_state.dart';
+import 'package:medicine_cabinet/main/state/user_state.dart';
 
 import 'chip_filter.dart';
 
-class MedicineCabinetPage extends StatelessWidget {
-  const MedicineCabinetPage();
+class CabinetPage extends StatelessWidget {
+  const CabinetPage();
 
   @override
   Widget build(BuildContext context) {
-    Get.put(Filter());
+    Get.put(FilterState());
     return Scaffold(
       drawer: Menu(),
       body: CustomScrollView(
@@ -29,7 +29,6 @@ class MedicineCabinetPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Get.toNamed("/add_drug");
-          // Navigator.pushNamed(context, "/add_drug");
         },
         backgroundColor: Theme.of(context).primaryColor,
         tooltip: 'Add medication',
@@ -56,13 +55,12 @@ class DrugGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserState userState = Get.find();
-    Filter filter = Get.find();
+    FilterState filter = Get.find();
     return Obx(() => StreamBuilder<List<DrugModel>>(
         stream: DrugRepository(context, userState.openCabinetId.value)
             .streamModels(filter: filter.filter.value),
         initialData: [],
         builder: (context, snapshot) {
-          print(snapshot.data);
           return SliverPadding(
               padding: EdgeInsets.all(15),
               sliver: SliverGrid.count(

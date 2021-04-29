@@ -8,7 +8,7 @@ import 'package:medicine_cabinet/drug/add_edit/icon_field.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/drug/data/selected_icon.dart';
-import 'package:medicine_cabinet/main/user_state.dart';
+import 'package:medicine_cabinet/main/state/user_state.dart';
 
 class AddDrug extends StatelessWidget {
   const AddDrug({Key key}) : super(key: key);

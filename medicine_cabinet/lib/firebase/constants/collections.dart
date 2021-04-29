@@ -7,9 +7,12 @@ class Collections {
   static final String categories = "categories";
   static final String users = "users";
   static final String owners = "owners";
+  
   // Services
+  // TODO
   static final FirebaseAnalytics analytics = FirebaseAnalytics();
 
   // Helper Methods
+  // TODO
   static doSomethingCool() => print('cool');
 }

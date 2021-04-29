@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/cabinet/medicine_cabinet_page.dart';
+import 'package:medicine_cabinet/cabinet/cabinet_page.dart';
 import 'package:medicine_cabinet/error/error_page.dart';
 import 'package:medicine_cabinet/error/loading_page.dart';
-import 'package:medicine_cabinet/firebase/user_model.dart';
-import 'package:medicine_cabinet/firebase/user_repository.dart';
-import 'package:medicine_cabinet/main/user_state.dart';
+import 'package:medicine_cabinet/firebase/user/user_model.dart';
+import 'package:medicine_cabinet/firebase/user/user_repository.dart';
+import 'package:medicine_cabinet/main/state/user_state.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
 import 'package:get/get.dart';
 
@@ -35,7 +35,7 @@ class MainPage extends StatelessWidget {
                   userState.name.value = snapshot.data.name;
                   userState.userId.value = snapshot.data.userId;
                   userState.openCabinetId.value = snapshot.data.openCabinetId;
-                  return MedicineCabinetPage();
+                  return CabinetPage();
                 }
                 return LoadingPage();
               });

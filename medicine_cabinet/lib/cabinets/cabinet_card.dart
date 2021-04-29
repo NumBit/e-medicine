@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinets/edit_cabinet.dart';
 import 'package:medicine_cabinet/cabinets/share_cabinet.dart';
-import 'package:medicine_cabinet/firebase/user_model.dart';
-import 'package:medicine_cabinet/firebase/user_repository.dart';
-import 'package:medicine_cabinet/main/user_state.dart';
+import 'package:medicine_cabinet/firebase/user/user_model.dart';
+import 'package:medicine_cabinet/firebase/user/user_repository.dart';
+import 'package:medicine_cabinet/main/state/user_state.dart';
 
 class CabinetCard extends StatelessWidget {
   final CabinetModel model;
@@ -79,7 +79,7 @@ class CabinetCard extends StatelessWidget {
                           userId: userState.userId.value,
                           email: userState.email.value,
                           name: userState.name.value));
-                      Navigator.popUntil(context, ModalRoute.withName("/"));
+                      Get.until(ModalRoute.withName("/"));
                     },
                     child: Text(
                       "Open",

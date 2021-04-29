@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/drug/data/selected_icon.dart';
-import 'package:medicine_cabinet/main/user_state.dart';
+import 'package:medicine_cabinet/main/state/user_state.dart';
 
 import 'custom_form_field.dart';
 import 'icon_field.dart';
@@ -64,11 +64,11 @@ class EditDrug extends StatelessWidget {
                     children: [
                       ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, "/", (Route<dynamic> route) => false);
-                            DrugRepository(context,
-                                    userState.openCabinetId.value)
-                                .remove(model.id);
+                            //TODO check
+                            Get.until(ModalRoute.withName("/"));
+                            DrugRepository(
+                                    context, userState.openCabinetId.value)
+                                .delete(model.id);
                           },
                           style: ElevatedButton.styleFrom(
                               primary: Theme.of(context).errorColor),
@@ -84,10 +84,10 @@ class EditDrug extends StatelessWidget {
                                 icon:
                                     jsonEncode(iconDataToMap(icon.icon.value)),
                               );
-                              DrugRepository(context,
-                                      userState.openCabinetId.value)
+                              DrugRepository(
+                                      context, userState.openCabinetId.value)
                                   .update(drug);
-                              Navigator.pop(context);
+                              Get.back();
                             }
                           },
                           child: Text("Save")),
