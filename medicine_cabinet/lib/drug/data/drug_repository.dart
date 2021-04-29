@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/firebase/collections.dart';
+import 'package:medicine_cabinet/firebase/constants/collections.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 
 import 'drug_model.dart';
@@ -36,11 +36,5 @@ class DrugRepository extends Repository<DrugModel> {
         return DrugModel.fromMap(e);
       }).toList();
     });
-  }
-
-  @override
-  DrugModel get(String id) {
-    // TODO: implement get
-    throw UnimplementedError();
   }
 }

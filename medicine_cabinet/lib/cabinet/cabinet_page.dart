@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/cabinet_app_bar.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 import 'package:medicine_cabinet/cabinet/drug_grid_item.dart';
 import 'package:medicine_cabinet/cabinet/search_bar.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
-import 'package:medicine_cabinet/main/cabinet_id.dart';
-import 'package:medicine_cabinet/main/filter.dart';
+import 'package:medicine_cabinet/main/state/filter_state.dart';
 import 'package:medicine_cabinet/main/menu.dart';
+import 'package:medicine_cabinet/main/state/user_state.dart';
 
 import 'chip_filter.dart';
 
-class MedicineCabinetPage extends StatelessWidget {
-  const MedicineCabinetPage();
+class CabinetPage extends StatelessWidget {
+  const CabinetPage();
 
   @override
   Widget build(BuildContext context) {
-    Get.put(Filter());
+    Get.put(FilterState());
     return Scaffold(
       drawer: Menu(),
       body: CustomScrollView(
@@ -31,7 +29,6 @@ class MedicineCabinetPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Get.toNamed("/add_drug");
-          // Navigator.pushNamed(context, "/add_drug");
         },
         backgroundColor: Theme.of(context).primaryColor,
         tooltip: 'Add medication',
@@ -57,10 +54,10 @@ class DrugGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CabinetId cabId = Get.find();
-    Filter filter = Get.find();
+    UserState userState = Get.find();
+    FilterState filter = Get.find();
     return Obx(() => StreamBuilder<List<DrugModel>>(
-        stream: DrugRepository(context, cabId.id.value)
+        stream: DrugRepository(context, userState.openCabinetId.value)
             .streamModels(filter: filter.filter.value),
         initialData: [],
         builder: (context, snapshot) {

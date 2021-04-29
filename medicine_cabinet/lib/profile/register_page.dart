@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 import 'package:medicine_cabinet/drug/add_edit/custom_form_field.dart';
 import 'package:medicine_cabinet/drug/add_edit/password_field.dart';
-import 'package:medicine_cabinet/firebase/user_model.dart';
-import 'package:medicine_cabinet/firebase/user_repository.dart';
+import 'package:medicine_cabinet/firebase/user/user_model.dart';
+import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 import 'package:medicine_cabinet/profile/login_button.dart';
 
@@ -86,7 +87,7 @@ class RegisterPage extends StatelessWidget {
                       if (_formKey.currentState.validate()) {
                         _register(
                             context, email.text, pass.text, passSecond.text);
-                        Navigator.pop(context);
+                        Get.back();
                       }
                     }
                   },
@@ -105,15 +106,15 @@ class RegisterPage extends StatelessWidget {
       return;
     }
     try {
-      var doc = await FirebaseAuth.instance
+      var userDoc = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: pass);
-      var cabId = await CabinetRepository(context)
-          .add(CabinetModel(name: "Default cabinet"));
+      var cabId = await CabinetRepository(context).add(
+          CabinetModel(name: "Default cabinet", ownerId: userDoc.user.uid));
       UserRepository(context).add(UserModel(
-          id: doc.user.uid,
+          userId: userDoc.user.uid,
           name: "Your Name",
           email: email,
-          defaultCabinet: cabId));
+          openCabinetId: cabId));
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
         snackBarMessage(context, "The password provided is too weak.");

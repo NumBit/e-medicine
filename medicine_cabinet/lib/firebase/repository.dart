@@ -27,7 +27,7 @@ abstract class Repository<T extends Model> {
         .add(model.toJson())
         .then((value) => print("Operation success."))
         .catchError(
-            (error) => snackBarMessage(context, "Something went wrong"));
+            (error) => snackBarMessage(context, "Something went wrong on add"));
   }
 
   Future<void> update(T model) {
@@ -35,16 +35,16 @@ abstract class Repository<T extends Model> {
         .doc(model.id)
         .update(model.toJson())
         .then((value) => print("Operation success."))
-        .catchError(
-            (error) => snackBarMessage(context, "Something went wrong"));
+        .catchError((error) =>
+            snackBarMessage(context, "Something went wrong on update"));
   }
 
-  Future<void> remove(String docId) {
+  Future<void> delete(String docId) {
     return collection
         .doc(docId)
         .delete()
         .then((value) => print("Operation success."))
-        .catchError(
-            (error) => snackBarMessage(context, "Something went wrong"));
+        .catchError((error) =>
+            snackBarMessage(context, "Something went wrong on remove"));
   }
 }

@@ -31,7 +31,7 @@ class DrugHeader extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.5,
                 child: Text(
-                  drug.latinName,
+                  drug.substance,
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(

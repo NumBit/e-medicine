@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:medicine_cabinet/cabinet/medicine_cabinet_page.dart';
+import 'package:medicine_cabinet/cabinet/cabinet_page.dart';
 import 'package:medicine_cabinet/cabinets/cabinets_list_page.dart';
 import 'package:medicine_cabinet/drug/add_edit/add_drug.dart';
 import 'package:medicine_cabinet/drug/add_edit/edit_drug.dart';
@@ -12,8 +12,8 @@ import 'package:medicine_cabinet/profile/profile_page.dart';
 import 'package:medicine_cabinet/profile/register_page.dart';
 import 'package:medicine_cabinet/schedule/schedule_page.dart';
 
-class MedicineCabinet extends StatelessWidget {
-  const MedicineCabinet({
+class CabinetApp extends StatelessWidget {
+  const CabinetApp({
     Key key,
   }) : super(key: key);
 
@@ -31,7 +31,7 @@ class MedicineCabinet extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => MainPage(),
-        "/main": (context) => MedicineCabinetPage(),
+        "/main": (context) => CabinetPage(),
         "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),
         "/profile": (context) => ProfilePage(),

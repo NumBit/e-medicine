@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
 
-class Filter extends GetxController {
+class FilterState extends GetxController {
   var filter = "".obs;
 }

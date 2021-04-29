@@ -4,15 +4,18 @@ import 'package:medicine_cabinet/firebase/model.dart';
 class CabinetModel extends Model {
   final String id;
   final String name;
+  final String ownerId;
 
-  CabinetModel({this.id, this.name}) : super(id: id);
+  CabinetModel({this.id, this.name, this.ownerId}) : super(id: id);
 
   CabinetModel.fromMap(DocumentSnapshot snapshot)
       : id = snapshot.id ?? "",
-        name = snapshot.data()["name"] ?? "";
+        name = snapshot.data()["name"] ?? "",
+        ownerId = snapshot.data()["owner_id"] ?? "";
 
   @override
   Map<String, dynamic> toJson() => {
-        "name": name,
+        if (name != null) "name": name,
+        if (ownerId != null) "owner_id": ownerId,
       };
 }

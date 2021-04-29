@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'error/error_page.dart';
 import 'error/loading_page.dart';
-import 'main/medicine_cabinet.dart';
+import 'main/cabinet_app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +22,7 @@ class MedicineCabinetApp extends StatelessWidget {
           return ErrorPage();
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          return MedicineCabinet();
+          return CabinetApp();
         }
         return LoadingPage();
       },

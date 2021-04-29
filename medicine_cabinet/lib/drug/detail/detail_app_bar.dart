@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 
 class DetailAppBar extends StatelessWidget {
@@ -33,7 +34,7 @@ class DetailAppBar extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                Navigator.pushNamed(context, "/edit_drug", arguments: model);
+                Get.toNamed("/edit_drug", arguments: model);
               },
               borderRadius: BorderRadius.circular(50),
               child: Icon(

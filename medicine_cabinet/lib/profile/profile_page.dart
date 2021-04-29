@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProfilePage extends StatelessWidget {
   final int cabinets;
@@ -95,7 +96,7 @@ class ProfilePage extends StatelessWidget {
                     child: Text('Logout'),
                     onPressed: () => [
                           FirebaseAuth.instance.signOut(),
-                          Navigator.pop(context)
+                          Get.back()
                         ])
               ],
             ),
