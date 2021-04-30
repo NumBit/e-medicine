@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
-import 'package:medicine_cabinet/category/data/category_model.dart';
-import 'package:medicine_cabinet/category/data/category_repository.dart';
 
 class ExperimentPage extends StatelessWidget {
   const ExperimentPage({
@@ -45,11 +43,7 @@ class ExperimentPage extends StatelessWidget {
                     children: [
                       Text(item.name),
                       ElevatedButton(
-                          onPressed: () {
-                            CategoryRepository(context, item.id)
-                                .add(CategoryModel(name: "Special"));
-                          },
-                          child: Text("Add category")),
+                          onPressed: () {}, child: Text("Add category")),
                       ElevatedButton(
                           onPressed: () {
                             //CabinetRepository(context)
