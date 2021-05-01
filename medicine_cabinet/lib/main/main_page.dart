@@ -17,22 +17,28 @@ class MainPage extends StatelessWidget {
     return StreamBuilder<Object>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, s) {
+        Get.put(UserState());
         if (FirebaseAuth.instance.currentUser == null) {
           print('User is currently signed out!');
           return LoginPage();
         } else {
           print('User is signed in!');
-          UserState userState = Get.put(UserState());
+          UserState userState = Get.find<UserState>();
           if (userState.id.value.isNotEmpty) {
+            print("THIS: " + userState.id.value);
+            print("got info from GETxxxxxxxxxxxx");
             return CabinetPage();
           }
           return FutureBuilder<UserModel>(
               future: UserRepository(context).getMyUser(),
               builder: (context, snapshot) {
+                print("123THIS: " + userState.id.value);
                 if (snapshot.hasError) {
                   return ErrorPage();
                 }
                 if (snapshot.connectionState == ConnectionState.done) {
+                  //TODO extra null check in future
+                  print("FFF got info from FIREBASE");
                   userState.id.value = snapshot.data.id;
                   userState.email.value = snapshot.data.email;
                   userState.name.value = snapshot.data.name;

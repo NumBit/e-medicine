@@ -13,85 +13,79 @@ class LoginPage extends StatelessWidget {
     final _formKey = GlobalKey<FormState>();
     final email = TextEditingController();
     final pass = TextEditingController();
-    Future<bool> shouldPop;
 
-    return WillPopScope(
-      onWillPop: () async {
-        return shouldPop;
-      },
-      child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Login account'),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).primaryColorDark),
-                    child: Text('Register'),
-                    onPressed: () => [
-                          Get.toNamed("/register"),
-                        ]),
-              ],
-            ),
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Login account'),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).primaryColorDark),
+                  child: Text('Register'),
+                  onPressed: () => [
+                        Get.toNamed("/register"),
+                      ]),
+            ],
           ),
-          body: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
-              child: Form(
-                key: _formKey,
-                child: Column(children: [
-                  Text(
-                    "Login",
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColorDark,
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                    ),
+        ),
+        body: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
+            child: Form(
+              key: _formKey,
+              child: Column(children: [
+                Text(
+                  "Login",
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
                   ),
-                  CustomFormField(
-                    label: "Email",
-                    controller: email,
-                    inputType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty)
-                        return "Email cannot be empty";
-                      if (!RegExp(
-                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                          .hasMatch(value)) return 'Wrong email format';
-                      return null;
-                    },
-                  ),
-                  PasswordField(
-                    label: "Password",
-                    controller: pass,
-                    validator: (value) {
-                      if (value == null || value.isEmpty)
-                        return "Password cannot be empty";
-                      if (value.length < 6)
-                        return "Password must be at leat 6 char. long";
-                      if (!value.contains(RegExp(r"[0-9]")))
-                        return "Password must have at least 1 number";
-                      return null;
-                    },
-                  ),
-                  LoginButton(
-                    text: "Login",
-                    onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        shouldPop = _login(context, email.text, pass.text);
-                      }
-                    },
-                  ),
-                ]),
-              ))),
-    );
+                ),
+                CustomFormField(
+                  label: "Email",
+                  controller: email,
+                  inputType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty)
+                      return "Email cannot be empty";
+                    if (!RegExp(
+                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                        .hasMatch(value)) return 'Wrong email format';
+                    return null;
+                  },
+                ),
+                PasswordField(
+                  label: "Password",
+                  controller: pass,
+                  validator: (value) {
+                    if (value == null || value.isEmpty)
+                      return "Password cannot be empty";
+                    if (value.length < 6)
+                      return "Password must be at leat 6 char. long";
+                    if (!value.contains(RegExp(r"[0-9]")))
+                      return "Password must have at least 1 number";
+                    return null;
+                  },
+                ),
+                LoginButton(
+                  text: "Login",
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      _login(context, email.text, pass.text);
+                    }
+                  },
+                ),
+              ]),
+            )));
   }
 
   Future<bool> _login(context, String email, String pass) async {
     if (email.isEmpty || pass.isEmpty) {
       snackBarMessage(context, "Empty field!");
-      return true;
+      return false;
     }
     try {
       await FirebaseAuth.instance
@@ -110,6 +104,7 @@ class LoginPage extends StatelessWidget {
       snackBarMessage(context, "Unknown error occured.");
       return false;
     }
+    Get.back();
     return true;
   }
 }

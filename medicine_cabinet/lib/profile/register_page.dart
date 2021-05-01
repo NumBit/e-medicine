@@ -46,9 +46,7 @@ class RegisterPage extends StatelessWidget {
                   validator: (value) {
                     if (value == null || value.isEmpty)
                       return "Email cannot be empty";
-                    if (!RegExp(
-                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                        .hasMatch(value)) return 'Wrong email format';
+                    if (!GetUtils.isEmail(value)) return 'Wrong email format';
                     return null;
                   },
                 ),
@@ -88,7 +86,6 @@ class RegisterPage extends StatelessWidget {
                       if (_formKey.currentState.validate()) {
                         _register(
                             context, email.text, pass.text, passSecond.text);
-                        Get.back();
                       }
                     }
                   },
@@ -106,6 +103,11 @@ class RegisterPage extends StatelessWidget {
       snackBarMessage(context, "Passwords are not same!");
       return;
     }
+    if (!GetUtils.isEmail(email)) {
+      snackBarMessage(context, "Wrong email format");
+      return;
+    }
+
     try {
       var userDoc = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: pass);
@@ -116,12 +118,15 @@ class RegisterPage extends StatelessWidget {
           name: "Your Name",
           email: email,
           openCabinetId: cabId));
-      UserState userState = Get.find();
+      UserState userState = Get.find<UserState>();
+      print("setting info into GETxxxxxxxxxxxx");
       userState.id.value = userDocId;
       userState.userId.value = userDoc.user.uid;
       userState.name.value = "Your name";
       userState.email.value = email;
       userState.openCabinetId.value = cabId;
+      print("poping from register");
+      Get.back();
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
         snackBarMessage(context, "The password provided is too weak.");
