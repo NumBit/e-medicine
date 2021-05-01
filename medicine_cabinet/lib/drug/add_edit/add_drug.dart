@@ -57,13 +57,14 @@ class AddDrug extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
+                        UserState userState = Get.find();
                         var drug = DrugModel(
+                          cabinetId: userState.openCabinetId.value,
                           name: nameController.text,
                           substance: substanceController.text,
                           description: descriptionController.text,
                           icon: jsonEncode(iconDataToMap(icon.icon.value)),
                         );
-                        UserState userState = Get.find();
                         DrugRepository(context, userState.openCabinetId.value)
                             .add(drug);
                         Get.back();
