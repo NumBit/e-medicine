@@ -29,7 +29,7 @@ class CabinetAppBar extends StatelessWidget {
           floating: true,
           centerTitle: true,
           title: Text(
-            snapshot.data.name,
+            snapshot.data?.name,
             textScaleFactor: 1.23,
             style: TextStyle(color: Colors.white),
           ),

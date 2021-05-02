@@ -27,15 +27,22 @@ class UserRepository extends Repository<UserModel> {
         .map((snap) => UserModel.fromMap(snap));
   }
 
-  Future<UserModel> getMyUser() {
-    var myUid = FirebaseAuth.instance.currentUser.uid;
-    return collection.where("user_id", isEqualTo: myUid).get().then((value) {
+  Stream<UserModel> getMyUser() {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return null;
+    }
+    var myUid = user.uid;
+    return collection
+        .where("user_id", isEqualTo: myUid)
+        .snapshots()
+        .map((value) {
       if (value.size > 0) {
         return value.docs.map((e) => UserModel.fromMap(e)).toList().first;
       } else {
         return null;
       }
-    }).catchError((error) => null);
+    });
   }
 
   Future<UserModel> getByEmail(String email) {

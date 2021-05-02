@@ -31,7 +31,7 @@ class DrugDetailPage extends StatelessWidget {
             id: "", description: "", icon: "", substance: "", name: ""),
         builder: (context, model) {
           if (model.data == null) {
-            return Container(color: Colors.brown, child: Text("Error"));
+            return Center(child: Container(child: Text("Please go back")));
           }
           return Scaffold(
             backgroundColor: Theme.of(context).primaryColor,

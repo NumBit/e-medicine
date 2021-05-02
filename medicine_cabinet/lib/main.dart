@@ -22,6 +22,7 @@ class MedicineCabinetApp extends StatelessWidget {
           return ErrorPage();
         }
         if (snapshot.connectionState == ConnectionState.done) {
+          print("Firebase.initializeApp() return DONE");
           return CabinetApp();
         }
         return LoadingPage();

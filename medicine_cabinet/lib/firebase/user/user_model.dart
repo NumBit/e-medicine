@@ -7,6 +7,7 @@ class UserModel extends Model {
   final String name;
   final String email;
   final String openCabinetId;
+  //final List<String> cabinets;
 
   UserModel({this.id, this.userId, this.name, this.email, this.openCabinetId})
       : super(id: id);
@@ -17,6 +18,7 @@ class UserModel extends Model {
         name = snapshot.data()["name"] ?? "",
         email = snapshot.data()["email"] ?? "",
         openCabinetId = snapshot.data()["default_cabinet"] ?? "";
+  //cabinets = snapshot.data()["cabinets"] ?? "";
 
   @override
   Map<String, dynamic> toJson() => {
@@ -24,5 +26,6 @@ class UserModel extends Model {
         if (name != null) "name": name,
         if (email != null) "email": email,
         if (openCabinetId != null) "default_cabinet": openCabinetId,
+        //if (cabinets != null) "cabinets": cabinets,
       };
 }
