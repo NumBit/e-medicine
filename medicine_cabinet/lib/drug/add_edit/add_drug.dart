@@ -9,7 +9,6 @@ import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/drug/data/selected_icon.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
-import 'package:medicine_cabinet/main/state/navigator_keys.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 
 class AddDrug extends StatelessWidget {
@@ -59,16 +58,16 @@ class AddDrug extends StatelessWidget {
                     IconField(icon: icon),
                     ElevatedButton(
                       onPressed: () {
-                        NavigationState nav = Get.find();
-
                         if (_formKey.currentState.validate()) {
+                          NavigationState nav = Get.find();
+                          UserState userState = Get.find();
                           var drug = DrugModel(
+                            cabinetId: userState.openCabinetId.value,
                             name: nameController.text,
                             substance: substanceController.text,
                             description: descriptionController.text,
                             icon: jsonEncode(iconDataToMap(icon.icon.value)),
                           );
-                          UserState userState = Get.find();
                           DrugRepository(context, userState.openCabinetId.value)
                               .add(drug);
                           Get.back(id: nav.navigatorId.value);
