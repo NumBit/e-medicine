@@ -113,19 +113,11 @@ class RegisterPage extends StatelessWidget {
           .createUserWithEmailAndPassword(email: email, password: pass);
       var cabId = await CabinetRepository(context).add(
           CabinetModel(name: "Default cabinet", ownerId: userDoc.user.uid));
-      var userDocId = await UserRepository(context).add(UserModel(
+      UserRepository(context).add(UserModel(
           userId: userDoc.user.uid,
           name: "Your Name",
           email: email,
           openCabinetId: cabId));
-      UserState userState = Get.find<UserState>();
-      print("setting info into GETxxxxxxxxxxxx");
-      userState.id.value = userDocId;
-      userState.userId.value = userDoc.user.uid;
-      userState.name.value = "Your name";
-      userState.email.value = email;
-      userState.openCabinetId.value = cabId;
-      print("poping from register");
       Get.back();
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {

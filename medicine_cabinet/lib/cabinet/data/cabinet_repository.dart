@@ -47,6 +47,44 @@ class CabinetRepository extends Repository<CabinetModel> {
     });
   }
 
+  Stream<int> cabinetCount() {
+    var myUid = FirebaseAuth.instance.currentUser.uid;
+    return collection
+        .where("owner_id", isEqualTo: myUid)
+        .snapshots()
+        .map((value) {
+      return value.size;
+    });
+  }
+
+//TODO
+  Stream<List<CabinetModel>> drugCount() {
+    var myUid = FirebaseAuth.instance.currentUser.uid;
+    return collection
+        .where("owner_id", isEqualTo: myUid)
+        .snapshots()
+        .map((value) {
+      if (value.size > 0) {
+        return value.docs.map((e) => CabinetModel.fromMap(e)).toList();
+      }
+      return [];
+    });
+  }
+
+//TODO
+  Stream<List<CabinetModel>> pillCount() {
+    var myUid = FirebaseAuth.instance.currentUser.uid;
+    return collection
+        .where("owner_id", isEqualTo: myUid)
+        .snapshots()
+        .map((value) {
+      if (value.size > 0) {
+        return value.docs.map((e) => CabinetModel.fromMap(e)).toList();
+      }
+      return [];
+    });
+  }
+
   Stream<CabinetModel> getDefaultCabinet(String id) {
     return collection.doc(id).snapshots().map((e) => CabinetModel.fromMap(e));
   }

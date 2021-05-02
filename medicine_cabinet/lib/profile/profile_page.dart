@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:medicine_cabinet/main/state/user_state.dart';
 
 class ProfilePage extends StatelessWidget {
   final int cabinets;
@@ -94,16 +95,18 @@ class ProfilePage extends StatelessWidget {
                 ),
                 ElevatedButton(
                     child: Text('Logout'),
-                    onPressed: () => [
-                          FirebaseAuth.instance.signOut(),
-                          Get.back()
-                        ])
+                    onPressed: () => [_signOut(), Get.back()])
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void _signOut() {
+    //TODO possible need to clear UserState (not needed for now)
+    FirebaseAuth.instance.signOut();
   }
 }
 
