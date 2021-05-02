@@ -38,7 +38,7 @@ class CabinetApp extends StatelessWidget {
         "/schedule": (context) => SchedulePage(),
         "/experiment": (context) => ExperimentPage(),
         "/add_drug": (context) => AddDrug(),
-        "/edit_drug": (context) => EditDrug(),
+        // "/edit_drug": (context) => EditDrug(),
         "/cabinets_list": (context) => CabinetsListPage(),
         "drug_detail": (context) => DrugDetailPage(),
       },

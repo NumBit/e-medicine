@@ -5,6 +5,7 @@ import 'package:medicine_cabinet/cabinets/edit_cabinet.dart';
 import 'package:medicine_cabinet/cabinets/share_cabinet.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_repository.dart';
+import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 
 class CabinetCard extends StatelessWidget {
@@ -72,13 +73,14 @@ class CabinetCard extends StatelessWidget {
                     )),
                 TextButton(
                     onPressed: () {
+                      NavigationState nav = Get.find();
                       userState.openCabinetId.value = model.id;
                       print(userState);
                       UserRepository(context).update(UserModel(
                         id: userState.id.value,
                         openCabinetId: model.id,
                       ));
-                      Get.until(ModalRoute.withName("/"));
+                      Get.offAllNamed("/", id: nav.navigatorId.value);
                     },
                     child: Text(
                       "Open",

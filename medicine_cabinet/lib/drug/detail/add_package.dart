@@ -22,10 +22,6 @@ class AddPackage extends StatelessWidget {
             child: Column(
               children: [
                 CustomFormField(label: "Dosage", controller: dosageController),
-                CustomFormField(
-                    label: "Count",
-                    controller: countController,
-                    inputType: TextInputType.number),
                 DatePickerField(
                     label: "Expiration",
                     controller: timeController,
@@ -36,6 +32,10 @@ class AddPackage extends StatelessWidget {
                             DateFormat('dd.MM.yyyy').format(value);
                       }
                     }),
+                CustomFormField(
+                    label: "Count",
+                    controller: countController,
+                    inputType: TextInputType.number),
                 ElevatedButton(
                     onPressed: () {
                       print(expiration);

@@ -7,6 +7,8 @@ import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/main/state/filter_state.dart';
 import 'package:medicine_cabinet/main/menu.dart';
+import 'package:medicine_cabinet/main/state/navigation_state.dart';
+import 'package:medicine_cabinet/main/state/navigator_keys.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 
 import 'chip_filter.dart';
@@ -28,7 +30,9 @@ class CabinetPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Get.toNamed("/add_drug");
+          NavigationState nav = Get.find();
+
+          Get.toNamed("/add_drug", id: nav.navigatorId.value);
         },
         backgroundColor: Theme.of(context).primaryColor,
         tooltip: 'Add medication',

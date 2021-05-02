@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:medicine_cabinet/main/tab_navigation.dart';
 
 class Menu extends StatelessWidget {
   const Menu({
@@ -27,6 +28,10 @@ class Menu extends StatelessWidget {
           ListTile(
             title: Text("Experiment"),
             onTap: () => Get.toNamed("/experiment"),
+          ),
+          ListTile(
+            title: Text("Tabbars"),
+            onTap: () => Get.to(() => TabNavigation()),
           )
         ],
       ),
