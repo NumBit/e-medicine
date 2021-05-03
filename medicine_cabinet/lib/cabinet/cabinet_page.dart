@@ -60,10 +60,11 @@ class DrugGrid extends StatelessWidget {
     UserState userState = Get.find();
     FilterState filter = Get.find();
     return Obx(() => StreamBuilder<List<DrugModel>>(
-        stream: DrugRepository(context, userState.openCabinetId.value)
+        stream: DrugRepository(userState.openCabinetId.value)
             .streamModels(filter: filter.filter.value),
         initialData: [],
         builder: (context, snapshot) {
+          if (snapshot.data == null) return Container();
           return SliverPadding(
               padding: EdgeInsets.all(15),
               sliver: SliverGrid.count(

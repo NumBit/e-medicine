@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
+import 'package:medicine_cabinet/firebase/user/user_cabinet_model.dart';
+import 'package:medicine_cabinet/firebase/user/user_cabinet_repository.dart';
 
 import 'cabinet_card.dart';
 import 'create_cabinet_dialog.dart';
@@ -22,8 +22,8 @@ class CabinetsListPage extends StatelessWidget {
             Icons.add,
             size: 30,
           )),
-      body: StreamBuilder<List<CabinetModel>>(
-          stream: CabinetRepository(context).streamModels(),
+      body: StreamBuilder<List<UserCabinetModel>>(
+          stream: UserCabinetRepository().getMyCabinets(),
           initialData: [],
           builder: (context, cabinets) {
             return ListView(

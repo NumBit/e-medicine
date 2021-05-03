@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
+import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 
@@ -54,11 +53,12 @@ class EditCabinet extends StatelessWidget {
                       onPressed: () {
                         UserState user = Get.find();
                         if (model.id == user.openCabinetId.value) {
-                          snackBarMessage(
-                              context, "Cannot delete opened cabinet");
+                          snackBarMessage("Cannot delete opened cabinet",
+                              "Open other cabinet first");
                         } else {
                           Get.back();
-                          CabinetRepository(context).delete(model.id);
+                          CabinetRepository().delete(model.id);
+                          DrugRepository(model.id).deleteAllDrugsInCabinet();
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -68,7 +68,7 @@ class EditCabinet extends StatelessWidget {
                     ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
-                            CabinetRepository(context).update(CabinetModel(
+                            CabinetRepository().update(CabinetModel(
                                 id: model.id, name: nameController.text));
                             Get.back();
                           }

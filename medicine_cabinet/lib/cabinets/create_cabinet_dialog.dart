@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 
-
 class CreateCabinetDialog extends StatelessWidget {
   const CreateCabinetDialog({
     Key key,
@@ -54,8 +53,8 @@ class CreateCabinetDialog extends StatelessWidget {
               ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
-                      CabinetRepository(context)
-                          .add(CabinetModel(id: "", name: nameController.text));
+                      CabinetRepository().addToAuthUser(
+                          CabinetModel(name: nameController.text));
                       Get.back();
                     }
                   },

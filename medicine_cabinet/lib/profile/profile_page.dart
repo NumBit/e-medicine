@@ -81,7 +81,7 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               children: [
                 StreamBuilder<UserModel>(
-                    stream: UserRepository(context).getMyUser(),
+                    stream: UserRepository().getMyUser(),
                     initialData: UserModel(name: ""),
                     builder: (context, user) {
                       return Text(
@@ -106,7 +106,7 @@ class ProfilePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 StreamBuilder<int>(
-                    stream: CabinetRepository(context).cabinetCount(),
+                    stream: CabinetRepository().cabinetCount(),
                     initialData: 0,
                     builder: (context, cabinetsCount) {
                       return _getColumn(
@@ -130,6 +130,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   void _signOut() {
+    // ignore: unused_local_variable
     UserState user = Get.find<UserState>();
     user = UserState();
     FirebaseAuth.instance.signOut();

@@ -25,7 +25,7 @@ class DrugDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     UserState userState = Get.find();
     return StreamBuilder<DrugModel>(
-        stream: DrugRepository(context, userState.openCabinetId.value)
+        stream: DrugRepository(userState.openCabinetId.value)
             .streamModel(id),
         initialData: DrugModel(
             id: "", description: "", icon: "", substance: "", name: ""),

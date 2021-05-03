@@ -68,7 +68,7 @@ class AddDrug extends StatelessWidget {
                             description: descriptionController.text,
                             icon: jsonEncode(iconDataToMap(icon.icon.value)),
                           );
-                          DrugRepository(context, userState.openCabinetId.value)
+                          DrugRepository(userState.openCabinetId.value)
                               .add(drug);
                           Get.back(id: nav.navigatorId.value);
                         }

@@ -69,11 +69,9 @@ class EditDrug extends StatelessWidget {
                             onPressed: () {
                               NavigationState nav = Get.find();
                               print(Get.key.currentState.bucket.toString());
-                              //TODO check
                               Get.offNamedUntil("/", ModalRoute.withName("/"),
                                   id: nav.navigatorId.value);
-                              DrugRepository(
-                                      context, userState.openCabinetId.value)
+                              DrugRepository(userState.openCabinetId.value)
                                   .delete(model.id);
                             },
                             style: ElevatedButton.styleFrom(
@@ -92,8 +90,7 @@ class EditDrug extends StatelessWidget {
                                   icon: jsonEncode(
                                       iconDataToMap(icon.icon.value)),
                                 );
-                                DrugRepository(
-                                        context, userState.openCabinetId.value)
+                                DrugRepository(userState.openCabinetId.value)
                                     .update(drug);
                                 Get.back(id: nav.navigatorId.value);
                               }
