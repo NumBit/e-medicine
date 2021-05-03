@@ -58,4 +58,15 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
     snackBarMessage("Share added", email);
     return true;
   }
+
+  void deleteAll(String cabinetId) {
+    collection
+        .where("cabinet_id", isEqualTo: cabinetId)
+        .snapshots()
+        .forEach((snap) {
+      snap.docs.forEach((e) {
+        delete(e.id);
+      });
+    });
+  }
 }

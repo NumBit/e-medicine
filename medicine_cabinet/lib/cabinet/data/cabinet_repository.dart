@@ -35,6 +35,17 @@ class CabinetRepository extends Repository<CabinetModel> {
     return cabinet.id;
   }
 
+  @override
+  void delete(String docId) {
+    collection
+        .doc(docId)
+        .delete()
+        .then((value) => print("Operation success."))
+        .catchError(
+            (error) => snackBarMessage("Operation failed", "Nothing removed"));
+    UserCabinetRepository().deleteAll(docId);
+  }
+
   Future<String> addToAuthUser(CabinetModel model) async {
     DocumentReference cabinet;
     var user = FirebaseAuth.instance.currentUser;
@@ -66,11 +77,11 @@ class CabinetRepository extends Repository<CabinetModel> {
     });
   }
 
-//TODO not the right count, use per UserCabinet
   Stream<int> cabinetCount() {
     var myUid = FirebaseAuth.instance.currentUser.uid;
-    return collection
-        .where("owner_id", isEqualTo: myUid)
+    return UserCabinetRepository()
+        .collection
+        .where("user_id", isEqualTo: myUid)
         .snapshots()
         .map((value) {
       return value.size;
@@ -104,6 +115,7 @@ class CabinetRepository extends Repository<CabinetModel> {
       return [];
     });
   }
+
 /*
   Future work: cabinet sharring
 
