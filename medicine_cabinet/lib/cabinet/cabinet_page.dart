@@ -19,6 +19,7 @@ class CabinetPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(FilterState());
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       drawer: Menu(),
       body: CustomScrollView(
         slivers: [

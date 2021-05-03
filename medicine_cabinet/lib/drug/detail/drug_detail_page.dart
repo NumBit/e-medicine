@@ -25,8 +25,7 @@ class DrugDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     UserState userState = Get.find();
     return StreamBuilder<DrugModel>(
-        stream: DrugRepository(userState.openCabinetId.value)
-            .streamModel(id),
+        stream: DrugRepository(userState.openCabinetId.value).streamModel(id),
         initialData: DrugModel(
             id: "", description: "", icon: "", substance: "", name: ""),
         builder: (context, model) {
@@ -60,7 +59,7 @@ class DrugDetailPage extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                                 primary: Theme.of(context).primaryColorDark),
                             onPressed: () {
-                              Get.dialog(AddPackage());
+                              Get.dialog(AddPackage(drugId: model.data.id));
                             },
                             child: Text("Add Package")),
                       ),
