@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
-import 'package:medicine_cabinet/firebase/user/user_model.dart';
-import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 
 class ExperimentPage extends StatelessWidget {
   const ExperimentPage({

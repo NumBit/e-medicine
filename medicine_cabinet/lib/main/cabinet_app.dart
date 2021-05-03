@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/cabinet_page.dart';
 import 'package:medicine_cabinet/cabinets/cabinets_list_page.dart';
 import 'package:medicine_cabinet/drug/add_edit/add_drug.dart';
-import 'package:medicine_cabinet/drug/add_edit/edit_drug.dart';
 import 'package:medicine_cabinet/drug/detail/drug_detail_page.dart';
 import 'package:medicine_cabinet/experiment/experiment_page.dart';
 import 'package:medicine_cabinet/main/main_page.dart';
@@ -38,7 +37,7 @@ class CabinetApp extends StatelessWidget {
         "/schedule": (context) => SchedulePage(),
         "/experiment": (context) => ExperimentPage(),
         "/add_drug": (context) => AddDrug(),
-        "/edit_drug": (context) => EditDrug(),
+        // "/edit_drug": (context) => EditDrug(),
         "/cabinets_list": (context) => CabinetsListPage(),
         "drug_detail": (context) => DrugDetailPage(),
       },

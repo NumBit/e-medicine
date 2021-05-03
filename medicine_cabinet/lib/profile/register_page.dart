@@ -25,7 +25,7 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text('Register account'),
+          title: Text("Medicine cabinet"),
         ),
         body: Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),

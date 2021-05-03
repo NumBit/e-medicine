@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/cabinet/cabinet_page.dart';
 import 'package:medicine_cabinet/error/loading_page.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
+import 'package:medicine_cabinet/main/tab_navigation.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
 import 'package:get/get.dart';
 
@@ -32,7 +32,7 @@ class MainPage extends StatelessWidget {
                 } else {
                   print("ACCOUNT: AUTH");
                   userState.fromModel(userModel.data);
-                  return CabinetPage();
+                  return TabNavigation();
                 }
               });
         });

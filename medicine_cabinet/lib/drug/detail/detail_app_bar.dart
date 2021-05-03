@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
+import 'package:medicine_cabinet/main/state/navigation_state.dart';
 
 class DetailAppBar extends StatelessWidget {
   const DetailAppBar({
@@ -12,10 +13,29 @@ class DetailAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(model);
     return SliverAppBar(
       pinned: true,
       floating: true,
       snap: true,
+      actions: [
+        IconButton(
+          icon: Icon(
+            Icons.edit,
+            color: Theme.of(context).primaryColorDark,
+          ),
+          onPressed: () {
+            NavigationState nav = Get.find();
+            print("tap" + model.name);
+            print(Get.key);
+            Get.toNamed(
+              "/edit_drug",
+              arguments: model,
+              id: nav.navigatorId.value,
+            );
+          },
+        )
+      ],
       title: Tooltip(
         message: model.name,
         child: Row(
@@ -32,18 +52,6 @@ class DetailAppBar extends StatelessWidget {
                     fontSize: 30),
               ),
             ),
-            InkWell(
-              onTap: () {
-                print("tap" + model.name);
-                Navigator.pushNamed(context, "/edit_drug", arguments: model);
-                // Get.toNamed("/edit_drug", arguments: model);
-              },
-              borderRadius: BorderRadius.circular(50),
-              child: Icon(
-                Icons.more_horiz,
-                color: Theme.of(context).primaryColorDark,
-              ),
-            )
           ],
         ),
       ),

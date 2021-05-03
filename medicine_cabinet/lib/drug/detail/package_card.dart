@@ -29,7 +29,7 @@ class PackageCard extends StatelessWidget {
         ),
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               InkWell(
                 onTap: () {},
