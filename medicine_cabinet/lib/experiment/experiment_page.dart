@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 
 class ExperimentPage extends StatelessWidget {
   const ExperimentPage({

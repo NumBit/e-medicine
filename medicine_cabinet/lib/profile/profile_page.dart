@@ -129,6 +129,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   void _signOut() {
+    // ignore: unused_local_variable
     UserState user = Get.find<UserState>();
     user = UserState();
     FirebaseAuth.instance.signOut();

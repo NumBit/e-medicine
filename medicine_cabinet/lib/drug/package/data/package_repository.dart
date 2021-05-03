@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/drug/package/data/package_model.dart';
 import 'package:medicine_cabinet/firebase/constants/collections.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 
-class DrugRepository extends Repository<PackageModel> {
+class PackageRepository extends Repository<PackageModel> {
   final String drugId;
-  DrugRepository(String drugId)
+  PackageRepository(String drugId)
       : this.drugId = drugId,
         super(
           FirebaseFirestore.instance.collection(Collections.packages),
@@ -33,11 +32,22 @@ class DrugRepository extends Repository<PackageModel> {
     });
   }
 
-  Future<void> increase(PackageModel model) {
-    return super.update(PackageModel(id: model.id, count: model.count + 1));
+  void increase(PackageModel model) {
+    super.update(PackageModel(id: model.id, count: model.count + 1));
   }
 
-  Future<void> decrease(PackageModel model) {
-    return super.update(PackageModel(id: model.id, count: model.count - 1));
+  void decrease(PackageModel model) {
+    super.update(PackageModel(id: model.id, count: model.count - 1));
+  }
+
+    void deleteAllDrugPackages() {
+    collection
+        .where("drug_id", isEqualTo: drugId)
+        .snapshots()
+        .map((snap) {
+      snap.docs.map((e) {
+        delete(e.id); 
+      });
+    });
   }
 }

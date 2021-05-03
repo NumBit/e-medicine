@@ -3,9 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
-import 'package:medicine_cabinet/firebase/user/user_cabinet_model.dart';
-import 'package:medicine_cabinet/firebase/user/user_cabinet_repository.dart';
-import 'package:medicine_cabinet/main/state/user_state.dart';
 
 class CreateCabinetDialog extends StatelessWidget {
   const CreateCabinetDialog({

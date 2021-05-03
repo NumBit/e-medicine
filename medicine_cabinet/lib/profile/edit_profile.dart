@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:medicine_cabinet/drug/add_edit/custom_form_field.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_repository.dart';
-import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 
 class EditProfile extends StatelessWidget {

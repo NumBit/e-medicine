@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/firebase/model.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 
@@ -22,21 +21,21 @@ abstract class Repository<T extends Model> {
     });
   }
 
-  Future<void> update(T model) {
-    return collection
+  void update(T model) {
+    collection
         .doc(model.id)
         .update(model.toJson())
         .then((value) => print("Operation success."))
-        .catchError((error) =>
-            snackBarMessage("Operation failed", "Nothing updated"));
+        .catchError(
+            (error) => snackBarMessage("Operation failed", "Nothing updated"));
   }
 
-  Future<void> delete(String docId) {
-    return collection
+  void delete(String docId) {
+    collection
         .doc(docId)
         .delete()
         .then((value) => print("Operation success."))
-        .catchError((error) =>
-            snackBarMessage("Operation failed", "Nothing removed"));
+        .catchError(
+            (error) => snackBarMessage("Operation failed", "Nothing removed"));
   }
 }

@@ -14,8 +14,7 @@ class CabinetAppBar extends StatelessWidget {
     UserState userState = Get.find();
     return Obx(
       () => StreamBuilder<CabinetModel>(
-        stream: CabinetRepository()
-            .streamModel(userState.openCabinetId.value),
+        stream: CabinetRepository().streamModel(userState.openCabinetId.value),
         initialData: CabinetModel(id: "", name: ""),
         builder: (context, snapshot) => SliverAppBar(
           leading: InkWell(
@@ -29,7 +28,7 @@ class CabinetAppBar extends StatelessWidget {
           floating: true,
           centerTitle: true,
           title: Text(
-            snapshot.data?.name,
+            snapshot.data?.name ?? "",
             textScaleFactor: 1.23,
             style: TextStyle(color: Colors.white),
           ),

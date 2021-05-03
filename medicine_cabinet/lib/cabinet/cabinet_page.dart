@@ -64,6 +64,7 @@ class DrugGrid extends StatelessWidget {
             .streamModels(filter: filter.filter.value),
         initialData: [],
         builder: (context, snapshot) {
+          if (snapshot.data == null) return Container();
           return SliverPadding(
               padding: EdgeInsets.all(15),
               sliver: SliverGrid.count(
