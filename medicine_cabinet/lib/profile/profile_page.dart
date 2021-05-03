@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_repository.dart';
+import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 import 'package:medicine_cabinet/profile/edit_profile.dart';
 import 'package:medicine_cabinet/profile/login_button.dart';
@@ -131,8 +132,11 @@ class ProfilePage extends StatelessWidget {
 
   void _signOut() {
     // ignore: unused_local_variable
-    UserState user = Get.find<UserState>();
+    UserState user = Get.find();
+    // ignore: unused_local_variable
+    NavigationState nav = Get.find();
     user = UserState();
+    nav.navigatorId.value = 0;
     FirebaseAuth.instance.signOut();
   }
 }
