@@ -54,7 +54,7 @@ class EditDrug extends StatelessWidget {
                     CustomFormField(
                         controller: substanceController,
                         label: "Active substance",
-                        maxLength: 60),
+                        maxLength: 45),
                     CustomFormField(
                         controller: descriptionController,
                         label: "Description",

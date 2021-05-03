@@ -87,6 +87,7 @@ class ProfilePage extends StatelessWidget {
                       return Text(
                         user.data.name,
                         textScaleFactor: 1.5,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).primaryColorDark),

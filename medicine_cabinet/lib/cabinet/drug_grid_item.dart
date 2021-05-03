@@ -69,7 +69,13 @@ class CardStats extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(substance),
+        Flexible(
+          child: Text(
+            substance,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
+        ),
         // Text(
         //   categories.first,
         //   textScaleFactor: 1.2,

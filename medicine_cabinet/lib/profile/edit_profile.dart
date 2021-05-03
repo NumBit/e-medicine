@@ -25,6 +25,7 @@ class EditProfile extends StatelessWidget {
                   CustomFormField(
                       label: "Name",
                       controller: nameController,
+                      maxLength: 50,
                       validator: (value) {
                         if (value == null || value.isEmpty)
                           return "Name cannot be empty";
