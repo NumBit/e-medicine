@@ -66,6 +66,7 @@ class CabinetRepository extends Repository<CabinetModel> {
     });
   }
 
+//TODO not the right count, use per UserCabinet
   Stream<int> cabinetCount() {
     var myUid = FirebaseAuth.instance.currentUser.uid;
     return collection
