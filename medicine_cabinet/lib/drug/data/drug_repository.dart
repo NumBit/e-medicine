@@ -7,10 +7,9 @@ import 'drug_model.dart';
 
 class DrugRepository extends Repository<DrugModel> {
   final String cabinetId;
-  DrugRepository(BuildContext context, String cabinetId)
+  DrugRepository(String cabinetId)
       : this.cabinetId = cabinetId,
         super(
-          context,
           FirebaseFirestore.instance.collection(Collections.drugs),
         );
 

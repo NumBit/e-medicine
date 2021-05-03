@@ -5,10 +5,11 @@ import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 import 'package:medicine_cabinet/drug/add_edit/custom_form_field.dart';
 import 'package:medicine_cabinet/drug/add_edit/password_field.dart';
+import 'package:medicine_cabinet/firebase/user/user_cabinet_model.dart';
+import 'package:medicine_cabinet/firebase/user/user_cabinet_repository.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
-import 'package:medicine_cabinet/main/state/user_state.dart';
 import 'package:medicine_cabinet/profile/login_button.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -96,41 +97,52 @@ class RegisterPage extends StatelessWidget {
 
   void _register(context, String email, String pass, String passSecond) async {
     if (email.isEmpty || pass.isEmpty || passSecond.isEmpty) {
-      snackBarMessage(context, "Empty field!");
+      snackBarMessage("Empty field", "Fill all fields");
       return;
     }
     if (pass != passSecond) {
-      snackBarMessage(context, "Passwords are not same!");
+      snackBarMessage("Passwords are not same", "Retype your password");
       return;
     }
     if (!GetUtils.isEmail(email)) {
-      snackBarMessage(context, "Wrong email format");
+      snackBarMessage("Wrong email format", "Check email format");
       return;
     }
 
     try {
       var userDoc = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: pass);
-      var cabId = await CabinetRepository(context).add(
-          CabinetModel(name: "Default cabinet", ownerId: userDoc.user.uid));
-      UserRepository(context).add(UserModel(
+      print("firebase OK");
+      var cabId =
+          await CabinetRepository().add(CabinetModel(name: "Default cabinet"));
+      print("cabinet OK");
+      UserRepository().add(UserModel(
           userId: userDoc.user.uid,
           name: "Your Name",
           email: email,
           openCabinetId: cabId));
+      print("userRepo OK");
+      UserCabinetRepository().add(UserCabinetModel(
+          cabinetId: cabId,
+          userId: userDoc.user.uid,
+          userEmail: userDoc.user.email,
+          admin: true));
+      print("userCab OK");
       Get.back();
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
-        snackBarMessage(context, "The password provided is too weak.");
+        snackBarMessage(
+            "The password provided is too weak", "Choose stronger password");
         return;
       } else if (e.code == "email-already-in-use") {
-        snackBarMessage(context, "The account already exists for that email.");
+        snackBarMessage(
+            "The account already exists for that email", "Please login");
         return;
       }
     } catch (e) {
       print("Error occured in register:");
       print(e);
-      snackBarMessage(context, "Unknown error occured.");
+      snackBarMessage("Unknown error occured", "Try again later");
       return;
     }
   }

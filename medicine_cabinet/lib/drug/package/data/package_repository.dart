@@ -6,10 +6,9 @@ import 'package:medicine_cabinet/firebase/repository.dart';
 
 class DrugRepository extends Repository<PackageModel> {
   final String drugId;
-  DrugRepository(BuildContext context, String drugId)
+  DrugRepository(String drugId)
       : this.drugId = drugId,
         super(
-          context,
           FirebaseFirestore.instance.collection(Collections.packages),
         );
 

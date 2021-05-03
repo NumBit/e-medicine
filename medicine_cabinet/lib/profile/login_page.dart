@@ -84,7 +84,7 @@ class LoginPage extends StatelessWidget {
 
   Future<bool> _login(context, String email, String pass) async {
     if (email.isEmpty || pass.isEmpty) {
-      snackBarMessage(context, "Empty field!");
+      snackBarMessage("Empty field", "Fill all fields");
       return false;
     }
     try {
@@ -92,16 +92,16 @@ class LoginPage extends StatelessWidget {
           .signInWithEmailAndPassword(email: email, password: pass);
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
-        snackBarMessage(context, "Account not found.");
+        snackBarMessage("Account not found", "Try again");
         return false;
       } else if (e.code == "wrong-password") {
-        snackBarMessage(context, "Wrong password.");
+        snackBarMessage("Wrong password", "Try again");
         return false;
       }
     } catch (e) {
       print("Error occured in login:");
       print(e);
-      snackBarMessage(context, "Unknown error occured.");
+      snackBarMessage("Unknown error occured", "Try again later");
       return false;
     }
     Get.back();

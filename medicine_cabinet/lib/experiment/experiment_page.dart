@@ -25,7 +25,7 @@ class ExperimentPage extends StatelessWidget {
       ),
       body: Container(
         child: StreamBuilder<QuerySnapshot>(
-          stream: CabinetRepository(context).getStream(),
+          stream: null,//CabinetRepository(context).getStream(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {

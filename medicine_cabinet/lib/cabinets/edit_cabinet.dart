@@ -49,7 +49,7 @@ class EditCabinet extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         Get.back();
-                        CabinetRepository(context).delete(model.id);
+                        CabinetRepository().delete(model.id);
                       },
                       style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).errorColor),
@@ -58,7 +58,7 @@ class EditCabinet extends StatelessWidget {
                     ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
-                            CabinetRepository(context).update(CabinetModel(
+                            CabinetRepository().update(CabinetModel(
                                 id: model.id, name: nameController.text));
                             Get.back();
                           }

@@ -1,15 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 
 import '../constants/collections.dart';
 
 class UserRepository extends Repository<UserModel> {
-  UserRepository(BuildContext context)
+  UserRepository()
       : super(
-          context,
           FirebaseFirestore.instance.collection(Collections.users),
         );
 

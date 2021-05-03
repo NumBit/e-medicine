@@ -20,7 +20,7 @@ class MainPage extends StatelessWidget {
         builder: (context, user) {
           print("ACCOUNT: Auth state changed!");
           return StreamBuilder<UserModel>(
-              stream: UserRepository(context).getMyUser(),
+              stream: UserRepository().getMyUser(),
               builder: (context, userModel) {
                 if (FirebaseAuth.instance.currentUser == null) {
                   print("ACCOUNT: NO AUTH");

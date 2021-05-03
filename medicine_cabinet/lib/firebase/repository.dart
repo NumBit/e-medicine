@@ -4,30 +4,20 @@ import 'package:medicine_cabinet/firebase/model.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 
 abstract class Repository<T extends Model> {
-  BuildContext context;
   CollectionReference collection;
 
-  Repository(BuildContext context, CollectionReference collection) {
-    this.context = context;
+  Repository(CollectionReference collection) {
     this.collection = collection;
   }
 
-  CollectionReference getCollection() {
-    return collection;
-  }
-
   Stream<T> streamModel(String id);
-
-  Stream getStream() {
-    return collection.snapshots();
-  }
 
   Future<String> add(T model) {
     return collection
         .add(model.toJson())
         .then((value) => value.id)
         .catchError((error) {
-      snackBarMessage(context, "Something went wrong on add");
+      snackBarMessage("Operation failed", "Nothing added");
       return "";
     });
   }
@@ -38,7 +28,7 @@ abstract class Repository<T extends Model> {
         .update(model.toJson())
         .then((value) => print("Operation success."))
         .catchError((error) =>
-            snackBarMessage(context, "Something went wrong on update"));
+            snackBarMessage("Operation failed", "Nothing updated"));
   }
 
   Future<void> delete(String docId) {
@@ -47,6 +37,6 @@ abstract class Repository<T extends Model> {
         .delete()
         .then((value) => print("Operation success."))
         .catchError((error) =>
-            snackBarMessage(context, "Something went wrong on remove"));
+            snackBarMessage("Operation failed", "Nothing removed"));
   }
 }

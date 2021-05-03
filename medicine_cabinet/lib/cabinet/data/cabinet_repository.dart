@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 import 'package:medicine_cabinet/firebase/constants/collections.dart';
+import 'package:medicine_cabinet/firebase/user/user_cabinet_model.dart';
+import 'package:medicine_cabinet/firebase/user/user_cabinet_repository.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 
 class CabinetRepository extends Repository<CabinetModel> {
-  CabinetRepository(BuildContext context)
+  CabinetRepository()
       : super(
-          context,
           FirebaseFirestore.instance.collection(Collections.cabinets),
         );
 
@@ -24,12 +25,31 @@ class CabinetRepository extends Repository<CabinetModel> {
   @override
   Future<String> add(CabinetModel model) async {
     DocumentReference cabinet;
-    var ownerId = FirebaseAuth.instance.currentUser.uid;
-    model = CabinetModel(name: model.name, ownerId: ownerId);
+
+    model = CabinetModel(name: model.name);
     try {
       cabinet = await collection.add(model.toJson());
     } catch (e) {
-      snackBarMessage(context, "Something went wrong");
+      snackBarMessage("Something went wrong", "Try again later");
+      return null;
+    }
+    return cabinet.id;
+  }
+
+  Future<String> addToAuthUser(CabinetModel model) async {
+    DocumentReference cabinet;
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
+    try {
+      cabinet = await collection.add(model.toJson());
+      await UserCabinetRepository().add(UserCabinetModel(
+          userId: user.uid,
+          userEmail: user.email,
+          cabinetId: cabinet.id,
+          admin: true));
+    } catch (e) {
+      snackBarMessage("Something went wrong", "Try again later");
+      return null;
     }
     return cabinet.id;
   }
@@ -83,10 +103,6 @@ class CabinetRepository extends Repository<CabinetModel> {
       }
       return [];
     });
-  }
-
-  Stream<CabinetModel> getDefaultCabinet(String id) {
-    return collection.doc(id).snapshots().map((e) => CabinetModel.fromMap(e));
   }
 /*
   Future work: cabinet sharring
