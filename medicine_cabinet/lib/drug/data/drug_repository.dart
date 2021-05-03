@@ -45,8 +45,8 @@ class DrugRepository extends Repository<DrugModel> {
     collection
         .where("cabinet_id", isEqualTo: cabinetId)
         .snapshots()
-        .map((snap) {
-      snap.docs.map((e) {
+        .forEach((element) {
+      element.docs.forEach((e) {
         delete(e.id);
         PackageRepository(e.id).deleteAllDrugPackages();
       });

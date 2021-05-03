@@ -52,14 +52,14 @@ class EditCabinet extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         UserState user = Get.find();
-                        if (model.id == user.openCabinetId.value) {
+                        /*if (model.id == user.openCabinetId.value) {
                           snackBarMessage("Cannot delete opened cabinet",
                               "Open other cabinet first");
-                        } else {
-                          Get.back();
-                          CabinetRepository().delete(model.id);
-                          DrugRepository(model.id).deleteAllDrugsInCabinet();
-                        }
+                        } else {*/
+                        Get.back();
+                        CabinetRepository().delete(model.id);
+                        DrugRepository(model.id).deleteAllDrugsInCabinet();
+                        //}
                       },
                       style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).errorColor),

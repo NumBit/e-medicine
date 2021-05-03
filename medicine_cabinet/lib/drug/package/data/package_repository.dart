@@ -40,13 +40,10 @@ class PackageRepository extends Repository<PackageModel> {
     super.update(PackageModel(id: model.id, count: model.count - 1));
   }
 
-    void deleteAllDrugPackages() {
-    collection
-        .where("drug_id", isEqualTo: drugId)
-        .snapshots()
-        .map((snap) {
-      snap.docs.map((e) {
-        delete(e.id); 
+  void deleteAllDrugPackages() {
+    collection.where("drug_id", isEqualTo: drugId).snapshots().forEach((snap) {
+      snap.docs.forEach((e) {
+        delete(e.id);
       });
     });
   }
