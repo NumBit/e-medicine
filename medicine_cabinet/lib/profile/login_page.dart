@@ -20,14 +20,12 @@ class LoginPage extends StatelessWidget {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Login account'),
+              Text('Medicine cabinet'),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).primaryColorDark),
                   child: Text('Register'),
-                  onPressed: () => [
-                        Get.toNamed("/register"),
-                      ]),
+                  onPressed: () => Get.toNamed("/register")),
             ],
           ),
         ),

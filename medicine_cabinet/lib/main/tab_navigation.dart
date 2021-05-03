@@ -4,9 +4,7 @@ import 'package:medicine_cabinet/cabinet/cabinet_page.dart';
 import 'package:medicine_cabinet/cabinets/cabinets_list_page.dart';
 import 'package:medicine_cabinet/drug/add_edit/add_drug.dart';
 import 'package:medicine_cabinet/drug/add_edit/edit_drug.dart';
-import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
-import 'package:medicine_cabinet/main/state/navigator_keys.dart';
 import 'package:medicine_cabinet/profile/profile_page.dart';
 import 'package:medicine_cabinet/schedule/schedule_page.dart';
 
@@ -21,13 +19,17 @@ class TabState extends State<TabNavigation>
 
   @override
   void initState() {
+    var nav = Get.put(NavigationState());
     super.initState();
     _controller = TabController(length: 3, vsync: this);
+    _controller.addListener(() {
+      nav.navigatorId.value = _controller.index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    var nav = Get.put(NavigationState());
+    NavigationState nav = Get.find();
     return WillPopScope(
       onWillPop: () async {
         var isFirst =
@@ -36,8 +38,9 @@ class TabState extends State<TabNavigation>
         return isFirst;
       },
       child: Scaffold(
+          resizeToAvoidBottomInset: false,
           body: TabBarView(
-            physics: NeverScrollableScrollPhysics(),
+            // physics: NeverScrollableScrollPhysics(),
             children: [
               CabinetNavigatorPage(navigatorKey: Get.nestedKey(0)),
               Navigator(
@@ -67,9 +70,6 @@ class TabState extends State<TabNavigation>
             child: TabBar(
               labelColor: Colors.white,
               indicatorColor: Colors.white,
-              onTap: (index) {
-                nav.navigatorId.value = index;
-              },
               tabs: [
                 Tab(
                   icon: Icon(Icons.medical_services),

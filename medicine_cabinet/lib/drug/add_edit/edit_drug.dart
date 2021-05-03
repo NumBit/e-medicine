@@ -7,7 +7,6 @@ import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/drug/data/selected_icon.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
-import 'package:medicine_cabinet/main/state/navigator_keys.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 
 import 'custom_form_field.dart';

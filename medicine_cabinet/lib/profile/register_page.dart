@@ -8,7 +8,6 @@ import 'package:medicine_cabinet/drug/add_edit/password_field.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
-import 'package:medicine_cabinet/main/state/user_state.dart';
 import 'package:medicine_cabinet/profile/login_button.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -24,7 +23,7 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text('Register account'),
+          title: Text("Medicine cabinet"),
         ),
         body: Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),

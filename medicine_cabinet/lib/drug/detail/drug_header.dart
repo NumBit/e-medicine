@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 
-import 'drug_categories.dart';
-
 class DrugHeader extends StatelessWidget {
   final List<String> categories;
   final DrugModel model;
@@ -40,7 +38,7 @@ class DrugHeader extends StatelessWidget {
                   ),
                 ),
               ),
-              DrugCategories(categories: categories)
+              // DrugCategories(categories: categories)
             ],
           ),
           if (drug.icon.isNotEmpty)

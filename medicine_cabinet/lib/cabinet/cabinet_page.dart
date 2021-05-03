@@ -8,7 +8,6 @@ import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/main/state/filter_state.dart';
 import 'package:medicine_cabinet/main/menu.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
-import 'package:medicine_cabinet/main/state/navigator_keys.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 
 import 'chip_filter.dart';
@@ -88,12 +87,11 @@ class SearchSliver extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Container(
         padding: EdgeInsets.zero,
-        height: 150,
+        height: 100,
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(50),
-            bottomRight: Radius.circular(50),
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(30),
           ),
           boxShadow: [
             BoxShadow(
@@ -105,9 +103,10 @@ class SearchSliver extends StatelessWidget {
           ],
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SearchBar(),
-            SearhCategories(),
+            // SearhCategories(),
           ],
         ),
       ),
