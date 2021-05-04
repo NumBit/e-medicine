@@ -18,7 +18,7 @@ class PackagesList extends StatelessWidget {
         stream: PackageRepository(model.id).streamModels(),
         initialData: [],
         builder: (context, snapshot) {
-          if (snapshot.data == null) return Container();
+          if (snapshot.data == null) return SliverToBoxAdapter();
           return SliverList(
             delegate: SliverChildListDelegate(snapshot.data
                 .map((package) => PackageCard(drugId: model.id, model: package))
