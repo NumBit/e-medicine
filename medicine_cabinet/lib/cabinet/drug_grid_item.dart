@@ -17,6 +17,7 @@ class DrugGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OpenContainer<bool>(
+        useRootNavigator: false,
         tappable: false,
         closedShape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -33,7 +34,11 @@ class DrugGridItem extends StatelessWidget {
                 children: [
                   CardIcon(model: model),
                   CardName(model: model),
-                  CardStats(categories: categories, count: count),
+                  CardStats(
+                    categories: categories,
+                    count: count,
+                    substance: model.substance,
+                  ),
                 ],
               ),
             ),
@@ -52,20 +57,29 @@ class CardStats extends StatelessWidget {
     Key key,
     @required this.categories,
     @required this.count,
+    this.substance,
   }) : super(key: key);
 
   final List<String> categories;
   final int count;
+  final String substance;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          categories.first,
-          textScaleFactor: 1.2,
+        Flexible(
+          child: Text(
+            substance,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
         ),
+        // Text(
+        //   categories.first,
+        //   textScaleFactor: 1.2,
+        // ),
         getCounterText(count)
       ],
     );

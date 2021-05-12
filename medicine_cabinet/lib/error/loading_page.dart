@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({
@@ -10,13 +11,15 @@ class LoadingPage extends StatelessWidget {
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
-              title: Text('Please wait'),
+              title: Text("Loading"),
             ),
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  child: Text("Loading..."),
+                  child: SpinKitFadingCircle(
+                    color: Theme.of(context).primaryColorDark,
+                  ),
                 ),
               ),
             )));

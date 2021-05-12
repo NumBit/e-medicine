@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
-import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 
 class ExperimentPage extends StatelessWidget {
   const ExperimentPage({
@@ -23,7 +21,7 @@ class ExperimentPage extends StatelessWidget {
       ),
       body: Container(
         child: StreamBuilder<QuerySnapshot>(
-          stream: CabinetRepository(context).getStream(),
+          stream: null,//CabinetRepository(context).getStream(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -32,29 +30,17 @@ class ExperimentPage extends StatelessWidget {
 
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Text("Loading");
+            } else {
+              return Container(
+                child: ElevatedButton(
+                  child: Text("Add user"),
+                  onPressed: () {
+                    //UserRepository(context)
+                    //.add(UserModel(cabinets: ["abc", "def"]));
+                  },
+                ),
+              );
             }
-            return ListView(
-              children: snapshot.data.docs
-                  .map((doc) => CabinetModel.fromMap(doc))
-                  .toList()
-                  .map((CabinetModel item) {
-                return Container(
-                  child: Column(
-                    children: [
-                      Text(item.name),
-                      ElevatedButton(
-                          onPressed: () {}, child: Text("Add category")),
-                      ElevatedButton(
-                          onPressed: () {
-                            //CabinetRepository(context)
-                            //.addOwner("mvHtFmG93h39BF7iAsXi", "p@p.sk");
-                          },
-                          child: Text("Add owner")),
-                    ],
-                  ),
-                );
-              }).toList(),
-            );
           },
         ),
       ),

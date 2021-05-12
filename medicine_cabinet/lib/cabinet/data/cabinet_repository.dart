@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 import 'package:medicine_cabinet/firebase/constants/collections.dart';
+import 'package:medicine_cabinet/firebase/user/user_cabinet_model.dart';
+import 'package:medicine_cabinet/firebase/user/user_cabinet_repository.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 
 class CabinetRepository extends Repository<CabinetModel> {
-  CabinetRepository(BuildContext context)
+  CabinetRepository()
       : super(
-          context,
           FirebaseFirestore.instance.collection(Collections.cabinets),
         );
 
@@ -24,12 +24,42 @@ class CabinetRepository extends Repository<CabinetModel> {
   @override
   Future<String> add(CabinetModel model) async {
     DocumentReference cabinet;
-    var ownerId = FirebaseAuth.instance.currentUser.uid;
-    model = CabinetModel(name: model.name, ownerId: ownerId);
+
+    model = CabinetModel(name: model.name);
     try {
       cabinet = await collection.add(model.toJson());
     } catch (e) {
-      snackBarMessage(context, "Something went wrong");
+      snackBarMessage("Something went wrong", "Try again later");
+      return null;
+    }
+    return cabinet.id;
+  }
+
+  @override
+  void delete(String docId) {
+    collection
+        .doc(docId)
+        .delete()
+        .then((value) => print("Operation success."))
+        .catchError(
+            (error) => snackBarMessage("Operation failed", "Nothing removed"));
+    UserCabinetRepository().deleteAll(docId);
+  }
+
+  Future<String> addToAuthUser(CabinetModel model) async {
+    DocumentReference cabinet;
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
+    try {
+      cabinet = await collection.add(model.toJson());
+      await UserCabinetRepository().add(UserCabinetModel(
+          userId: user.uid,
+          userEmail: user.email,
+          cabinetId: cabinet.id,
+          admin: true));
+    } catch (e) {
+      snackBarMessage("Something went wrong", "Try again later");
+      return null;
     }
     return cabinet.id;
   }
@@ -47,9 +77,45 @@ class CabinetRepository extends Repository<CabinetModel> {
     });
   }
 
-  Stream<CabinetModel> getDefaultCabinet(String id) {
-    return collection.doc(id).snapshots().map((e) => CabinetModel.fromMap(e));
+  Stream<int> cabinetCount() {
+    var myUid = FirebaseAuth.instance.currentUser.uid;
+    return UserCabinetRepository()
+        .collection
+        .where("user_id", isEqualTo: myUid)
+        .snapshots()
+        .map((value) {
+      return value.size;
+    });
   }
+
+//TODO
+  Stream<List<CabinetModel>> drugCount() {
+    var myUid = FirebaseAuth.instance.currentUser.uid;
+    return collection
+        .where("owner_id", isEqualTo: myUid)
+        .snapshots()
+        .map((value) {
+      if (value.size > 0) {
+        return value.docs.map((e) => CabinetModel.fromMap(e)).toList();
+      }
+      return [];
+    });
+  }
+
+//TODO
+  Stream<List<CabinetModel>> pillCount() {
+    var myUid = FirebaseAuth.instance.currentUser.uid;
+    return collection
+        .where("owner_id", isEqualTo: myUid)
+        .snapshots()
+        .map((value) {
+      if (value.size > 0) {
+        return value.docs.map((e) => CabinetModel.fromMap(e)).toList();
+      }
+      return [];
+    });
+  }
+
 /*
   Future work: cabinet sharring
 

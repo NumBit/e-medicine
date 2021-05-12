@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:medicine_cabinet/cabinet/cabinet_page.dart';
-import 'package:medicine_cabinet/error/error_page.dart';
 import 'package:medicine_cabinet/error/loading_page.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
+import 'package:medicine_cabinet/main/tab_navigation.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
 import 'package:get/get.dart';
 
@@ -14,36 +13,28 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Object>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, s) {
-        if (FirebaseAuth.instance.currentUser == null) {
-          print('User is currently signed out!');
-          return LoginPage();
-        } else {
-          print('User is signed in!');
-          UserState userState = Get.put(UserState());
-          if (userState.id.value.isNotEmpty) {
-            return CabinetPage();
-          }
-          return FutureBuilder<UserModel>(
-              future: UserRepository(context).getMyUser(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return ErrorPage();
+    Get.put(UserState());
+    UserState userState = Get.find<UserState>();
+    return StreamBuilder<User>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, user) {
+          print("ACCOUNT: Auth state changed!");
+          return StreamBuilder<UserModel>(
+              stream: UserRepository().getMyUser(),
+              builder: (context, userModel) {
+                if (FirebaseAuth.instance.currentUser == null) {
+                  print("ACCOUNT: NO AUTH");
+                  return LoginPage();
+                } else if (userModel.data == null) {
+                  // TODO timeout back to login page after certain time (30s)
+                  print("ACCOUNT: LOADING");
+                  return LoadingPage();
+                } else {
+                  print("ACCOUNT: AUTH");
+                  userState.fromModel(userModel.data);
+                  return TabNavigation();
                 }
-                if (snapshot.connectionState == ConnectionState.done) {
-                  userState.id.value = snapshot.data.id;
-                  userState.email.value = snapshot.data.email;
-                  userState.name.value = snapshot.data.name;
-                  userState.userId.value = snapshot.data.userId;
-                  userState.openCabinetId.value = snapshot.data.openCabinetId;
-                  return CabinetPage();
-                }
-                return LoadingPage();
               });
-        }
-      },
-    );
+        });
   }
 }

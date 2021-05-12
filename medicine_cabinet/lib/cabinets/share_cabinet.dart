@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
+import 'package:medicine_cabinet/cabinets/user_cabinet_tile.dart';
 import 'package:medicine_cabinet/drug/add_edit/custom_form_field.dart';
+import 'package:medicine_cabinet/firebase/user/user_cabinet_model.dart';
+import 'package:medicine_cabinet/firebase/user/user_cabinet_repository.dart';
 
 class ShareCabinet extends StatelessWidget {
   final CabinetModel model;
@@ -11,73 +14,25 @@ class ShareCabinet extends StatelessWidget {
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
     final emailController = TextEditingController();
-    var emailCount = 3;
     return SimpleDialog(
-      title: Center(child: Text("Share Cabinet")),
+      title: Center(child: Text("Current users")),
       children: [
-        Container(
-          height: emailCount < 3 ? 60 * emailCount.toDouble() : 180,
-          width: 600,
-          child: ListView(
-            children: [
-              ListTile(
-                title: Text("email@email.com"),
-                trailing: Tooltip(
-                  message: "Cancel sharing this cabinet",
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(50),
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.cancel),
-                    ),
-                  ),
-                ),
-              ),
-              ListTile(
-                title: Text("email@email.com"),
-                trailing: Tooltip(
-                  message: "Cancel sharing this cabinet",
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(50),
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.cancel),
-                    ),
-                  ),
-                ),
-              ),
-              ListTile(
-                title: Text("email@email.com"),
-                trailing: Tooltip(
-                  message: "Cancel sharing this cabinet",
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(50),
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.cancel),
-                    ),
-                  ),
-                ),
-              ),
-              ListTile(
-                title: Text("email@email.com"),
-                trailing: Tooltip(
-                  message: "Cancel sharing this cabinet",
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(50),
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.cancel),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+        StreamBuilder<List<UserCabinetModel>>(
+          stream: UserCabinetRepository().getCabinetUsers(model.id),
+          initialData: [],
+          builder: (context, snapshot) {
+            if (snapshot.data == null) {
+              return Container();
+            }
+            var emailCount = snapshot.data.length;
+            return Container(
+                height: emailCount < 3 ? 60 * emailCount.toDouble() : 180,
+                width: 600,
+                child: ListView(
+                    children: snapshot.data
+                        .map((e) => UserCabinetTile(model: e))
+                        .toList()));
+          },
         ),
         Form(
             key: _formKey,
@@ -92,8 +47,7 @@ class ShareCabinet extends StatelessWidget {
                       validator: (String value) {
                         if (value == null ||
                             value.isEmpty ||
-                            !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                .hasMatch(value)) {
+                            !GetUtils.isEmail(value)) {
                           return 'Wrong email format';
                         }
                         return null;
@@ -102,7 +56,9 @@ class ShareCabinet extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        Get.back();
+                        UserCabinetRepository()
+                            .addByEmail(emailController.text, model.id);
+                        //emailController.text = "";
                       }
                     },
                     child: Text("Share")),

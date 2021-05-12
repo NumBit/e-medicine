@@ -7,6 +7,7 @@ import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/main/state/filter_state.dart';
 import 'package:medicine_cabinet/main/menu.dart';
+import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 
 import 'chip_filter.dart';
@@ -18,6 +19,7 @@ class CabinetPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(FilterState());
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       drawer: Menu(),
       body: CustomScrollView(
         slivers: [
@@ -28,7 +30,9 @@ class CabinetPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Get.toNamed("/add_drug");
+          NavigationState nav = Get.find();
+
+          Get.toNamed("/add_drug", id: nav.navigatorId.value);
         },
         backgroundColor: Theme.of(context).primaryColor,
         tooltip: 'Add medication',
@@ -57,10 +61,11 @@ class DrugGrid extends StatelessWidget {
     UserState userState = Get.find();
     FilterState filter = Get.find();
     return Obx(() => StreamBuilder<List<DrugModel>>(
-        stream: DrugRepository(context, userState.openCabinetId.value)
+        stream: DrugRepository(userState.openCabinetId.value)
             .streamModels(filter: filter.filter.value),
         initialData: [],
         builder: (context, snapshot) {
+          if (snapshot.data == null) return Container();
           return SliverPadding(
               padding: EdgeInsets.all(15),
               sliver: SliverGrid.count(
@@ -84,12 +89,11 @@ class SearchSliver extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Container(
         padding: EdgeInsets.zero,
-        height: 150,
+        height: 100,
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(50),
-            bottomRight: Radius.circular(50),
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(30),
           ),
           boxShadow: [
             BoxShadow(
@@ -101,9 +105,10 @@ class SearchSliver extends StatelessWidget {
           ],
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SearchBar(),
-            SearhCategories(),
+            // SearhCategories(),
           ],
         ),
       ),

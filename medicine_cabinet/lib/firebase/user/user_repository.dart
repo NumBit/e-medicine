@@ -1,15 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 
 import '../constants/collections.dart';
 
 class UserRepository extends Repository<UserModel> {
-  UserRepository(BuildContext context)
+  UserRepository()
       : super(
-          context,
           FirebaseFirestore.instance.collection(Collections.users),
         );
 
@@ -27,15 +25,22 @@ class UserRepository extends Repository<UserModel> {
         .map((snap) => UserModel.fromMap(snap));
   }
 
-  Future<UserModel> getMyUser() {
-    var myUid = FirebaseAuth.instance.currentUser.uid;
-    return collection.where("user_id", isEqualTo: myUid).get().then((value) {
+  Stream<UserModel> getMyUser() {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return null;
+    }
+    var myUid = user.uid;
+    return collection
+        .where("user_id", isEqualTo: myUid)
+        .snapshots()
+        .map((value) {
       if (value.size > 0) {
         return value.docs.map((e) => UserModel.fromMap(e)).toList().first;
       } else {
         return null;
       }
-    }).catchError((error) => null);
+    });
   }
 
   Future<UserModel> getByEmail(String email) {

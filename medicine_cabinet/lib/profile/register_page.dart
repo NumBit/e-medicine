@@ -5,10 +5,11 @@ import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 import 'package:medicine_cabinet/drug/add_edit/custom_form_field.dart';
 import 'package:medicine_cabinet/drug/add_edit/password_field.dart';
+import 'package:medicine_cabinet/firebase/user/user_cabinet_model.dart';
+import 'package:medicine_cabinet/firebase/user/user_cabinet_repository.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
-import 'package:medicine_cabinet/main/state/user_state.dart';
 import 'package:medicine_cabinet/profile/login_button.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -24,7 +25,7 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text('Register account'),
+          title: Text("Medicine cabinet"),
         ),
         body: Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
@@ -46,9 +47,7 @@ class RegisterPage extends StatelessWidget {
                   validator: (value) {
                     if (value == null || value.isEmpty)
                       return "Email cannot be empty";
-                    if (!RegExp(
-                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                        .hasMatch(value)) return 'Wrong email format';
+                    if (!GetUtils.isEmail(value)) return 'Wrong email format';
                     return null;
                   },
                 ),
@@ -88,7 +87,6 @@ class RegisterPage extends StatelessWidget {
                       if (_formKey.currentState.validate()) {
                         _register(
                             context, email.text, pass.text, passSecond.text);
-                        Get.back();
                       }
                     }
                   },
@@ -99,41 +97,52 @@ class RegisterPage extends StatelessWidget {
 
   void _register(context, String email, String pass, String passSecond) async {
     if (email.isEmpty || pass.isEmpty || passSecond.isEmpty) {
-      snackBarMessage(context, "Empty field!");
+      snackBarMessage("Empty field", "Fill all fields");
       return;
     }
     if (pass != passSecond) {
-      snackBarMessage(context, "Passwords are not same!");
+      snackBarMessage("Passwords are not same", "Retype your password");
       return;
     }
+    if (!GetUtils.isEmail(email)) {
+      snackBarMessage("Wrong email format", "Check email format");
+      return;
+    }
+
     try {
       var userDoc = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: pass);
-      var cabId = await CabinetRepository(context).add(
-          CabinetModel(name: "Default cabinet", ownerId: userDoc.user.uid));
-      var userDocId = await UserRepository(context).add(UserModel(
+      print("firebase OK");
+      var cabId =
+          await CabinetRepository().add(CabinetModel(name: "Default cabinet"));
+      print("cabinet OK");
+      UserRepository().add(UserModel(
           userId: userDoc.user.uid,
           name: "Your Name",
           email: email,
           openCabinetId: cabId));
-      UserState userState = Get.find();
-      userState.id.value = userDocId;
-      userState.userId.value = userDoc.user.uid;
-      userState.name.value = "Your name";
-      userState.email.value = email;
-      userState.openCabinetId.value = cabId;
+      print("userRepo OK");
+      UserCabinetRepository().add(UserCabinetModel(
+          cabinetId: cabId,
+          userId: userDoc.user.uid,
+          userEmail: userDoc.user.email,
+          admin: true));
+      print("userCab OK");
+      Get.back();
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
-        snackBarMessage(context, "The password provided is too weak.");
+        snackBarMessage(
+            "The password provided is too weak", "Choose stronger password");
         return;
       } else if (e.code == "email-already-in-use") {
-        snackBarMessage(context, "The account already exists for that email.");
+        snackBarMessage(
+            "The account already exists for that email", "Please login");
         return;
       }
     } catch (e) {
       print("Error occured in register:");
       print(e);
-      snackBarMessage(context, "Unknown error occured.");
+      snackBarMessage("Unknown error occured", "Try again later");
       return;
     }
   }
