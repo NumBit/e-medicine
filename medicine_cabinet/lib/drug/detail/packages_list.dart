@@ -21,7 +21,7 @@ class PackagesList extends StatelessWidget {
           if (snapshot.data == null) return SliverToBoxAdapter();
           return SliverList(
             delegate: SliverChildListDelegate(snapshot.data
-                .map((package) => PackageCard(drugId: model.id, model: package))
+                .map((package) => PackageCard(model: package))
                 .toList()),
           );
         });

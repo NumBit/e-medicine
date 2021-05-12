@@ -75,12 +75,6 @@ EventList<Event> _markedDateMap = new EventList<Event>(
         date: new DateTime(2021, 4, 29),
         title: 'Event 1',
         icon: _eventIcon,
-        dot: Container(
-          margin: EdgeInsets.symmetric(horizontal: 1.0),
-          color: Colors.red,
-          height: 5.0,
-          width: 5.0,
-        ),
       ),
       new Event(
         date: new DateTime(2021, 4, 29),
@@ -108,13 +102,14 @@ EventList<Event> _markedDateMap = new EventList<Event>(
         date: new DateTime(2021, 4, 29),
         title: 'Event 1',
         icon: _eventIcon,
-        dot: Container(
-          margin: EdgeInsets.symmetric(horizontal: 1.0),
-          color: Colors.green,
-          height: 5.0,
-          width: 5.0,
-        ),
       )
+    ],
+    new DateTime(2021, 4, 25): [
+      Event(
+        date: new DateTime(2021, 4, 29),
+        title: 'Event 1',
+        icon: _eventIcon,
+      ),
     ],
     new DateTime(2021, 4, 30): [
       new Event(
@@ -141,3 +136,5 @@ Widget _eventIcon = new Container(
     color: Colors.amber,
   ),
 );
+
+

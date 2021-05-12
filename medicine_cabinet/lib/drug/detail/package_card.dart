@@ -6,11 +6,9 @@ import 'package:medicine_cabinet/drug/package/data/package_model.dart';
 import 'package:medicine_cabinet/drug/package/data/package_repository.dart';
 
 class PackageCard extends StatelessWidget {
-  final String drugId;
   final PackageModel model;
   const PackageCard({
     Key key,
-    this.drugId,
     this.model,
   }) : super(key: key);
 
@@ -19,48 +17,34 @@ class PackageCard extends StatelessWidget {
     return Card(
       child: ExpansionTile(
         key: Key(model.id),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 90,
-              child: Text(
-                model.dossage,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Text(
-              DateFormat('dd.MM.yyyy').format(model.expiration.toDate()),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: (model.expiration.millisecondsSinceEpoch >
-                        Timestamp.now().millisecondsSinceEpoch)
-                    ? Theme.of(context).primaryColorDark
-                    : Theme.of(context).errorColor,
-              ),
-            ),
-            SizedBox(
-              width: 70,
-              child: Text(
-                model.count.toString() + " pcs",
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
+        title: PackageCardTitle(model: model),
         children: [
-          Row(
+          PackageCardExpanded(model: model),
+        ],
+      ),
+    );
+  }
+}
+
+class PackageCardExpanded extends StatelessWidget {
+  const PackageCardExpanded({
+    Key key,
+    @required this.model,
+  }) : super(key: key);
+
+  final PackageModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               InkWell(
                 onTap: () {
-                  PackageRepository(drugId).increase(model);
+                  PackageRepository(model.drugId).increase(model);
                 },
                 borderRadius: BorderRadius.circular(50),
                 child: Icon(
@@ -80,7 +64,7 @@ class PackageCard extends StatelessWidget {
               InkWell(
                 borderRadius: BorderRadius.circular(50),
                 onTap: () {
-                  PackageRepository(drugId).decrease(model);
+                  PackageRepository(model.drugId).decrease(model);
                 },
                 child: Icon(
                   Icons.remove,
@@ -88,21 +72,72 @@ class PackageCard extends StatelessWidget {
                   size: 50,
                 ),
               ),
-              InkWell(
-                borderRadius: BorderRadius.circular(50),
-                onTap: () {
-                  Get.dialog(DeletePackage(model: model));
-                },
-                child: Icon(
-                  Icons.delete,
-                  color: Colors.grey,
-                  size: 25,
-                ),
-              ),
             ],
           ),
-        ],
-      ),
+        ),
+        InkWell(
+          borderRadius: BorderRadius.circular(50),
+          onTap: () {
+            Get.dialog(DeletePackage(model: model));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(
+              Icons.delete,
+              color: Colors.grey,
+              size: 25,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class PackageCardTitle extends StatelessWidget {
+  const PackageCardTitle({
+    Key key,
+    @required this.model,
+  }) : super(key: key);
+
+  final PackageModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          width: 90,
+          child: Text(
+            model.dossage,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Text(
+          DateFormat('dd.MM.yyyy').format(model.expiration.toDate()),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: (model.expiration.millisecondsSinceEpoch >
+                    Timestamp.now().millisecondsSinceEpoch)
+                ? Theme.of(context).primaryColorDark
+                : Theme.of(context).errorColor,
+          ),
+        ),
+        SizedBox(
+          width: 70,
+          child: Text(
+            model.count.toString() + " pcs",
+            textAlign: TextAlign.end,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

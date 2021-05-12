@@ -30,16 +30,9 @@ class CabinetApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => MainPage(),
-        "/main": (context) => CabinetPage(),
         "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),
-        "/profile": (context) => ProfilePage(),
-        "/schedule": (context) => SchedulePage(),
         "/experiment": (context) => ExperimentPage(),
-        "/add_drug": (context) => AddDrug(),
-        // "/edit_drug": (context) => EditDrug(),
-        "/cabinets_list": (context) => CabinetsListPage(),
-        "drug_detail": (context) => DrugDetailPage(),
       },
     );
   }

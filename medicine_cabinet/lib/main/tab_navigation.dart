@@ -15,7 +15,7 @@ class TabNavigation extends StatefulWidget {
 
 class TabState extends State<TabNavigation>
     with SingleTickerProviderStateMixin {
-  var _controller;
+  TabController _controller;
 
   @override
   void initState() {
@@ -34,7 +34,6 @@ class TabState extends State<TabNavigation>
       onWillPop: () async {
         var isFirst =
             !await Get.nestedKey(nav.navigatorId.value).currentState.maybePop();
-        print(isFirst);
         return isFirst;
       },
       child: Scaffold(
@@ -43,65 +42,107 @@ class TabState extends State<TabNavigation>
             // physics: NeverScrollableScrollPhysics(),
             children: [
               CabinetNavigatorPage(navigatorKey: Get.nestedKey(0)),
-              Navigator(
-                key: Get.nestedKey(1),
-                onGenerateRoute: (routeSettings) {
-                  print(Get.key);
-
-                  return MaterialPageRoute(
-                    builder: (context) => SchedulePage(),
-                  );
-                },
-              ),
-              Navigator(
-                key: Get.nestedKey(2),
-                onGenerateRoute: (routeSettings) {
-                  return MaterialPageRoute(
-                    builder: (context) => ProfilePage(),
-                  );
-                },
-              )
+              ScheduleNavigatorPage(navigatorKey: Get.nestedKey(1)),
+              ProfileNNavigatorPage(navigatorKey: Get.nestedKey(2))
             ],
             controller: _controller,
           ),
-          bottomNavigationBar: Container(
-            color: Theme.of(context).primaryColorDark,
-            height: 60,
-            child: TabBar(
-              labelColor: Colors.white,
-              indicatorColor: Colors.white,
-              tabs: [
-                Tab(
-                  icon: Icon(Icons.medical_services),
-                  text: "Cabinet",
-                  iconMargin: EdgeInsets.only(bottom: 5),
-                ),
-                Tab(
-                  icon: Icon(Icons.calendar_today),
-                  text: "Schedule",
-                  iconMargin: EdgeInsets.only(bottom: 5),
-                ),
-                Tab(
-                  icon: Icon(Icons.account_circle),
-                  text: "Profile",
-                  iconMargin: EdgeInsets.only(bottom: 5),
-                ),
-              ],
-              controller: _controller,
-            ),
-          )),
+          bottomNavigationBar: BottomTabBar(controller: _controller)),
+    );
+  }
+}
+
+class BottomTabBar extends StatelessWidget {
+  const BottomTabBar({
+    Key key,
+    @required controller,
+  })  : _controller = controller,
+        super(key: key);
+
+  final TabController _controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Theme.of(context).primaryColorDark,
+      height: 60,
+      child: TabBar(
+        labelColor: Colors.white,
+        indicatorColor: Colors.white,
+        tabs: [
+          Tab(
+            icon: Icon(Icons.medical_services),
+            text: "Cabinet",
+            iconMargin: EdgeInsets.only(bottom: 5),
+          ),
+          Tab(
+            icon: Icon(Icons.calendar_today),
+            text: "Schedule",
+            iconMargin: EdgeInsets.only(bottom: 5),
+          ),
+          Tab(
+            icon: Icon(Icons.account_circle),
+            text: "Profile",
+            iconMargin: EdgeInsets.only(bottom: 5),
+          ),
+        ],
+        controller: _controller,
+      ),
+    );
+  }
+}
+
+class ProfileNNavigatorPage extends StatelessWidget {
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  const ProfileNNavigatorPage({
+    Key key,
+    @required this.navigatorKey,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      key: navigatorKey,
+      onGenerateRoute: (routeSettings) {
+        return MaterialPageRoute(
+          builder: (context) => ProfilePage(),
+        );
+      },
+    );
+  }
+}
+
+class ScheduleNavigatorPage extends StatelessWidget {
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  const ScheduleNavigatorPage({
+    Key key,
+    @required this.navigatorKey,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      key: navigatorKey,
+      onGenerateRoute: (routeSettings) {
+        print(Get.key);
+
+        return MaterialPageRoute(
+          builder: (context) => SchedulePage(),
+        );
+      },
     );
   }
 }
 
 class CabinetNavigatorPage extends StatefulWidget {
+  final GlobalKey<NavigatorState> navigatorKey;
+
   const CabinetNavigatorPage({
     Key key,
-    @required GlobalKey<NavigatorState> navigatorKey,
-  })  : _navigatorKey = navigatorKey,
-        super(key: key);
-
-  final GlobalKey<NavigatorState> _navigatorKey;
+    @required this.navigatorKey,
+  }) : super(key: key);
 
   @override
   _CabinetNavigatorPageState createState() => _CabinetNavigatorPageState();
@@ -122,7 +163,7 @@ class _CabinetNavigatorPageState extends State<CabinetNavigatorPage>
     super.build(context);
     return Navigator(
       initialRoute: "/",
-      key: widget._navigatorKey,
+      key: widget.navigatorKey,
       onGenerateRoute: (routeSettings) {
         print(routeSettings.name);
         if (routeSettings.name == "/")
