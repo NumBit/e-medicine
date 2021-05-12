@@ -22,10 +22,17 @@ class ScheduleRepository extends Repository<ScheduleModel> {
 
   @override
   Future<String> add(ScheduleModel model) async {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
     DocumentReference cabinet;
-    model = ScheduleModel(name: model.name);
+    var item = ScheduleModel(
+        ownerId: user.uid,
+        name: model.name,
+        dosage: model.dosage,
+        count: model.count,
+        timestamp: model.timestamp);
     try {
-      cabinet = await collection.add(model.toJson());
+      cabinet = await collection.add(item.toJson());
     } catch (e) {
       snackBarMessage("Something went wrong", "Try again later");
       return null;
