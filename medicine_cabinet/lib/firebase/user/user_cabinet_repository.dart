@@ -20,9 +20,10 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
   }
 
   Stream<List<UserCabinetModel>> getMyCabinets() {
-    var myUid = FirebaseAuth.instance.currentUser.uid;
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
     return collection
-        .where("user_id", isEqualTo: myUid)
+        .where("user_id", isEqualTo: user.uid)
         .snapshots()
         .map((value) {
       if (value.size > 0) {

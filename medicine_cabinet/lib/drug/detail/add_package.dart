@@ -53,7 +53,7 @@ class AddPackage extends StatelessWidget {
                       if (_formKey.currentState.validate()) {
                         var model = PackageModel(
                             count: int.parse(countController.text),
-                            dossage: dosageController.text,
+                            dosage: dosageController.text,
                             drugId: drugId,
                             expiration: Timestamp.fromDate(expiration));
                         PackageRepository(drugId).add(model);
