@@ -9,7 +9,7 @@ import 'package:medicine_cabinet/schedule/data/schedule_model.dart';
 class ScheduleRepository extends Repository<ScheduleModel> {
   ScheduleRepository()
       : super(
-          FirebaseFirestore.instance.collection(Collections.cabinets),
+          FirebaseFirestore.instance.collection(Collections.schedules),
         );
 
   @override
