@@ -3,35 +3,36 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 import 'package:medicine_cabinet/firebase/constants/collections.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
-import 'package:medicine_cabinet/schedule/data/schedule_model.dart';
+import 'package:medicine_cabinet/schedule/data/scheduler_model.dart';
 
-class ScheduleRepository extends Repository<ScheduleModel> {
-  ScheduleRepository()
+class SchedulerRepository extends Repository<SchedulerModel> {
+  SchedulerRepository()
       : super(
-          FirebaseFirestore.instance.collection(Collections.schedules),
+          FirebaseFirestore.instance.collection(Collections.scheduler),
         );
 
   @override
-  Stream<ScheduleModel> streamModel(String id) {
+  Stream<SchedulerModel> streamModel(String id) {
     return collection.snapshots().map((snap) => snap.docs
         .where((element) => element.id == id)
-        .map((e) => ScheduleModel.fromMap(e))
+        .map((e) => SchedulerModel.fromMap(e))
         .first);
   }
 
   @override
-  Future<String> add(ScheduleModel model) async {
+  Future<String> add(SchedulerModel model) async {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;
     DocumentReference cabinet;
-    var item = ScheduleModel(
+    var item = SchedulerModel(
         ownerId: user.uid,
-        schedulerId: model
-            .schedulerId, // TODO WARNING, SET THIS IN FRONTEND (id from SchedulerRepo.Add)
         name: model.name,
         dosage: model.dosage,
         count: model.count,
-        timestamp: model.timestamp);
+        dayFrom: model.dayFrom,
+        dayTo: model.dayTo,
+        timeFrom: model.timeFrom,
+        timeTo: model.timeTo);
     try {
       cabinet = await collection.add(item.toJson());
     } catch (e) {
@@ -49,10 +50,10 @@ class ScheduleRepository extends Repository<ScheduleModel> {
         .then((value) => print("Operation success."))
         .catchError(
             (error) => snackBarMessage("Operation failed", "Nothing removed"));
-    //TODO cleanup, UserCabinetRepository().deleteAll(docId);
+    //TODO cleanup UserCabinetRepository().deleteAll(docId);
   }
 
-  Stream<List<ScheduleModel>> streamModels() {
+  Stream<List<SchedulerModel>> streamModels() {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;
     return collection
@@ -60,7 +61,7 @@ class ScheduleRepository extends Repository<ScheduleModel> {
         .snapshots()
         .map((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => ScheduleModel.fromMap(e)).toList();
+        return value.docs.map((e) => SchedulerModel.fromMap(e)).toList();
       }
       return [];
     });

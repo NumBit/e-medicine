@@ -11,6 +11,7 @@ class Collections {
   static final String userCabinet = "user_cabinet";
   static final String owners = "owners";
   static final String schedules = "schedules";
+  static final String scheduler = "scheduler";
 
   // Services
   // TODO

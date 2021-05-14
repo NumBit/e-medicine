@@ -6,6 +6,7 @@ import 'package:medicine_cabinet/firebase/model.dart';
 class ScheduleModel extends Model with EventInterface {
   final String id;
   final String ownerId;
+  final String schedulerId;
   final String name;
   final String dosage;
   final int count;
@@ -14,6 +15,7 @@ class ScheduleModel extends Model with EventInterface {
   ScheduleModel(
       {this.id,
       this.ownerId,
+      this.schedulerId,
       this.name,
       this.dosage,
       this.count,
@@ -23,6 +25,7 @@ class ScheduleModel extends Model with EventInterface {
   ScheduleModel.fromMap(DocumentSnapshot snapshot)
       : id = snapshot.id ?? "",
         ownerId = snapshot.data()["owner_id"] ?? "",
+        schedulerId = snapshot.data()["scheduler_id"] ?? "",
         name = snapshot.data()["name"] ?? "",
         dosage = snapshot.data()["dosage"] ?? "",
         count = snapshot.data()["count"] ?? 0,
@@ -31,6 +34,7 @@ class ScheduleModel extends Model with EventInterface {
   @override
   Map<String, dynamic> toJson() => {
         if (ownerId != null) "owner_id": ownerId,
+        if (schedulerId != null) "scheduler_id": schedulerId,
         if (name != null) "name": name,
         if (dosage != null) "dossage": dosage,
         if (count != null && count >= 0) "count": count,
