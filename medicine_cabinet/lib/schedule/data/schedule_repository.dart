@@ -28,6 +28,7 @@ class ScheduleRepository extends Repository<ScheduleModel> {
         ownerId: user.uid,
         schedulerId: model
             .schedulerId, // TODO WARNING, SET THIS IN FRONTEND (id from SchedulerRepo.Add)
+        schedulerKey: model.schedulerKey,
         name: model.name,
         dosage: model.dosage,
         count: model.count,
@@ -56,12 +57,14 @@ class ScheduleRepository extends Repository<ScheduleModel> {
     });
   }
 
-  void deleteAll(String schedulerId) {
+  void deleteAll(String schedulerKey) {
     collection
-        .where("scheduler_id", isEqualTo: schedulerId)
+        .where("scheduler_key", isEqualTo: schedulerKey)
         .snapshots()
         .forEach((snap) {
       snap.docs.forEach((e) {
+        print("XY->");
+        print(e.id);
         super.delete(e.id);
       });
     });

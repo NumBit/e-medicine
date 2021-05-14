@@ -7,6 +7,7 @@ class ScheduleModel extends Model with EventInterface {
   final String id;
   final String ownerId;
   final String schedulerId;
+  final String schedulerKey;
   final String name;
   final String dosage;
   final int count;
@@ -17,6 +18,7 @@ class ScheduleModel extends Model with EventInterface {
       {this.id,
       this.ownerId,
       this.schedulerId,
+      this.schedulerKey,
       this.name,
       this.dosage,
       this.count,
@@ -28,6 +30,7 @@ class ScheduleModel extends Model with EventInterface {
       : id = snapshot.id ?? "",
         ownerId = snapshot.data()["owner_id"] ?? "",
         schedulerId = snapshot.data()["scheduler_id"] ?? "",
+        schedulerKey = snapshot.data()["scheduler_key"] ?? "",
         name = snapshot.data()["name"] ?? "",
         dosage = snapshot.data()["dosage"] ?? "",
         count = snapshot.data()["count"] ?? 0,
@@ -38,6 +41,7 @@ class ScheduleModel extends Model with EventInterface {
   Map<String, dynamic> toJson() => {
         if (ownerId != null) "owner_id": ownerId,
         if (schedulerId != null) "scheduler_id": schedulerId,
+        if (schedulerKey != null) "scheduler_key": schedulerKey,
         if (name != null) "name": name,
         if (dosage != null) "dosage": dosage,
         if (count != null && count >= 0) "count": count,

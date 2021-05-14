@@ -5,6 +5,7 @@ import 'package:medicine_cabinet/firebase/model.dart';
 class SchedulerModel extends Model {
   final String id;
   final String ownerId;
+  final String schedulerKey;
   final String name;
   final String dosage;
   final int count;
@@ -18,6 +19,7 @@ class SchedulerModel extends Model {
   SchedulerModel(
       {this.id,
       this.ownerId,
+      this.schedulerKey,
       this.name,
       this.dosage,
       this.count,
@@ -32,6 +34,7 @@ class SchedulerModel extends Model {
   SchedulerModel.fromMap(DocumentSnapshot snapshot)
       : id = snapshot.id ?? "",
         ownerId = snapshot.data()["owner_id"] ?? "",
+        schedulerKey = snapshot.data()["scheduler_key"] ?? "",
         name = snapshot.data()["name"] ?? "",
         dosage = snapshot.data()["dosage"] ?? "",
         count = snapshot.data()["count"] ?? 0,
@@ -49,6 +52,7 @@ class SchedulerModel extends Model {
   @override
   Map<String, dynamic> toJson() => {
         if (ownerId != null) "owner_id": ownerId,
+        if (schedulerKey != null) "scheduler_key": schedulerKey,
         if (name != null) "name": name,
         if (dosage != null) "dosage": dosage,
         if (repeatType != null) "repeat_type": repeatType,

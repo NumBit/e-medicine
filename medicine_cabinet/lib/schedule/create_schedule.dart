@@ -10,6 +10,7 @@ import 'package:medicine_cabinet/schedule/data/schedule_repository.dart';
 import 'package:medicine_cabinet/schedule/data/scheduler_model.dart';
 import 'package:medicine_cabinet/schedule/data/scheduler_repository.dart';
 import 'package:medicine_cabinet/schedule/data/time_picker_field.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateSchedule extends StatelessWidget {
   final DateTime date;
@@ -228,6 +229,8 @@ class CreateSchedule extends StatelessWidget {
   ) async {
     if (_formKey.currentState.validate()) {
       NavigationState nav = Get.find();
+      var schedulerKey = Uuid().v4();
+      var scheduleRepo = ScheduleRepository();
       var schedulerId = await SchedulerRepository().add(SchedulerModel(
           name: drugNameController.text,
           dosage: dosageController.text,
@@ -240,7 +243,7 @@ class CreateSchedule extends StatelessWidget {
           timeTo: endTime));
 
       if (repeat.value == "Never") {
-        ScheduleRepository().add(ScheduleModel(
+        scheduleRepo.add(ScheduleModel(
             schedulerId: schedulerId,
             name: drugNameController.text,
             count: int.parse(countController.text),
@@ -254,8 +257,9 @@ class CreateSchedule extends StatelessWidget {
       } else if (repeat.value == "Day") {
         var start = startDate;
         while (!start.isAfter(endDate)) {
-          ScheduleRepository().add(ScheduleModel(
+          scheduleRepo.add(ScheduleModel(
               schedulerId: schedulerId,
+              schedulerKey: schedulerKey,
               name: drugNameController.text,
               count: int.parse(countController.text),
               timestamp: Timestamp.fromDate(DateTime(start.year, start.month,
@@ -266,8 +270,9 @@ class CreateSchedule extends StatelessWidget {
       } else if (repeat.value == "Week") {
         var start = startDate;
         while (!start.isAfter(endDate)) {
-          ScheduleRepository().add(ScheduleModel(
+          scheduleRepo.add(ScheduleModel(
               schedulerId: schedulerId,
+              schedulerKey: schedulerKey,
               name: drugNameController.text,
               count: int.parse(countController.text),
               timestamp: Timestamp.fromDate(DateTime(start.year, start.month,
@@ -278,8 +283,9 @@ class CreateSchedule extends StatelessWidget {
       } else if (repeat.value == "Day") {
         var start = startDate;
         while (!start.isAfter(endDate)) {
-          ScheduleRepository().add(ScheduleModel(
+          scheduleRepo.add(ScheduleModel(
               schedulerId: schedulerId,
+              schedulerKey: schedulerKey,
               name: drugNameController.text,
               count: int.parse(countController.text),
               timestamp: Timestamp.fromDate(DateTime(start.year, start.month,
@@ -290,8 +296,9 @@ class CreateSchedule extends StatelessWidget {
       } else if (repeat.value == "X Days") {
         var start = startDate;
         while (!start.isAfter(endDate)) {
-          ScheduleRepository().add(ScheduleModel(
+          scheduleRepo.add(ScheduleModel(
               schedulerId: schedulerId,
+              schedulerKey: schedulerKey,
               name: drugNameController.text,
               count: int.parse(countController.text),
               timestamp: Timestamp.fromDate(DateTime(start.year, start.month,
@@ -308,8 +315,9 @@ class CreateSchedule extends StatelessWidget {
           print("e" + endTime.hour.toString());
           while (toDouble(startTimeTmp) <= toDouble(endTime)) {
             print(startTimeTmp.hour);
-            ScheduleRepository().add(ScheduleModel(
+            scheduleRepo.add(ScheduleModel(
                 schedulerId: schedulerId,
+                schedulerKey: schedulerKey,
                 name: drugNameController.text,
                 count: int.parse(countController.text),
                 timestamp: Timestamp.fromDate(DateTime(start.year, start.month,
