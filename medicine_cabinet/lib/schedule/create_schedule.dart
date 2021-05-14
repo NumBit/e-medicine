@@ -13,8 +13,7 @@ import 'package:medicine_cabinet/schedule/data/time_picker_field.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateSchedule extends StatelessWidget {
-  final DateTime date;
-  const CreateSchedule({Key key, this.date}) : super(key: key);
+  const CreateSchedule({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

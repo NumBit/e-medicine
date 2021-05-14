@@ -7,6 +7,8 @@ import 'package:medicine_cabinet/drug/add_edit/edit_drug.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/profile/profile_page.dart';
 import 'package:medicine_cabinet/schedule/create_schedule.dart';
+import 'package:medicine_cabinet/schedule/edit_one_schedule.dart';
+import 'package:medicine_cabinet/schedule/edit_schedule_plan.dart';
 import 'package:medicine_cabinet/schedule/schedule_page.dart';
 
 class TabNavigation extends StatefulWidget {
@@ -37,7 +39,8 @@ class TabState extends State<TabNavigation>
             !await Get.nestedKey(nav.navigatorId.value).currentState.maybePop();
         return isFirst;
       },
-      child: Scaffold(
+      child: Obx(
+        () => Scaffold(
           resizeToAvoidBottomInset: false,
           body: TabBarView(
             // physics: NeverScrollableScrollPhysics(),
@@ -48,7 +51,9 @@ class TabState extends State<TabNavigation>
             ],
             controller: _controller,
           ),
-          bottomNavigationBar: BottomTabBar(controller: _controller)),
+          bottomNavigationBar: BottomTabBar(controller: _controller),
+        ),
+      ),
     );
   }
 }
@@ -136,14 +141,16 @@ class _ScheduleNavigatorPageState extends State<ScheduleNavigatorPage>
       key: widget.navigatorKey,
       onGenerateRoute: (routeSettings) {
         if (routeSettings.name == "/")
-          return GetPageRoute(
-            page: () => SchedulePage(),
-          );
+          return GetPageRoute(page: () => SchedulePage());
         else if (routeSettings.name == "/create_schedule")
+          return GetPageRoute(page: () => CreateSchedule());
+        else if (routeSettings.name == "/edit_one_schedule")
           return GetPageRoute(
-              page: () => CreateSchedule(
-                    date: routeSettings.arguments,
-                  ));
+              page: () => EditOneSchedule(model: routeSettings.arguments));
+        else if (routeSettings.name == "/edit_schedule_plan")
+          return GetPageRoute(
+              page: () =>
+                  EditSchedulePlan(schedulerId: routeSettings.arguments));
         return GetPageRoute(
             page: () => Container(
                   color: Colors.deepOrange,
@@ -200,10 +207,7 @@ class _CabinetNavigatorPageState extends State<CabinetNavigatorPage>
           return GetPageRoute(page: () => CabinetsListPage());
         else if (routeSettings.name == "/edit_drug")
           return GetPageRoute(
-            page: () => EditDrug(
-              model: routeSettings.arguments,
-            ),
-          );
+              page: () => EditDrug(model: routeSettings.arguments));
         return GetPageRoute(
             page: () => Container(
                   color: Colors.deepOrange,

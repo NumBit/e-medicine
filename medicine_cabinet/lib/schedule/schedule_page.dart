@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:get/get.dart';
-import 'package:medicine_cabinet/error/loading_page.dart';
 import 'package:medicine_cabinet/error/loading_widget.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/schedule/create_schedule.dart';
@@ -19,7 +18,7 @@ class SchedulePage extends StatelessWidget {
     var date = Get.put(SelectedDate());
     return Scaffold(
       appBar: _buildSchedulePageAppBar(context),
-      floatingActionButton: AddScheduleButton(date: date),
+      floatingActionButton: AddScheduleButton(),
       body: StreamBuilder<List<ScheduleModel>>(
           stream: ScheduleRepository().streamModels(),
           builder: (context, schedules) {
@@ -28,21 +27,7 @@ class SchedulePage extends StatelessWidget {
             return Column(
               children: [
                 WeekCalendar(events: events),
-                Expanded(
-                  child: Container(
-                    child: Obx(() {
-                      var schedulesList = events
-                          .getEvents(date.date.value)
-                          .map((e) => ScheduleItem(model: e))
-                          .toList();
-                      schedulesList.sort((a, b) =>
-                          a.model.timestamp.compareTo(b.model.timestamp));
-                      return ListView(
-                        children: schedulesList,
-                      );
-                    }),
-                  ),
-                ),
+                SchedulesList(events: events, date: date),
               ],
             );
           }),
@@ -65,23 +50,50 @@ class SchedulePage extends StatelessWidget {
   }
 }
 
-class AddScheduleButton extends StatelessWidget {
-  const AddScheduleButton({
+class SchedulesList extends StatelessWidget {
+  const SchedulesList({
     Key key,
+    @required this.events,
     @required this.date,
   }) : super(key: key);
 
+  final EventList<ScheduleModel> events;
   final SelectedDate date;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        child: Obx(() {
+          var schedulesList = events
+              .getEvents(date.date.value)
+              .map((e) => ScheduleItem(model: e))
+              .toList();
+          schedulesList
+              .sort((a, b) => a.model.timestamp.compareTo(b.model.timestamp));
+          return ListView(
+            children: schedulesList,
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class AddScheduleButton extends StatelessWidget {
+  const AddScheduleButton({
+    Key key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
       child: Icon(Icons.add),
+      backgroundColor: Theme.of(context).primaryColor,
       onPressed: () {
         NavigationState nav = Get.find();
 
-        Get.to(CreateSchedule(date: date.date.value),
-            id: nav.navigatorId.value);
+        Get.to(CreateSchedule(), id: nav.navigatorId.value);
       },
     );
   }

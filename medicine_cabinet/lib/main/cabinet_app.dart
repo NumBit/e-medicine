@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:medicine_cabinet/cabinet/cabinet_page.dart';
-import 'package:medicine_cabinet/cabinets/cabinets_list_page.dart';
-import 'package:medicine_cabinet/drug/add_edit/add_drug.dart';
-import 'package:medicine_cabinet/drug/detail/drug_detail_page.dart';
 import 'package:medicine_cabinet/experiment/experiment_page.dart';
 import 'package:medicine_cabinet/main/main_page.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
-import 'package:medicine_cabinet/profile/profile_page.dart';
 import 'package:medicine_cabinet/profile/register_page.dart';
-import 'package:medicine_cabinet/schedule/schedule_page.dart';
 
 class CabinetApp extends StatelessWidget {
   const CabinetApp({

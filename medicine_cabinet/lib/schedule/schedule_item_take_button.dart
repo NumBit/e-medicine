@@ -1,77 +1,73 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/schedule/data/schedule_model.dart';
+import 'package:medicine_cabinet/schedule/data/schedule_repository.dart';
 
 class ScheduleItemTakeButton extends StatelessWidget {
   const ScheduleItemTakeButton({
     Key key,
-    @required this.time,
-    @required this.takeWhen,
+    @required this.model,
   }) : super(key: key);
 
-  final TimeOfDay time;
-  final String takeWhen;
+  final ScheduleModel model;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Material(
-          elevation: 5,
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
-            height: 60,
-            width: 150,
-            decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        time.format(context),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                      Text(
-                        takeWhen,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ],
+    return FilterChip(
+      selected: model.isTaken,
+      onSelected: (_) {
+        ScheduleRepository()
+            .update(ScheduleModel(id: model.id, isTaken: !model.isTaken));
+      },
+      elevation: 5,
+      selectedColor: Theme.of(context).primaryColor,
+      backgroundColor: Colors.white,
+      checkmarkColor: Colors.white,
+      side: BorderSide(
+        color: model.isTaken
+            ? Theme.of(context).primaryColor
+            : Theme.of(context).primaryColor,
+      ),
+      label: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  getTimeFromTimestamp(model.timestamp).format(context),
+                  style: TextStyle(
+                    color: model.isTaken
+                        ? Colors.white
+                        : Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
-                  Icon(
-                    Icons.check_circle,
-                    size: 35,
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
+            // if (model.isTaken)
+            //   Padding(
+            //     padding: const EdgeInsets.only(left: 8.0),
+            //     child: Icon(
+            //       Icons.check_circle,
+            //       size: 30,
+            //       color: model.isTaken
+            //           ? Theme.of(context).primaryColorDark
+            //           : Colors.white,
+            //     ),
+            //   ),
+          ],
         ),
-        Positioned.fill(
-          child: Material(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.transparent,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(10),
-              onTap: () {},
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
+}
+
+TimeOfDay getTimeFromTimestamp(Timestamp timestamp) {
+  return TimeOfDay.fromDateTime(timestamp.toDate());
 }
