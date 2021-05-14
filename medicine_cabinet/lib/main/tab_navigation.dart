@@ -6,6 +6,7 @@ import 'package:medicine_cabinet/drug/add_edit/add_drug.dart';
 import 'package:medicine_cabinet/drug/add_edit/edit_drug.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/profile/profile_page.dart';
+import 'package:medicine_cabinet/schedule/create_schedule.dart';
 import 'package:medicine_cabinet/schedule/schedule_page.dart';
 
 class TabNavigation extends StatefulWidget {
@@ -113,7 +114,7 @@ class ProfileNNavigatorPage extends StatelessWidget {
   }
 }
 
-class ScheduleNavigatorPage extends StatelessWidget {
+class ScheduleNavigatorPage extends StatefulWidget {
   final GlobalKey<NavigatorState> navigatorKey;
 
   const ScheduleNavigatorPage({
@@ -122,17 +123,41 @@ class ScheduleNavigatorPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Navigator(
-      key: navigatorKey,
-      onGenerateRoute: (routeSettings) {
-        print(Get.key);
+  _ScheduleNavigatorPageState createState() => _ScheduleNavigatorPageState();
+}
 
-        return MaterialPageRoute(
-          builder: (context) => SchedulePage(),
-        );
+class _ScheduleNavigatorPageState extends State<ScheduleNavigatorPage>
+    with AutomaticKeepAliveClientMixin<ScheduleNavigatorPage> {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Navigator(
+      initialRoute: "/",
+      key: widget.navigatorKey,
+      onGenerateRoute: (routeSettings) {
+        if (routeSettings.name == "/")
+          return GetPageRoute(
+            page: () => SchedulePage(),
+          );
+        else if (routeSettings.name == "/create_schedule")
+          return GetPageRoute(
+              page: () => CreateSchedule(
+                    date: routeSettings.arguments,
+                  ));
+        return GetPageRoute(
+            page: () => Container(
+                  color: Colors.deepOrange,
+                ));
       },
     );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
   }
 }
 
@@ -165,7 +190,6 @@ class _CabinetNavigatorPageState extends State<CabinetNavigatorPage>
       initialRoute: "/",
       key: widget.navigatorKey,
       onGenerateRoute: (routeSettings) {
-        print(routeSettings.name);
         if (routeSettings.name == "/")
           return GetPageRoute(
             page: () => CabinetPage(),

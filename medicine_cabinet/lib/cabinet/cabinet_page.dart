@@ -66,14 +66,15 @@ class DrugGrid extends StatelessWidget {
         initialData: [],
         builder: (context, snapshot) {
           if (snapshot.data == null) return Container();
+          var drugs = snapshot.data.map((m) => DrugGridItem(model: m)).toList();
+          drugs.sort((a, b) => a.model.createdAt.compareTo(b.model.createdAt));
           return SliverPadding(
               padding: EdgeInsets.all(15),
               sliver: SliverGrid.count(
                 crossAxisCount: 2,
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
-                children:
-                    snapshot.data.map((m) => DrugGridItem(model: m)).toList(),
+                children: drugs,
               ));
         }));
   }

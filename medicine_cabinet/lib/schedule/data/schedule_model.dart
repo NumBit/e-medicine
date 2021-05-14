@@ -32,7 +32,7 @@ class ScheduleModel extends Model with EventInterface {
   Map<String, dynamic> toJson() => {
         if (ownerId != null) "owner_id": ownerId,
         if (name != null) "name": name,
-        if (dosage != null) "dossage": dosage,
+        if (dosage != null) "dosage": dosage,
         if (count != null && count >= 0) "count": count,
         if (timestamp != null) "timestamp": timestamp,
       };

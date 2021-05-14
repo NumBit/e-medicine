@@ -1,19 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/schedule/data/schedule_model.dart';
 import 'package:medicine_cabinet/schedule/schedule_item_take_button.dart';
 
 class ScheduleItem extends StatelessWidget {
-  final String name;
-  final String dosage;
-  final int count;
-  final String takeWhen;
-  final TimeOfDay time = const TimeOfDay(hour: 14, minute: 50);
+  final ScheduleModel model;
 
   const ScheduleItem({
     Key key,
-    this.name = "Zodac",
-    this.dosage = "50mg",
-    this.count = 2,
-    this.takeWhen = "After meal",
+    this.model,
   }) : super(key: key);
 
   @override
@@ -31,7 +26,7 @@ class ScheduleItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    name,
+                    model.name,
                     style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 25,
@@ -41,7 +36,7 @@ class ScheduleItem extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    dosage + " x " + count.toString(),
+                    model.dosage + " x " + model.count.toString(),
                     style: TextStyle(
                         color: Theme.of(context).primaryColorDark,
                         fontSize: 18,
@@ -49,11 +44,18 @@ class ScheduleItem extends StatelessWidget {
                   ),
                 ],
               ),
-              ScheduleItemTakeButton(time: time, takeWhen: takeWhen),
+              ScheduleItemTakeButton(
+                  time: getTimeFromTimestamp(model.timestamp),
+                  takeWhen: "Morning"),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+TimeOfDay getTimeFromTimestamp(Timestamp timestamp) {
+  return TimeOfDay.fromDateTime(
+      DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch));
 }
