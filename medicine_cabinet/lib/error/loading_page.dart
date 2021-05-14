@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:medicine_cabinet/error/loading_widget.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({
@@ -14,15 +15,6 @@ class LoadingPage extends StatelessWidget {
               backgroundColor: Color(0xff06BCC1),
               title: Text("Loading"),
             ),
-            body: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  child: SpinKitFadingCircle(
-                    color: Color(0xff12263A),
-                  ),
-                ),
-              ),
-            )));
+            body: LoadingWidget()));
   }
 }

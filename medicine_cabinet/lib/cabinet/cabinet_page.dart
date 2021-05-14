@@ -5,6 +5,7 @@ import 'package:medicine_cabinet/cabinet/drug_grid_item.dart';
 import 'package:medicine_cabinet/cabinet/search_bar.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
+import 'package:medicine_cabinet/error/loading_widget.dart';
 import 'package:medicine_cabinet/main/state/filter_state.dart';
 import 'package:medicine_cabinet/main/menu.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
@@ -65,7 +66,7 @@ class DrugGrid extends StatelessWidget {
             .streamModels(filter: filter.filter.value),
         initialData: [],
         builder: (context, snapshot) {
-          if (snapshot.data == null) return Container();
+          if (snapshot.data == null) return LoadingWidget();
           var drugs = snapshot.data.map((m) => DrugGridItem(model: m)).toList();
           drugs.sort((a, b) => a.model.createdAt.compareTo(b.model.createdAt));
           return SliverPadding(

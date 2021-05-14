@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinets/user_cabinet_tile.dart';
 import 'package:medicine_cabinet/drug/add_edit/custom_form_field.dart';
+import 'package:medicine_cabinet/error/loading_widget.dart';
 import 'package:medicine_cabinet/firebase/user/user_cabinet_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_cabinet_repository.dart';
 
@@ -21,9 +22,8 @@ class ShareCabinet extends StatelessWidget {
           stream: UserCabinetRepository().getCabinetUsers(model.id),
           initialData: [],
           builder: (context, snapshot) {
-            if (snapshot.data == null) {
-              return Container();
-            }
+            if (snapshot.data == null) return LoadingWidget();
+
             var emailCount = snapshot.data.length;
             return Container(
                 height: emailCount < 3 ? 60 * emailCount.toDouble() : 180,

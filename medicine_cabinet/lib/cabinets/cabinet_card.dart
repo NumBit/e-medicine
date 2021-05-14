@@ -4,6 +4,7 @@ import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 import 'package:medicine_cabinet/cabinets/edit_cabinet.dart';
 import 'package:medicine_cabinet/cabinets/share_cabinet.dart';
+import 'package:medicine_cabinet/error/loading_widget.dart';
 import 'package:medicine_cabinet/firebase/user/user_cabinet_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_repository.dart';
@@ -24,9 +25,8 @@ class CabinetCard extends StatelessWidget {
       stream: CabinetRepository().streamModel(model.cabinetId),
       initialData: null,
       builder: (context, snapshot) {
-        if (snapshot.data == null) {
-          return Container();
-        }
+        if (snapshot.data == null) return LoadingWidget();
+
         return Padding(
           padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
           child: Card(
