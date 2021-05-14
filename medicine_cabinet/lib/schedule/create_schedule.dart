@@ -21,7 +21,7 @@ class CreateSchedule extends StatelessWidget {
     final drugNameController = TextEditingController();
     final dosageController = TextEditingController(text: "");
     final countController = TextEditingController();
-    final repeatController = TextEditingController();
+    final repeatController = TextEditingController(text: "0");
     var startTime = TimeOfDay.now();
     final startTimeController = TextEditingController(
         text: MaterialLocalizations.of(context).formatTimeOfDay(startTime));
