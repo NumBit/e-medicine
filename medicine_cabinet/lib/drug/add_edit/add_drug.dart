@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:get/get.dart';
@@ -66,6 +67,7 @@ class AddDrug extends StatelessWidget {
                             name: nameController.text,
                             substance: substanceController.text,
                             description: descriptionController.text,
+                            createdAt: Timestamp.now(),
                             icon: jsonEncode(iconDataToMap(icon.icon.value)),
                           );
                           DrugRepository(userState.openCabinetId.value)
