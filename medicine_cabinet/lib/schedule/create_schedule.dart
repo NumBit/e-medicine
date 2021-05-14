@@ -231,6 +231,8 @@ class CreateSchedule extends StatelessWidget {
       var schedulerId = await SchedulerRepository().add(SchedulerModel(
           name: drugNameController.text,
           dosage: dosageController.text,
+          repeatTimes: int.parse(repeatController.text),
+          repeatType: repeat.value,
           count: int.parse(countController.text),
           dayFrom: Timestamp.fromDate(startDate),
           dayTo: Timestamp.fromDate(endDate),

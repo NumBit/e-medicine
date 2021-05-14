@@ -31,7 +31,8 @@ class ScheduleRepository extends Repository<ScheduleModel> {
         name: model.name,
         dosage: model.dosage,
         count: model.count,
-        timestamp: model.timestamp);
+        timestamp: model.timestamp,
+        isTaken: model.isTaken ?? false);
     try {
       cabinet = await collection.add(item.toJson());
     } catch (e) {

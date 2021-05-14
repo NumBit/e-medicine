@@ -23,6 +23,9 @@ class UserCabinetTile extends StatelessWidget {
                 user.userId.value == model.userId) {
               snackBarMessage(
                   "Cannot delete open cabinet", "Open other cabinet first");
+            } else if (user.userId.value == model.userId) {
+              UserCabinetRepository().delete(model.id);
+              Get.back();
             } else {
               UserCabinetRepository().delete(model.id);
             }

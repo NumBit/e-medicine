@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/error/loading_page.dart';
+import 'package:medicine_cabinet/error/loading_widget.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/schedule/create_schedule.dart';
 import 'package:medicine_cabinet/schedule/data/schedule_model.dart';
@@ -22,7 +23,7 @@ class SchedulePage extends StatelessWidget {
       body: StreamBuilder<List<ScheduleModel>>(
           stream: ScheduleRepository().streamModels(),
           builder: (context, schedules) {
-            if (!schedules.hasData) return LoadingPage();
+            if (!schedules.hasData) return LoadingWidget();
             var events = listToEventList(schedules.data);
             return Column(
               children: [

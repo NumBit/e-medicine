@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:medicine_cabinet/drug/add_edit/custom_form_field.dart';
 import 'package:medicine_cabinet/drug/detail/date_picker_field.dart';
-import 'package:medicine_cabinet/error/loading_page.dart';
 import 'package:medicine_cabinet/error/loading_widget.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/schedule/data/schedule_model.dart';
@@ -58,7 +57,8 @@ class EditSchedulePlan extends StatelessWidget {
                 drugNameController.text = scheduler.data.name;
                 dosageController.text = scheduler.data.dosage;
                 countController.text = scheduler.data.count.toString();
-                // repeatController.text = scheduler.data.
+                repeatController.text = scheduler.data.repeatTimes.toString();
+                repeat.value = scheduler.data.repeatType;
                 startTime = scheduler.data.timeFrom;
                 endTime = scheduler.data.timeTo;
                 startDate = scheduler.data.dayFrom.toDate();
@@ -256,7 +256,8 @@ class EditSchedulePlan extends StatelessWidget {
     if (_formKey.currentState.validate()) {
       NavigationState nav = Get.find();
       //TODO delete old schedules
-      var schedulerId = await SchedulerRepository().add(SchedulerModel(
+      SchedulerRepository().update(SchedulerModel(
+          id: schedulerId,
           name: drugNameController.text,
           dosage: dosageController.text,
           count: int.parse(countController.text),
@@ -350,7 +351,6 @@ class EditSchedulePlan extends StatelessWidget {
           start = start.add(Duration(days: 1));
         }
       }
-
       Get.back(id: nav.navigatorId.value);
     }
   }

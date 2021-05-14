@@ -109,6 +109,6 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
             (error) => snackBarMessage("Operation failed", "Nothing removed"));
 
     var userRepo = UserRepository();
-    userRepo.setEmptyCabinet(doc.cabinetId);
+    userRepo.setEmptyCabinet(doc?.cabinetId ?? "");
   }
 }

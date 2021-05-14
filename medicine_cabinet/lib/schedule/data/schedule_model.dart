@@ -32,7 +32,7 @@ class ScheduleModel extends Model with EventInterface {
         dosage = snapshot.data()["dosage"] ?? "",
         count = snapshot.data()["count"] ?? 0,
         timestamp = snapshot.data()["timestamp"] ?? "",
-        isTaken = snapshot.data()["is_taken"] ?? "";
+        isTaken = snapshot.data()["is_taken"] ?? false;
 
   @override
   Map<String, dynamic> toJson() => {
