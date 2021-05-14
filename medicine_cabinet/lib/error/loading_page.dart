@@ -11,6 +11,7 @@ class LoadingPage extends StatelessWidget {
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
+              backgroundColor: Color(0xff06BCC1),
               title: Text("Loading"),
             ),
             body: Center(
@@ -18,7 +19,7 @@ class LoadingPage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   child: SpinKitFadingCircle(
-                    color: Theme.of(context).primaryColorDark,
+                    color: Color(0xff12263A),
                   ),
                 ),
               ),

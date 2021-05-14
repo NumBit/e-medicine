@@ -10,6 +10,7 @@ class ErrorPage extends StatelessWidget {
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
+              backgroundColor: Color(0xff06BCC1),
               title: Text('Something went wrong'),
             ),
             body: Center(
