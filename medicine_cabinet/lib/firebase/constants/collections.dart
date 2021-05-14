@@ -1,8 +1,4 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
-
 class Collections {
-  // Collection names
-
   static final String cabinets = "cabinets";
   static final String drugs = "drugs";
   static final String packages = "packages";
@@ -12,12 +8,4 @@ class Collections {
   static final String owners = "owners";
   static final String schedules = "schedules";
   static final String scheduler = "scheduler";
-
-  // Services
-  // TODO
-  static final FirebaseAnalytics analytics = FirebaseAnalytics();
-
-  // Helper Methods
-  // TODO
-  static doSomethingCool() => print('cool');
 }
