@@ -26,6 +26,7 @@ class SchedulerRepository extends Repository<SchedulerModel> {
     DocumentReference cabinet;
     var item = SchedulerModel(
         ownerId: user.uid,
+        schedulerKey: model.schedulerKey,
         name: model.name,
         dosage: model.dosage,
         count: model.count,

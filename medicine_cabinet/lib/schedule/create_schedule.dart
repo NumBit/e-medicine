@@ -231,6 +231,7 @@ class CreateSchedule extends StatelessWidget {
       var schedulerKey = Uuid().v4();
       var scheduleRepo = ScheduleRepository();
       var schedulerId = await SchedulerRepository().add(SchedulerModel(
+          schedulerKey: schedulerKey,
           name: drugNameController.text,
           dosage: dosageController.text,
           repeatTimes: int.parse(repeatController.text),
@@ -244,6 +245,7 @@ class CreateSchedule extends StatelessWidget {
       if (repeat.value == "Never") {
         scheduleRepo.add(ScheduleModel(
             schedulerId: schedulerId,
+            schedulerKey: schedulerKey,
             name: drugNameController.text,
             count: int.parse(countController.text),
             timestamp: Timestamp.fromDate(DateTime(

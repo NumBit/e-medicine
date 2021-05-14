@@ -221,7 +221,7 @@ class EditSchedulePlan extends StatelessWidget {
                     }),
                     ElevatedButton(
                         onPressed: () {
-                          createSchedules(
+                          editSchedules(
                               _formKey,
                               repeat,
                               drugNameController,
@@ -243,7 +243,7 @@ class EditSchedulePlan extends StatelessWidget {
     );
   }
 
-  void createSchedules(
+  void editSchedules(
       GlobalKey<FormState> _formKey,
       RxString repeat,
       TextEditingController drugNameController,
@@ -259,8 +259,6 @@ class EditSchedulePlan extends StatelessWidget {
       NavigationState nav = Get.find();
       var schedulerKey = Uuid().v4();
       var scheduleRepo = ScheduleRepository();
-      print("old KEY ->");
-      print(oldSchedulerKey);
 
       scheduleRepo.deleteAll(oldSchedulerKey);
       SchedulerRepository().update(SchedulerModel(
@@ -277,6 +275,7 @@ class EditSchedulePlan extends StatelessWidget {
       if (repeat.value == "Never") {
         scheduleRepo.add(ScheduleModel(
             schedulerId: schedulerId,
+            schedulerKey: schedulerKey,
             name: drugNameController.text,
             count: int.parse(countController.text),
             timestamp: Timestamp.fromDate(DateTime(

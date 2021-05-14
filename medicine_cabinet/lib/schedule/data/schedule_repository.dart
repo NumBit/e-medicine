@@ -58,6 +58,7 @@ class ScheduleRepository extends Repository<ScheduleModel> {
   }
 
   void deleteAll(String schedulerKey) {
+    print("DELETE BY->" + schedulerKey);
     collection
         .where("scheduler_key", isEqualTo: schedulerKey)
         .snapshots()
