@@ -42,17 +42,6 @@ class ScheduleRepository extends Repository<ScheduleModel> {
     return cabinet.id;
   }
 
-  @override
-  void delete(String docId) {
-    collection
-        .doc(docId)
-        .delete()
-        .then((value) => print("Operation success."))
-        .catchError(
-            (error) => snackBarMessage("Operation failed", "Nothing removed"));
-    //TODO cleanup, UserCabinetRepository().deleteAll(docId);
-  }
-
   Stream<List<ScheduleModel>> streamModels() {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;
@@ -64,6 +53,17 @@ class ScheduleRepository extends Repository<ScheduleModel> {
         return value.docs.map((e) => ScheduleModel.fromMap(e)).toList();
       }
       return [];
+    });
+  }
+
+  void deleteAll(String schedulerId) {
+    collection
+        .where("scheduler_id", isEqualTo: schedulerId)
+        .snapshots()
+        .forEach((snap) {
+      snap.docs.forEach((e) {
+        super.delete(e.id);
+      });
     });
   }
 }
