@@ -39,20 +39,18 @@ class TabState extends State<TabNavigation>
             !await Get.nestedKey(nav.navigatorId.value).currentState.maybePop();
         return isFirst;
       },
-      child: Obx(
-        () => Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: TabBarView(
-            // physics: NeverScrollableScrollPhysics(),
-            children: [
-              CabinetNavigatorPage(navigatorKey: Get.nestedKey(0)),
-              ScheduleNavigatorPage(navigatorKey: Get.nestedKey(1)),
-              ProfileNNavigatorPage(navigatorKey: Get.nestedKey(2))
-            ],
-            controller: _controller,
-          ),
-          bottomNavigationBar: BottomTabBar(controller: _controller),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: TabBarView(
+          // physics: NeverScrollableScrollPhysics(),
+          children: [
+            CabinetNavigatorPage(navigatorKey: Get.nestedKey(0)),
+            ScheduleNavigatorPage(navigatorKey: Get.nestedKey(1)),
+            ProfileNNavigatorPage(navigatorKey: Get.nestedKey(2))
+          ],
+          controller: _controller,
         ),
+        bottomNavigationBar: BottomTabBar(controller: _controller),
       ),
     );
   }
