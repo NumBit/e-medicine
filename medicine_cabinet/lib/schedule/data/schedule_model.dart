@@ -11,6 +11,7 @@ class ScheduleModel extends Model with EventInterface {
   final String dosage;
   final int count;
   final Timestamp timestamp;
+  final bool isTaken;
 
   ScheduleModel(
       {this.id,
@@ -19,7 +20,8 @@ class ScheduleModel extends Model with EventInterface {
       this.name,
       this.dosage,
       this.count,
-      this.timestamp})
+      this.timestamp,
+      this.isTaken})
       : super(id: id);
 
   ScheduleModel.fromMap(DocumentSnapshot snapshot)
@@ -29,7 +31,8 @@ class ScheduleModel extends Model with EventInterface {
         name = snapshot.data()["name"] ?? "",
         dosage = snapshot.data()["dosage"] ?? "",
         count = snapshot.data()["count"] ?? 0,
-        timestamp = snapshot.data()["timestamp"] ?? "";
+        timestamp = snapshot.data()["timestamp"] ?? "",
+        isTaken = snapshot.data()["is_taken"] ?? "";
 
   @override
   Map<String, dynamic> toJson() => {
@@ -39,6 +42,7 @@ class ScheduleModel extends Model with EventInterface {
         if (dosage != null) "dosage": dosage,
         if (count != null && count >= 0) "count": count,
         if (timestamp != null) "timestamp": timestamp,
+        if (isTaken != null) "is_taken": isTaken,
       };
 
   @override

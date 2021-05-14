@@ -29,6 +29,8 @@ class SchedulerRepository extends Repository<SchedulerModel> {
         name: model.name,
         dosage: model.dosage,
         count: model.count,
+        repeatType: model.repeatType,
+        repeatTimes: model.repeatTimes,
         dayFrom: model.dayFrom,
         dayTo: model.dayTo,
         timeFrom: model.timeFrom,

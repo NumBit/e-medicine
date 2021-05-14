@@ -8,6 +8,8 @@ class SchedulerModel extends Model {
   final String name;
   final String dosage;
   final int count;
+  final String repeatType;
+  final int repeatTimes;
   final Timestamp dayFrom;
   final Timestamp dayTo;
   final TimeOfDay timeFrom;
@@ -19,6 +21,8 @@ class SchedulerModel extends Model {
       this.name,
       this.dosage,
       this.count,
+      this.repeatType,
+      this.repeatTimes,
       this.dayFrom,
       this.dayTo,
       this.timeFrom,
@@ -31,6 +35,8 @@ class SchedulerModel extends Model {
         name = snapshot.data()["name"] ?? "",
         dosage = snapshot.data()["dosage"] ?? "",
         count = snapshot.data()["count"] ?? 0,
+        repeatType = snapshot.data()["repeat_type"] ?? "",
+        repeatTimes = snapshot.data()["repeat_times"] ?? 0,
         dayFrom = snapshot.data()["dayFrom"] ?? "",
         dayTo = snapshot.data()["dayTo"] ?? "",
         timeFrom = TimeOfDay(
@@ -44,7 +50,10 @@ class SchedulerModel extends Model {
   Map<String, dynamic> toJson() => {
         if (ownerId != null) "owner_id": ownerId,
         if (name != null) "name": name,
-        if (dosage != null) "dossage": dosage,
+        if (dosage != null) "dosage": dosage,
+        if (repeatType != null) "repeat_type": repeatType,
+        if (repeatTimes != null && repeatTimes >= 0)
+          "repeat_times": repeatTimes,
         if (count != null && count >= 0) "count": count,
         if (dayFrom != null) "dayFrom": dayFrom,
         if (dayTo != null) "dayTo": dayTo,
