@@ -46,7 +46,7 @@ class EditSchedulePlan extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Create schedule"),
+        title: Text("Edit schedule"),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -234,7 +234,7 @@ class EditSchedulePlan extends StatelessWidget {
                               endTime,
                               scheduler.data.schedulerKey);
                         },
-                        child: Text("Create")),
+                        child: Text("Edit")),
                   ],
                 );
               }),
