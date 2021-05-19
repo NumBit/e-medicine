@@ -65,9 +65,10 @@ class CabinetRepository extends Repository<CabinetModel> {
   }
 
   Stream<List<CabinetModel>> streamModels() {
-    var myUid = FirebaseAuth.instance.currentUser.uid;
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
     return collection
-        .where("owner_id", isEqualTo: myUid)
+        .where("owner_id", isEqualTo: user.uid)
         .snapshots()
         .map((value) {
       if (value.size > 0) {

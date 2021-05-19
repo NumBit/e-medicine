@@ -10,7 +10,7 @@ class LoginPage extends StatelessWidget {
   const LoginPage();
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     final email = TextEditingController();
     final pass = TextEditingController();
 
@@ -32,7 +32,7 @@ class LoginPage extends StatelessWidget {
         body: Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
             child: Form(
-              key: _formKey,
+              key: formKey,
               child: Column(children: [
                 Text(
                   "Login",
@@ -71,7 +71,7 @@ class LoginPage extends StatelessWidget {
                 LoginButton(
                   text: "Login",
                   onPressed: () {
-                    if (_formKey.currentState.validate()) {
+                    if (formKey.currentState.validate()) {
                       _login(context, email.text, pass.text);
                     }
                   },

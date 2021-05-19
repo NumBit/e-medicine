@@ -95,7 +95,7 @@ class ProfilePage extends StatelessWidget {
                       );
                     }),
                 Text(
-                  FirebaseAuth.instance.currentUser.email,
+                  FirebaseAuth.instance.currentUser?.email ?? "No email",
                   textScaleFactor: 1.2,
                 ),
               ],

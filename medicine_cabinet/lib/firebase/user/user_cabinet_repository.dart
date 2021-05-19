@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:medicine_cabinet/firebase/constants/collections.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 import 'package:medicine_cabinet/firebase/user/user_cabinet_model.dart';
@@ -20,9 +21,10 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
   }
 
   Stream<List<UserCabinetModel>> getMyCabinets() {
-    var myUid = FirebaseAuth.instance.currentUser.uid;
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
     return collection
-        .where("user_id", isEqualTo: myUid)
+        .where("user_id", isEqualTo: user.uid)
         .snapshots()
         .map((value) {
       if (value.size > 0) {
@@ -44,10 +46,27 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
     });
   }
 
+  Future<bool> isCabinetUser(String cabinetId, String userId) async {
+    var res = await collection
+        .where("cabinet_id", isEqualTo: cabinetId)
+        .where("user_id", isEqualTo: userId)
+        .get()
+        .then((value) => value.docs.length);
+
+    if (res == 0) return false;
+    return true;
+  }
+
   Future<bool> addByEmail(String email, String cabinetId) async {
     var user = await UserRepository().getByEmail(email);
     if (user == null) {
       snackBarMessage("User not found", "Check email format");
+      return false;
+    }
+    var isShared = await isCabinetUser(cabinetId, user.userId);
+    print(isShared);
+    if (isShared) {
+      snackBarMessage("Already shared", email);
       return false;
     }
     add(UserCabinetModel(
@@ -65,8 +84,31 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
         .snapshots()
         .forEach((snap) {
       snap.docs.forEach((e) {
-        delete(e.id);
+        super.delete(e.id);
       });
     });
+  }
+
+  Future<UserCabinetModel> get(String docId) async {
+    var res = await collection
+        .doc(docId)
+        .get()
+        .then((e) => UserCabinetModel.fromMap(e));
+    return res;
+  }
+
+  @override
+  Future<void> delete(String docId) async {
+    var doc = await get(docId);
+
+    collection
+        .doc(docId)
+        .delete()
+        .then((value) => print("Operation success."))
+        .catchError(
+            (error) => snackBarMessage("Operation failed", "Nothing removed"));
+
+    var userRepo = UserRepository();
+    userRepo.setEmptyCabinet(doc?.cabinetId ?? "");
   }
 }

@@ -5,6 +5,7 @@ import 'package:medicine_cabinet/cabinet/drug_grid_item.dart';
 import 'package:medicine_cabinet/cabinet/search_bar.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
+import 'package:medicine_cabinet/error/loading_widget.dart';
 import 'package:medicine_cabinet/main/state/filter_state.dart';
 import 'package:medicine_cabinet/main/menu.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
@@ -28,23 +29,34 @@ class CabinetPage extends StatelessWidget {
           DrugGrid(),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          NavigationState nav = Get.find();
+      floatingActionButton: AddDrugFAB(),
+    );
+  }
+}
 
-          Get.toNamed("/add_drug", id: nav.navigatorId.value);
-        },
-        backgroundColor: Theme.of(context).primaryColor,
-        tooltip: 'Add medication',
-        icon: Icon(
-          Icons.add,
-          size: 30,
-        ),
-        label: Text(
-          "Add",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+class AddDrugFAB extends StatelessWidget {
+  const AddDrugFAB({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: () {
+        NavigationState nav = Get.find();
+
+        Get.toNamed("/add_drug", id: nav.navigatorId.value);
+      },
+      backgroundColor: Theme.of(context).primaryColor,
+      tooltip: "Add medication",
+      icon: Icon(
+        Icons.add,
+        size: 30,
+      ),
+      label: Text(
+        "Add",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
@@ -65,15 +77,16 @@ class DrugGrid extends StatelessWidget {
             .streamModels(filter: filter.filter.value),
         initialData: [],
         builder: (context, snapshot) {
-          if (snapshot.data == null) return Container();
+          if (snapshot.data == null) return LoadingWidget();
+          var drugs = snapshot.data.map((m) => DrugGridItem(model: m)).toList();
+          drugs.sort((a, b) => a.model.createdAt.compareTo(b.model.createdAt));
           return SliverPadding(
               padding: EdgeInsets.all(15),
               sliver: SliverGrid.count(
                 crossAxisCount: 2,
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
-                children:
-                    snapshot.data.map((m) => DrugGridItem(model: m)).toList(),
+                children: drugs,
               ));
         }));
   }
@@ -108,39 +121,9 @@ class SearchSliver extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SearchBar(),
-            // SearhCategories(),
           ],
         ),
       ),
-    );
-  }
-}
-
-class SearhCategories extends StatelessWidget {
-  const SearhCategories({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-      height: 60,
-      child: StreamBuilder<Object>(
-          stream: null,
-          builder: (context, snapshot) {
-            return ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                ChipFilter(name: "Filter"),
-                ChipFilter(name: "Filter"),
-                ChipFilter(name: "Filter"),
-                ChipFilter(name: "Filter"),
-                ChipFilter(name: "Filter"),
-                ChipFilter(name: "Filter"),
-              ],
-            );
-          }),
     );
   }
 }

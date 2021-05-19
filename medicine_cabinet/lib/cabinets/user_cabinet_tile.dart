@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/firebase/user/user_cabinet_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_cabinet_repository.dart';
+import 'package:medicine_cabinet/main/snack_bar_message.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 
 class UserCabinetTile extends StatelessWidget {
@@ -10,22 +11,31 @@ class UserCabinetTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userState = Get.find<UserState>();
     return ListTile(
       title: Text(model.userEmail),
-      trailing: (userState.openCabinetId.value == model.id)
-          ? Tooltip(
-              message: "Cancel sharing this cabinet",
-              child: InkWell(
-                borderRadius: BorderRadius.circular(50),
-                onTap: () => UserCabinetRepository().delete(model.id),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(Icons.cancel),
-                ),
-              ),
-            )
-          : null,
+      trailing: Tooltip(
+        message: "Cancel sharing this cabinet",
+        child: InkWell(
+          borderRadius: BorderRadius.circular(50),
+          onTap: () {
+            UserState user = Get.find();
+            if (model.cabinetId == user.openCabinetId.value &&
+                user.userId.value == model.userId) {
+              snackBarMessage(
+                  "Cannot delete open cabinet", "Open other cabinet first");
+            } else if (user.userId.value == model.userId) {
+              UserCabinetRepository().delete(model.id);
+              Get.back();
+            } else {
+              UserCabinetRepository().delete(model.id);
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(Icons.cancel),
+          ),
+        ),
+      ),
     );
   }
 }

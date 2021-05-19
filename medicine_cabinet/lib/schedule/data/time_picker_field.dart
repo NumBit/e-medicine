@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
-class DatePickerField extends StatelessWidget {
-  const DatePickerField({
+class TimePickerField extends StatelessWidget {
+  const TimePickerField({
     Key key,
     @required this.controller,
     this.label,
     this.onTap,
+    this.time,
     this.validator,
   }) : super(key: key);
 
   final TextEditingController controller;
   final String label;
   final Function onTap;
+  final TimeOfDay time;
   final String Function(String) validator;
 
   @override
@@ -20,12 +22,11 @@ class DatePickerField extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2500))
-              .then(onTap);
+          showTimePicker(
+            initialEntryMode: TimePickerEntryMode.dial,
+            initialTime: time,
+            context: context,
+          ).then(onTap);
         },
         child: TextFormField(
           enabled: false,

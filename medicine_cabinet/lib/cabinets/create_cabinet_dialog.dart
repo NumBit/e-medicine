@@ -9,23 +9,23 @@ class CreateCabinetDialog extends StatelessWidget {
     Key key,
     @required GlobalKey<FormState> formKey,
     @required this.nameController,
-  })  : _formKey = formKey,
+  })  : formKey = formKey,
         super(key: key);
 
-  final GlobalKey<FormState> _formKey;
+  final GlobalKey<FormState> formKey;
   final TextEditingController nameController;
 
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(title: Text("Create new medical cabinet"), children: [
       Form(
-          key: _formKey,
+          key: formKey,
           child: Column(children: [
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: TextFormField(
                   onChanged: (value) {
-                    _formKey.currentState.validate();
+                    formKey.currentState.validate();
                   },
                   maxLength: 40,
                   maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -52,7 +52,7 @@ class CreateCabinetDialog extends StatelessWidget {
                       primary: Theme.of(context).primaryColorDark)),
               ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState.validate()) {
+                    if (formKey.currentState.validate()) {
                       CabinetRepository().addToAuthUser(
                           CabinetModel(name: nameController.text));
                       Get.back();

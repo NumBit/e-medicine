@@ -27,7 +27,7 @@ class DrugModel extends Model {
         description = snapshot.data()["description"] ?? "",
         icon = snapshot.data()["icon"] ??
             "{\"codePoint\":60518,\"fontFamily\":\"MaterialIcons\",\"fontPackage\":null,\"matchTextDirection\":false}",
-        createdAt = snapshot.data()["created_at"] ?? Timestamp.now();
+        createdAt = snapshot.data()["created_at"] ?? "";
 
   @override
   Map<String, dynamic> toJson() => {
@@ -36,7 +36,7 @@ class DrugModel extends Model {
         if (substance != null) "substance": substance,
         if (description != null) "description": description,
         if (icon != null) "icon": icon,
-        if (createdAt != null) "created_at": Timestamp.now(),
+        if (createdAt != null) "created_at": createdAt,
         "edited_at": Timestamp.now(),
       };
 }

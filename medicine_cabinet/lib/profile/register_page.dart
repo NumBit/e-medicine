@@ -17,7 +17,7 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     final email = TextEditingController();
     final pass = TextEditingController();
     final passSecond = TextEditingController();
@@ -30,7 +30,7 @@ class RegisterPage extends StatelessWidget {
         body: Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
             child: Form(
-              key: _formKey,
+              key: formKey,
               child: Column(children: [
                 Text(
                   "Register",
@@ -84,7 +84,7 @@ class RegisterPage extends StatelessWidget {
                   text: "Register",
                   onPressed: () {
                     {
-                      if (_formKey.currentState.validate()) {
+                      if (formKey.currentState.validate()) {
                         _register(
                             context, email.text, pass.text, passSecond.text);
                       }
