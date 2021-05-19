@@ -2,12 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:medicine_cabinet/drug/add_edit/custom_form_field.dart';
-import 'package:medicine_cabinet/drug/detail/date_picker_field.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/schedule/data/schedule_model.dart';
 import 'package:medicine_cabinet/schedule/data/schedule_repository.dart';
-import 'package:medicine_cabinet/schedule/data/time_picker_field.dart';
+import 'package:medicine_cabinet/schedule/schedule_form_fields.dart';
+
+import 'create_schedule.dart';
+import 'data/time_picker_field.dart';
 
 class EditOneSchedule extends StatelessWidget {
   final ScheduleModel model;
@@ -16,7 +17,7 @@ class EditOneSchedule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     final drugNameController = TextEditingController(text: model.name);
     final dosageController = TextEditingController(text: model.dosage);
     final countController = TextEditingController(text: model.count.toString());
@@ -36,43 +37,34 @@ class EditOneSchedule extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Form(
-          key: _formKey,
+          key: formKey,
           child: Column(
             children: [
-              CustomFormField(
-                label: "Drug",
-                controller: drugNameController,
-                validator: (String value) {
-                  if (value == null || value.isBlank)
-                    return "Drug cannot be empty";
-                  return null;
-                },
-              ),
-              CustomFormField(
-                label: "Dosage",
-                controller: dosageController,
-              ),
-              CustomFormField(
-                label: "Count",
-                controller: countController,
-                inputType: TextInputType.number,
-                validator: (value) {
-                  if (!GetUtils.isNum(value)) return "Must input number";
-                  return null;
-                },
-              ),
+              DrugNameField(drugNameController: drugNameController),
+              DosageField(dosageController: dosageController),
+              CountField(countController: countController),
               Divider(
                 indent: 8,
                 endIndent: 8,
                 thickness: 3,
               ),
+              StartTimeField(
+                  startTimeController: startTimeController,
+                  startTime: startTime,
+                  setStartTime: (value) {
+                    if (value != null) {
+                      startTime = value;
+                      startTimeController.text =
+                          MaterialLocalizations.of(context)
+                              .formatTimeOfDay(value);
+                    }
+                  }),
               SizedBox(
                 height: 20,
               ),
-              DatePickerField(
-                controller: startDateController,
-                label: "Starting Day",
-                onTap: (value) {
+              StartDateField(
+                startDateController: startDateController,
+                setStartDate: (value) {
                   if (value != null) {
                     startDate = value;
                     startDateController.text =
@@ -80,33 +72,33 @@ class EditOneSchedule extends StatelessWidget {
                   }
                 },
               ),
-              SizedBox(
-                height: 20,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      ScheduleRepository().delete(model.id);
+                      Get.back(
+                          id: Get.find<NavigationState>().navigatorId.value);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).errorColor),
+                    child: Text("Delete"),
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        createSchedules(
+                            formKey,
+                            drugNameController,
+                            countController,
+                            dosageController,
+                            startDate,
+                            startTime,
+                            model);
+                      },
+                      child: Text("Edit")),
+                ],
               ),
-              TimePickerField(
-                controller: startTimeController,
-                label: "Time",
-                time: startTime,
-                onTap: (value) {
-                  if (value != null) {
-                    startTime = value;
-                    startTimeController.text = MaterialLocalizations.of(context)
-                        .formatTimeOfDay(value);
-                  }
-                },
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    createSchedules(
-                        _formKey,
-                        drugNameController,
-                        countController,
-                        dosageController,
-                        startDate,
-                        startTime,
-                        model);
-                  },
-                  child: Text("Edit")),
             ],
           ),
         ),
@@ -115,7 +107,7 @@ class EditOneSchedule extends StatelessWidget {
   }
 
   void createSchedules(
-    GlobalKey<FormState> _formKey,
+    GlobalKey<FormState> formKey,
     TextEditingController drugNameController,
     TextEditingController countController,
     TextEditingController dosageController,
@@ -123,7 +115,7 @@ class EditOneSchedule extends StatelessWidget {
     TimeOfDay startTime,
     ScheduleModel model,
   ) {
-    if (_formKey.currentState.validate()) {
+    if (formKey.currentState.validate()) {
       NavigationState nav = Get.find();
       ScheduleRepository().update(ScheduleModel(
           id: model.id,

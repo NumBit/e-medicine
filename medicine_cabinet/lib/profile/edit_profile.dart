@@ -12,13 +12,13 @@ class EditProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final nameController = TextEditingController(text: name);
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     return Container(
       child: SimpleDialog(
         title: Text("Edit profile"),
         children: [
           Form(
-              key: _formKey,
+              key: formKey,
               child: Column(
                 children: [
                   CustomFormField(
@@ -32,7 +32,7 @@ class EditProfile extends StatelessWidget {
                       }),
                   ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState.validate()) {
+                        if (formKey.currentState.validate()) {
                           UserState user = Get.find();
                           user.name.value = nameController.text;
                           UserRepository().update(UserModel(

@@ -58,10 +58,9 @@ class _WeekCalendarState extends State<WeekCalendar> {
             iconColor: Colors.white,
             weekFormat: true,
             height: 180,
-            markedDateShowIcon: true,
             markedDatesMap: widget.events,
+            markedDateShowIcon: true,
             markedDateMoreShowTotal: false,
-            markedDateIconMargin: 10,
             onDayPressed: (date, events) {
               selectedDate.date.value = date;
             },

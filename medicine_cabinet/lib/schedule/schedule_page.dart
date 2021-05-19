@@ -3,7 +3,6 @@ import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/error/loading_widget.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
-import 'package:medicine_cabinet/schedule/create_schedule.dart';
 import 'package:medicine_cabinet/schedule/data/schedule_model.dart';
 import 'package:medicine_cabinet/schedule/data/schedule_repository.dart';
 import 'package:medicine_cabinet/schedule/data/selected_date.dart';
@@ -93,7 +92,7 @@ class AddScheduleButton extends StatelessWidget {
       onPressed: () {
         NavigationState nav = Get.find();
 
-        Get.to(CreateSchedule(), id: nav.navigatorId.value);
+        Get.toNamed("/create_schedule", id: nav.navigatorId.value);
       },
     );
   }

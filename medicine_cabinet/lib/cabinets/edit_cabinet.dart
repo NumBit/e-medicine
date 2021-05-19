@@ -13,21 +13,21 @@ class EditCabinet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     final nameController = TextEditingController();
     nameController.text = model.name;
     return SimpleDialog(
       title: Text("Edit Cabinet"),
       children: [
         Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: TextFormField(
                       onChanged: (value) {
-                        _formKey.currentState.validate();
+                        formKey.currentState.validate();
                       },
                       maxLength: 40,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -67,7 +67,7 @@ class EditCabinet extends StatelessWidget {
                     ),
                     ElevatedButton(
                         onPressed: () {
-                          if (_formKey.currentState.validate()) {
+                          if (formKey.currentState.validate()) {
                             CabinetRepository().update(CabinetModel(
                                 id: model.id, name: nameController.text));
                             Get.back();

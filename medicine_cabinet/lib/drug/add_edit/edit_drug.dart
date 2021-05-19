@@ -20,7 +20,7 @@ class EditDrug extends StatelessWidget {
   Widget build(BuildContext context) {
     // final DrugModel model = Get.arguments as DrugModel;
     // print("-ARG: " + Get.arguments);
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     final nameController = TextEditingController(text: model.name);
     final substanceController = TextEditingController(text: model.substance);
     final descriptionController =
@@ -38,7 +38,7 @@ class EditDrug extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   children: [
                     CustomFormField(
@@ -81,7 +81,7 @@ class EditDrug extends StatelessWidget {
                             onPressed: () {
                               NavigationState nav = Get.find();
 
-                              if (_formKey.currentState.validate()) {
+                              if (formKey.currentState.validate()) {
                                 var drug = DrugModel(
                                   id: model.id,
                                   name: nameController.text,

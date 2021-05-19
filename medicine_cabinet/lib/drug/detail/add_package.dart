@@ -13,7 +13,7 @@ class AddPackage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     final dosageController = TextEditingController(text: "");
     final countController = TextEditingController();
     final timeController = TextEditingController(
@@ -25,7 +25,7 @@ class AddPackage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(5.0),
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               children: [
                 CustomFormField(label: "Dosage", controller: dosageController),
@@ -50,7 +50,7 @@ class AddPackage extends StatelessWidget {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState.validate()) {
+                      if (formKey.currentState.validate()) {
                         var model = PackageModel(
                             count: int.parse(countController.text),
                             dosage: dosageController.text,

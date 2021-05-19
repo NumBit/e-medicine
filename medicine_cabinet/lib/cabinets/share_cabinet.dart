@@ -13,7 +13,7 @@ class ShareCabinet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     final emailController = TextEditingController();
     return SimpleDialog(
       title: Center(child: Text("Current users")),
@@ -35,7 +35,7 @@ class ShareCabinet extends StatelessWidget {
           },
         ),
         Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               children: [
                 Padding(
@@ -55,7 +55,7 @@ class ShareCabinet extends StatelessWidget {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState.validate()) {
+                      if (formKey.currentState.validate()) {
                         UserCabinetRepository()
                             .addByEmail(emailController.text, model.id);
                         //emailController.text = "";

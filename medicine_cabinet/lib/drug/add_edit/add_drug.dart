@@ -17,7 +17,7 @@ class AddDrug extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     final nameController = TextEditingController();
     final substanceController = TextEditingController();
     final descriptionController = TextEditingController();
@@ -31,7 +31,7 @@ class AddDrug extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               children: [
                 CustomFormField(
@@ -58,7 +58,7 @@ class AddDrug extends StatelessWidget {
                 IconField(icon: icon),
                 ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState.validate()) {
+                    if (formKey.currentState.validate()) {
                       NavigationState nav = Get.find();
                       UserState userState = Get.find();
                       var drug = DrugModel(
