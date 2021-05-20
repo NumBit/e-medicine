@@ -110,7 +110,7 @@ class PackageCardTitle extends StatelessWidget {
         SizedBox(
           width: 90,
           child: Text(
-            model.dosage!,
+            model.dosage ?? "Not set",
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.bold,

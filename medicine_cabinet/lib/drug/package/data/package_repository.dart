@@ -12,12 +12,14 @@ class PackageRepository extends Repository<PackageModel> {
         );
 
   @override
-  Stream<PackageModel> streamModel(String id) {
+  Stream<PackageModel?> streamModel(String? id) {
+    if (id == null) return Stream.empty();
     return collection
         .where("drug_id", isEqualTo: drugId)
         .snapshots()
         .map((snap) => snap.docs.where((element) => element.id == id).map((e) {
-              return PackageModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>);
+              return PackageModel.fromMap(
+                  e as QueryDocumentSnapshot<Map<String, dynamic>>);
             }).first);
   }
 
@@ -27,7 +29,8 @@ class PackageRepository extends Repository<PackageModel> {
         .snapshots()
         .map((snap) {
       return snap.docs.map((e) {
-        return PackageModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>);
+        return PackageModel.fromMap(
+            e as QueryDocumentSnapshot<Map<String, dynamic>>);
       }).toList();
     });
   }

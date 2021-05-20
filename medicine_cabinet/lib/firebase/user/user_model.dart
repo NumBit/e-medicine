@@ -13,7 +13,7 @@ class UserModel extends Model {
       : super(id: id);
 
   UserModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : id = snapshot.id ?? "",
+      : id = snapshot.id,
         userId = snapshot.data()["user_id"] ?? "",
         name = snapshot.data()["name"] ?? "",
         email = snapshot.data()["email"] ?? "",

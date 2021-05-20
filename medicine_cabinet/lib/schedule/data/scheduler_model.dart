@@ -32,7 +32,7 @@ class SchedulerModel extends Model {
       : super(id: id);
 
   SchedulerModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : id = snapshot.id ?? "",
+      : id = snapshot.id,
         ownerId = snapshot.data()["owner_id"] ?? "",
         schedulerKey = snapshot.data()["scheduler_key"] ?? "",
         name = snapshot.data()["name"] ?? "",

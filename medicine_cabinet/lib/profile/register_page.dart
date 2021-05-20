@@ -81,7 +81,7 @@ class RegisterPage extends StatelessWidget {
                   },
                 ),
                 LoginButton(
-                  text: "Register",
+                  "Register",
                   onPressed: () {
                     {
                       if (formKey.currentState!.validate()) {

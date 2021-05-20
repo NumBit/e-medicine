@@ -11,17 +11,11 @@ import 'package:medicine_cabinet/profile/edit_profile.dart';
 import 'package:medicine_cabinet/profile/login_button.dart';
 
 class ProfilePage extends StatelessWidget {
-  final int drugs;
-  final int pills;
-
-  const ProfilePage({
-    Key? key,
-    this.drugs = 21,
-    this.pills = 190,
-  }) : super(key: key);
+  const ProfilePage();
 
   @override
   Widget build(BuildContext context) {
+    CabinetRepository().drugCount();
     UserState userModel = Get.find();
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -116,13 +110,15 @@ class ProfilePage extends StatelessWidget {
                       return _getColumn(
                           context, "Cabinets", cabinetsCount.data);
                     }),
-                _getColumn(context, "Drugs", drugs),
-                _getColumn(context, "Pills", pills),
+                Obx(() =>
+                    _getColumn(context, "Drugs", userModel.drugsCount.value)),
+                Obx(() =>
+                    _getColumn(context, "Pills", userModel.pillCount.value)),
               ],
             ),
           ),
           LoginButton(
-            text: "Logout",
+            "Logout",
             onPressed: () {
               _signOut();
               Get.back();
@@ -174,7 +170,7 @@ Widget _getColumn(context, String text, int? number) {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Text(
-              number.toString(),
+              number?.toString() ?? "0",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).primaryColorDark,

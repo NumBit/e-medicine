@@ -12,10 +12,12 @@ class ScheduleRepository extends Repository<ScheduleModel> {
         );
 
   @override
-  Stream<ScheduleModel> streamModel(String id) {
+  Stream<ScheduleModel?> streamModel(String? id) {
+    if (id == null) return Stream.empty();
     return collection.snapshots().map((snap) => snap.docs
         .where((element) => element.id == id)
-        .map((e) => ScheduleModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>))
+        .map((e) => ScheduleModel.fromMap(
+            e as QueryDocumentSnapshot<Map<String, dynamic>>))
         .first);
   }
 
@@ -43,15 +45,18 @@ class ScheduleRepository extends Repository<ScheduleModel> {
     return cabinet.id;
   }
 
-  Stream<List<ScheduleModel>>? streamModels() {
+  Stream<List<ScheduleModel>> streamModels() {
     var user = FirebaseAuth.instance.currentUser;
-    if (user == null) return null;
+    if (user == null) return Stream.empty();
     return collection
         .where("owner_id", isEqualTo: user.uid)
         .snapshots()
         .map((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => ScheduleModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>)).toList();
+        return value.docs
+            .map((e) => ScheduleModel.fromMap(
+                e as QueryDocumentSnapshot<Map<String, dynamic>>))
+            .toList();
       }
       return [];
     });

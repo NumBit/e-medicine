@@ -27,7 +27,7 @@ class ScheduleModel extends Model {
       : super(id: id);
 
   ScheduleModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : id = snapshot.id ?? "",
+      : id = snapshot.id,
         ownerId = snapshot.data()["owner_id"] ?? "",
         schedulerId = snapshot.data()["scheduler_id"] ?? "",
         schedulerKey = snapshot.data()["scheduler_key"] ?? "",

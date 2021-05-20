@@ -15,7 +15,7 @@ class EditCabinet extends StatelessWidget {
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
     final nameController = TextEditingController();
-    nameController.text = model.name!;
+    nameController.text = model.name ?? "Not set";
     return SimpleDialog(
       title: Text("Edit Cabinet"),
       children: [

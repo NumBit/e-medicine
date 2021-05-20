@@ -14,7 +14,7 @@ class CategoryChip extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       backgroundColor: Theme.of(context).primaryColorDark,
       label: Text(
-        category!,
+        category ?? "Not set",
         style: TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,

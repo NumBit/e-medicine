@@ -22,7 +22,7 @@ class _ChipFilterState extends State<ChipFilter> {
         elevation: 3,
         backgroundColor: Colors.white,
         selectedColor: Color(0x6006BCC1),
-        label: Text(widget.name!),
+        label: Text(widget.name ?? "Empty"),
         selected: active,
         onSelected: (bool value) {
           setState(() {

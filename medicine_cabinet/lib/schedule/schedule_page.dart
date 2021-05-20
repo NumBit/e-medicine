@@ -70,7 +70,7 @@ class SchedulesList extends StatelessWidget {
               .map((e) => ScheduleItem(model: e))
               .toList();
           schedulesList
-              .sort((a, b) => a.model!.timestamp!.compareTo(b.model!.timestamp!));
+              .sort((a, b) => a.model.timestamp!.compareTo(b.model.timestamp!));
           return ListView(
             children: schedulesList,
           );
