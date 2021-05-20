@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class LoginButton extends StatelessWidget {
   final String text;
-  final Function onPressed;
-  const LoginButton({
-    Key key,
-    this.text,
+  final Function? onPressed;
+  const LoginButton(
+    this.text, {
+    Key? key,
     this.onPressed,
   }) : super(key: key);
 
@@ -27,7 +27,7 @@ class LoginButton extends StatelessWidget {
               style: TextStyle(fontSize: 20),
             ),
           ),
-          onPressed: onPressed),
+          onPressed: onPressed as void Function()?),
     );
   }
 }

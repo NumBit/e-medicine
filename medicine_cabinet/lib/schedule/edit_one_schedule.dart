@@ -9,8 +9,10 @@ import 'package:medicine_cabinet/schedule/schedule_form_fields.dart';
 
 class EditOneSchedule extends StatelessWidget {
   final ScheduleModel model;
-  final DateTime date;
-  const EditOneSchedule({Key key, this.date, this.model}) : super(key: key);
+  const EditOneSchedule({
+    Key? key,
+    required this.model,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +21,12 @@ class EditOneSchedule extends StatelessWidget {
     final dosageController = TextEditingController(text: model.dosage);
     final countController = TextEditingController(text: model.count.toString());
     var startTime = TimeOfDay(
-        hour: model.timestamp.toDate().hour,
-        minute: model.timestamp.toDate().minute);
+        hour: model.timestamp!.toDate().hour,
+        minute: model.timestamp!.toDate().minute);
     final startTimeController = TextEditingController(
         text: MaterialLocalizations.of(context).formatTimeOfDay(startTime));
-    var startDate = DateTime(model.timestamp.toDate().year,
-        model.timestamp.toDate().month, model.timestamp.toDate().day);
+    var startDate = DateTime(model.timestamp!.toDate().year,
+        model.timestamp!.toDate().month, model.timestamp!.toDate().day);
     final startDateController =
         TextEditingController(text: DateFormat("dd.MM.yyyy").format(startDate));
     return Scaffold(
@@ -112,7 +114,7 @@ class EditOneSchedule extends StatelessWidget {
     TimeOfDay startTime,
     ScheduleModel model,
   ) {
-    if (formKey.currentState.validate()) {
+    if (formKey.currentState!.validate()) {
       NavigationState nav = Get.find();
       ScheduleRepository().update(ScheduleModel(
           id: model.id,

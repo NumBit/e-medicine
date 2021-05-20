@@ -3,14 +3,14 @@ import 'package:flutter/services.dart';
 
 class PasswordField extends StatelessWidget {
   const PasswordField({
-    Key key,
-    @required this.label,
-    @required this.controller,
+    Key? key,
+    required this.label,
+    required this.controller,
     this.validator,
   }) : super(key: key);
 
   final TextEditingController controller;
-  final String Function(String) validator;
+  final String? Function(String?)? validator;
   final String label;
 
   @override

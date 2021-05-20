@@ -1,18 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class DatePickerField extends StatelessWidget {
   const DatePickerField({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
     this.label,
     this.onTap,
     this.validator,
   }) : super(key: key);
 
   final TextEditingController controller;
-  final String label;
-  final Function onTap;
-  final String Function(String) validator;
+  final String? label;
+  final Function? onTap;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class DatePickerField extends StatelessWidget {
                   initialDate: DateTime.now(),
                   firstDate: DateTime(2000),
                   lastDate: DateTime(2500))
-              .then(onTap);
+              .then(onTap as FutureOr Function(DateTime?));
         },
         child: TextFormField(
           enabled: false,

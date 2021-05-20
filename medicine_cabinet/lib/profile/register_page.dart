@@ -81,10 +81,10 @@ class RegisterPage extends StatelessWidget {
                   },
                 ),
                 LoginButton(
-                  text: "Register",
+                  "Register",
                   onPressed: () {
                     {
-                      if (formKey.currentState.validate()) {
+                      if (formKey.currentState!.validate()) {
                         _register(
                             context, email.text, pass.text, passSecond.text);
                       }
@@ -117,15 +117,15 @@ class RegisterPage extends StatelessWidget {
           await CabinetRepository().add(CabinetModel(name: "Default cabinet"));
       print("cabinet OK");
       UserRepository().add(UserModel(
-          userId: userDoc.user.uid,
+          userId: userDoc.user!.uid,
           name: "Your Name",
           email: email,
           openCabinetId: cabId));
       print("userRepo OK");
       UserCabinetRepository().add(UserCabinetModel(
           cabinetId: cabId,
-          userId: userDoc.user.uid,
-          userEmail: userDoc.user.email,
+          userId: userDoc.user!.uid,
+          userEmail: userDoc.user!.email,
           admin: true));
       print("userCab OK");
       Get.back();

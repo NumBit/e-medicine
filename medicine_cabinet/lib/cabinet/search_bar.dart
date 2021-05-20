@@ -4,7 +4,7 @@ import 'package:medicine_cabinet/main/state/filter_state.dart';
 
 class SearchBar extends StatelessWidget {
   const SearchBar({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

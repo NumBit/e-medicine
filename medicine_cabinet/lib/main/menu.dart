@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 class Menu extends StatelessWidget {
   const Menu({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

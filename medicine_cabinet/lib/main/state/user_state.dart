@@ -7,14 +7,14 @@ class UserState extends GetxController {
   Rx<String> name = "".obs;
   Rx<String> email = "".obs;
   Rx<String> openCabinetId = "".obs;
+  Rx<int> drugsCount = 0.obs;
+  Rx<int> pillCount = 0.obs;
 
   void fromModel(UserModel model) {
-    id = model.id.obs;
-    userId = model.userId.obs;
-    name = model.name.obs;
-    email = model.email.obs;
-    openCabinetId = model.openCabinetId.obs;
+    id = model.id!.obs;
+    userId = model.userId!.obs;
+    name = model.name!.obs;
+    email = model.email!.obs;
+    openCabinetId = model.openCabinetId!.obs;
   }
 }
-
-//_setUserState(UserModel model){

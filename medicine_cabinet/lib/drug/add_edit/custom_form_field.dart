@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 
 class CustomFormField extends StatelessWidget {
   const CustomFormField({
-    Key key,
-    @required this.label,
-    @required this.controller,
+    Key? key,
+    required this.label,
+    required this.controller,
     this.validator,
     this.helper,
     this.maxLength,
@@ -15,13 +15,13 @@ class CustomFormField extends StatelessWidget {
   }) : super(key: key);
 
   final TextEditingController controller;
-  final String Function(String) validator;
+  final String? Function(String?)? validator;
   final String label;
-  final String helper;
-  final int maxLength;
+  final String? helper;
+  final int? maxLength;
   final int maxLines;
   final int minLines;
-  final TextInputType inputType;
+  final TextInputType? inputType;
 
   @override
   Widget build(BuildContext context) {

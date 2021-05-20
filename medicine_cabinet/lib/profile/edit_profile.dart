@@ -6,8 +6,8 @@ import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 
 class EditProfile extends StatelessWidget {
-  final String name;
-  const EditProfile({Key key, this.name}) : super(key: key);
+  final String? name;
+  const EditProfile({Key? key, this.name}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class EditProfile extends StatelessWidget {
                       }),
                   ElevatedButton(
                       onPressed: () {
-                        if (formKey.currentState.validate()) {
+                        if (formKey.currentState!.validate()) {
                           UserState user = Get.find();
                           user.name.value = nameController.text;
                           UserRepository().update(UserModel(

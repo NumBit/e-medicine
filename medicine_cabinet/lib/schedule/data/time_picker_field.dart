@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class TimePickerField extends StatelessWidget {
   const TimePickerField({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
     this.label,
     this.onTap,
     this.time,
@@ -11,10 +13,10 @@ class TimePickerField extends StatelessWidget {
   }) : super(key: key);
 
   final TextEditingController controller;
-  final String label;
-  final Function onTap;
-  final TimeOfDay time;
-  final String Function(String) validator;
+  final String? label;
+  final Function? onTap;
+  final TimeOfDay? time;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +26,9 @@ class TimePickerField extends StatelessWidget {
         onTap: () {
           showTimePicker(
             initialEntryMode: TimePickerEntryMode.dial,
-            initialTime: time,
+            initialTime: time!,
             context: context,
-          ).then(onTap);
+          ).then(onTap as FutureOr Function(TimeOfDay?));
         },
         child: TextFormField(
           enabled: false,

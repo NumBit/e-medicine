@@ -6,8 +6,8 @@ import 'package:medicine_cabinet/drug/package/data/package_repository.dart';
 
 class PackagesList extends StatelessWidget {
   const PackagesList({
-    Key key,
-    this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   final DrugModel model;
@@ -19,11 +19,11 @@ class PackagesList extends StatelessWidget {
         initialData: [],
         builder: (context, snapshot) {
           if (snapshot.data == null) return SliverToBoxAdapter();
-          var packages = snapshot.data
+          var packages = snapshot.data!
               .map((package) => PackageCard(model: package))
               .toList();
-          packages
-              .sort((a, b) => a.model.expiration.compareTo(b.model.expiration));
+          packages.sort(
+              (a, b) => a.model.expiration!.compareTo(b.model.expiration!));
           return SliverList(
             delegate: SliverChildListDelegate(packages),
           );

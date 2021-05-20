@@ -7,14 +7,14 @@ import 'package:medicine_cabinet/schedule/repeating.dart';
 
 class TimePickers extends StatelessWidget {
   const TimePickers({
-    Key key,
-    @required this.startTimeController,
-    @required this.startTime,
-    @required this.repeat,
-    @required this.endTimeController,
-    @required this.endTime,
-    @required this.setStartTime,
-    @required this.setEndTime,
+    Key? key,
+    required this.startTimeController,
+    required this.startTime,
+    required this.repeat,
+    required this.endTimeController,
+    required this.endTime,
+    required this.setStartTime,
+    required this.setEndTime,
   }) : super(key: key);
 
   final TextEditingController startTimeController;
@@ -48,11 +48,11 @@ class TimePickers extends StatelessWidget {
 
 class EndTimeField extends StatelessWidget {
   const EndTimeField({
-    Key key,
-    @required this.endTimeController,
-    @required this.endTime,
-    @required this.setEndTime,
-    @required this.startTime,
+    Key? key,
+    required this.endTimeController,
+    required this.endTime,
+    required this.setEndTime,
+    required this.startTime,
   }) : super(key: key);
 
   final TextEditingController endTimeController;
@@ -77,10 +77,10 @@ class EndTimeField extends StatelessWidget {
 
 class StartTimeField extends StatelessWidget {
   const StartTimeField({
-    Key key,
-    @required this.startTimeController,
-    @required this.startTime,
-    @required this.setStartTime,
+    Key? key,
+    required this.startTimeController,
+    required this.startTime,
+    required this.setStartTime,
   }) : super(key: key);
 
   final TextEditingController startTimeController;
@@ -100,14 +100,14 @@ class StartTimeField extends StatelessWidget {
 
 class DatePickers extends StatelessWidget {
   const DatePickers({
-    Key key,
-    @required this.repeat,
-    @required this.startDateController,
-    @required this.endDateController,
-    @required this.startDate,
-    @required this.endDate,
-    @required this.setStartDate,
-    @required this.setEndDate,
+    Key? key,
+    required this.repeat,
+    required this.startDateController,
+    required this.endDateController,
+    required this.startDate,
+    required this.endDate,
+    required this.setStartDate,
+    required this.setEndDate,
   }) : super(key: key);
 
   final RxString repeat;
@@ -140,11 +140,11 @@ class DatePickers extends StatelessWidget {
 
 class EndDateField extends StatelessWidget {
   const EndDateField({
-    Key key,
-    @required this.endDateController,
-    @required this.setEndDate,
-    @required this.endDate,
-    @required this.startDate,
+    Key? key,
+    required this.endDateController,
+    required this.setEndDate,
+    required this.endDate,
+    required this.startDate,
   }) : super(key: key);
 
   final TextEditingController endDateController;
@@ -169,9 +169,9 @@ class EndDateField extends StatelessWidget {
 
 class StartDateField extends StatelessWidget {
   const StartDateField({
-    Key key,
-    @required this.startDateController,
-    @required this.setStartDate,
+    Key? key,
+    required this.startDateController,
+    required this.setStartDate,
   }) : super(key: key);
 
   final TextEditingController startDateController;
@@ -188,9 +188,9 @@ class StartDateField extends StatelessWidget {
 
 class RepeatSelection extends StatelessWidget {
   const RepeatSelection({
-    Key key,
-    @required this.repeat,
-    @required this.repeatController,
+    Key? key,
+    required this.repeat,
+    required this.repeatController,
   }) : super(key: key);
 
   final RxString repeat;
@@ -206,7 +206,7 @@ class RepeatSelection extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             child: DropdownButtonFormField<String>(
               value: repeat.value,
-              onChanged: (value) => repeat.value = value,
+              onChanged: (value) => repeat.value = value!,
               items: <String>[
                 Repeating.Never,
                 Repeating.XHours,
@@ -237,7 +237,7 @@ class RepeatSelection extends StatelessWidget {
               controller: repeatController,
               inputType: TextInputType.number,
               validator: (value) {
-                if (!GetUtils.isNumericOnly(value))
+                if (value == null || !GetUtils.isNumericOnly(value))
                   return "Must input whole number";
                 if (int.parse(value) == 0) return "Cannot select 0";
                 return null;
@@ -252,8 +252,8 @@ class RepeatSelection extends StatelessWidget {
 
 class CountField extends StatelessWidget {
   const CountField({
-    Key key,
-    @required this.countController,
+    Key? key,
+    required this.countController,
   }) : super(key: key);
 
   final TextEditingController countController;
@@ -265,7 +265,7 @@ class CountField extends StatelessWidget {
       controller: countController,
       inputType: TextInputType.number,
       validator: (value) {
-        if (!GetUtils.isNum(value)) return "Must input number";
+        if (value == null || !GetUtils.isNum(value)) return "Must input number";
         return null;
       },
     );
@@ -274,8 +274,8 @@ class CountField extends StatelessWidget {
 
 class DosageField extends StatelessWidget {
   const DosageField({
-    Key key,
-    @required this.dosageController,
+    Key? key,
+    required this.dosageController,
   }) : super(key: key);
 
   final TextEditingController dosageController;
@@ -291,8 +291,8 @@ class DosageField extends StatelessWidget {
 
 class DrugNameField extends StatelessWidget {
   const DrugNameField({
-    Key key,
-    @required this.drugNameController,
+    Key? key,
+    required this.drugNameController,
   }) : super(key: key);
 
   final TextEditingController drugNameController;
@@ -302,8 +302,8 @@ class DrugNameField extends StatelessWidget {
     return CustomFormField(
       label: "Drug",
       controller: drugNameController,
-      validator: (String value) {
-        if (value == null || value.isBlank) return "Drug cannot be empty";
+      validator: (String? value) {
+        if (value == null || value.isBlank!) return "Drug cannot be empty";
         return null;
       },
     );

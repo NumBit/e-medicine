@@ -9,7 +9,7 @@ import 'package:medicine_cabinet/drug/package/data/package_repository.dart';
 
 class AddPackage extends StatelessWidget {
   final String drugId;
-  const AddPackage({Key key, @required this.drugId}) : super(key: key);
+  const AddPackage({Key? key, required this.drugId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +44,14 @@ class AddPackage extends StatelessWidget {
                   controller: countController,
                   inputType: TextInputType.number,
                   validator: (value) {
-                    if (!GetUtils.isNum(value)) return "Must input number";
+                    if (value == null || !GetUtils.isNum(value))
+                      return "Must input number";
                     return null;
                   },
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      if (formKey.currentState.validate()) {
+                      if (formKey.currentState!.validate()) {
                         var model = PackageModel(
                             count: int.parse(countController.text),
                             dosage: dosageController.text,

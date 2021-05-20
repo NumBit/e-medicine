@@ -3,7 +3,7 @@ import 'package:medicine_cabinet/error/loading_widget.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

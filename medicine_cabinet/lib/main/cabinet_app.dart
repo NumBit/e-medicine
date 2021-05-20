@@ -7,7 +7,7 @@ import 'package:medicine_cabinet/profile/register_page.dart';
 
 class CabinetApp extends StatelessWidget {
   const CabinetApp({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

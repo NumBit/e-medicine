@@ -9,7 +9,7 @@ import 'package:medicine_cabinet/firebase/user/user_cabinet_repository.dart';
 
 class ShareCabinet extends StatelessWidget {
   final CabinetModel model;
-  const ShareCabinet({Key key, this.model}) : super(key: key);
+  const ShareCabinet({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +24,12 @@ class ShareCabinet extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.data == null) return LoadingWidget();
 
-            var emailCount = snapshot.data.length;
+            var emailCount = snapshot.data!.length;
             return Container(
                 height: emailCount < 3 ? 60 * emailCount.toDouble() : 180,
                 width: 600,
                 child: ListView(
-                    children: snapshot.data
+                    children: snapshot.data!
                         .map((e) => UserCabinetTile(model: e))
                         .toList()));
           },
@@ -44,7 +44,7 @@ class ShareCabinet extends StatelessWidget {
                       inputType: TextInputType.emailAddress,
                       label: "Email",
                       controller: emailController,
-                      validator: (String value) {
+                      validator: (String? value) {
                         if (value == null ||
                             value.isEmpty ||
                             !GetUtils.isEmail(value)) {
@@ -55,7 +55,8 @@ class ShareCabinet extends StatelessWidget {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      if (formKey.currentState.validate()) {
+                      if (formKey.currentState != null &&
+                          formKey.currentState!.validate()) {
                         UserCabinetRepository()
                             .addByEmail(emailController.text, model.id);
                         //emailController.text = "";

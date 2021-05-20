@@ -5,12 +5,12 @@ import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 
 class DrugHeader extends StatelessWidget {
-  final List<String> categories;
+  // final List<String> categories;
   final DrugModel model;
   const DrugHeader({
-    Key key,
-    @required this.categories,
-    this.model,
+    Key? key,
+    // required this.categories,
+    required this.model,
   }) : super(key: key);
 
   @override
@@ -29,7 +29,7 @@ class DrugHeader extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.5,
                 child: Text(
-                  drug.substance,
+                  drug.substance!,
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -41,9 +41,9 @@ class DrugHeader extends StatelessWidget {
               // DrugCategories(categories: categories)
             ],
           ),
-          if (drug.icon.isNotEmpty)
+          if (drug.icon!.isNotEmpty)
             Icon(
-              mapToIconData(jsonDecode(drug.icon)),
+              deserializeIcon(jsonDecode(drug.icon!)),
               color: Theme.of(context).primaryColorDark,
               size: 100,
             ),

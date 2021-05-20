@@ -34,7 +34,7 @@ class CabinetPage extends StatelessWidget {
 
 class AddDrugFAB extends StatelessWidget {
   const AddDrugFAB({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -63,7 +63,7 @@ class AddDrugFAB extends StatelessWidget {
 
 class DrugGrid extends StatelessWidget {
   const DrugGrid({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -76,8 +76,10 @@ class DrugGrid extends StatelessWidget {
         initialData: [],
         builder: (context, snapshot) {
           if (snapshot.data == null) return LoadingWidget();
-          var drugs = snapshot.data.map((m) => DrugGridItem(model: m)).toList();
-          drugs.sort((a, b) => a.model.createdAt.compareTo(b.model.createdAt));
+          var drugs =
+              snapshot.data!.map((m) => DrugGridItem(model: m)).toList();
+          drugs
+              .sort((a, b) => a.model.createdAt!.compareTo(b.model.createdAt!));
           return SliverPadding(
               padding: EdgeInsets.all(15),
               sliver: SliverGrid.count(
@@ -92,7 +94,7 @@ class DrugGrid extends StatelessWidget {
 
 class SearchSliver extends StatelessWidget {
   const SearchSliver({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

@@ -12,7 +12,7 @@ import 'package:medicine_cabinet/schedule/schedule_form_fields.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateSchedule extends StatelessWidget {
-  const CreateSchedule({Key key}) : super(key: key);
+  const CreateSchedule({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +145,7 @@ void createSchedules(
   TimeOfDay startTime,
   TimeOfDay endTime,
 ) async {
-  if (formKey.currentState.validate()) {
+  if (formKey.currentState!.validate()) {
     var repeatHours = int.parse(repeatController.text);
     var count = int.parse(countController.text);
     NavigationState nav = Get.find();
@@ -183,7 +183,7 @@ void createSchedules(
 void createRepeatingSchedules(
     RxString repeat,
     ScheduleRepository scheduleRepo,
-    String schedulerId,
+    String? schedulerId,
     String schedulerKey,
     TextEditingController drugNameController,
     int count,
@@ -262,7 +262,7 @@ void createScheduleXHoursRepeat(
     TimeOfDay startTime,
     TimeOfDay endTime,
     ScheduleRepository scheduleRepo,
-    String schedulerId,
+    String? schedulerId,
     String schedulerKey,
     TextEditingController drugNameController,
     int count,
@@ -294,7 +294,7 @@ void createScheduleXDaysRepeat(
     DateTime startDate,
     DateTime endDate,
     ScheduleRepository scheduleRepo,
-    String schedulerId,
+    String? schedulerId,
     String schedulerKey,
     TextEditingController drugNameController,
     int count,
@@ -319,7 +319,7 @@ void createScheduleWeekRepeat(
     DateTime startDate,
     DateTime endDate,
     ScheduleRepository scheduleRepo,
-    String schedulerId,
+    String? schedulerId,
     String schedulerKey,
     TextEditingController drugNameController,
     int count,
@@ -343,7 +343,7 @@ void createScheduleDayRepeat(
     DateTime startDate,
     DateTime endDate,
     ScheduleRepository scheduleRepo,
-    String schedulerId,
+    String? schedulerId,
     String schedulerKey,
     TextEditingController drugNameController,
     int count,
@@ -365,7 +365,7 @@ void createScheduleDayRepeat(
 
 void createScheduleNoRepeat(
     ScheduleRepository scheduleRepo,
-    String schedulerId,
+    String? schedulerId,
     String schedulerKey,
     TextEditingController drugNameController,
     int count,

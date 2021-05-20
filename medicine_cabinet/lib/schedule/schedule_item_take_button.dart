@@ -5,8 +5,8 @@ import 'package:medicine_cabinet/schedule/data/schedule_repository.dart';
 
 class ScheduleItemTakeButton extends StatelessWidget {
   const ScheduleItemTakeButton({
-    Key key,
-    @required this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   final ScheduleModel model;
@@ -14,17 +14,17 @@ class ScheduleItemTakeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FilterChip(
-      selected: model.isTaken,
+      selected: model.isTaken!,
       onSelected: (_) {
         ScheduleRepository()
-            .update(ScheduleModel(id: model.id, isTaken: !model.isTaken));
+            .update(ScheduleModel(id: model.id, isTaken: !model.isTaken!));
       },
       elevation: 5,
       selectedColor: Theme.of(context).primaryColor,
       backgroundColor: Colors.white,
       checkmarkColor: Colors.white,
       side: BorderSide(
-        color: model.isTaken
+        color: model.isTaken!
             ? Theme.of(context).primaryColor
             : Theme.of(context).primaryColor,
       ),
@@ -39,9 +39,9 @@ class ScheduleItemTakeButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  getTimeFromTimestamp(model.timestamp).format(context),
+                  getTimeFromTimestamp(model.timestamp!).format(context),
                   style: TextStyle(
-                    color: model.isTaken
+                    color: model.isTaken!
                         ? Colors.white
                         : Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold,

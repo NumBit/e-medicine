@@ -2,18 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:medicine_cabinet/firebase/model.dart';
 
 class UserModel extends Model {
-  final String id;
-  final String userId;
-  final String name;
-  final String email;
-  final String openCabinetId;
+  final String? id;
+  final String? userId;
+  final String? name;
+  final String? email;
+  final String? openCabinetId;
   //final List<String> cabinets;
 
   UserModel({this.id, this.userId, this.name, this.email, this.openCabinetId})
       : super(id: id);
 
-  UserModel.fromMap(DocumentSnapshot snapshot)
-      : id = snapshot.id ?? "",
+  UserModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
+      : id = snapshot.id,
         userId = snapshot.data()["user_id"] ?? "",
         name = snapshot.data()["name"] ?? "",
         email = snapshot.data()["email"] ?? "",

@@ -6,10 +6,10 @@ import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 
 class CreateCabinetDialog extends StatelessWidget {
   const CreateCabinetDialog({
-    Key key,
-    @required GlobalKey<FormState> formKey,
-    @required this.nameController,
-  })  : formKey = formKey,
+    Key? key,
+    required GlobalKey<FormState> formKey,
+    required this.nameController,
+  })   : formKey = formKey,
         super(key: key);
 
   final GlobalKey<FormState> formKey;
@@ -25,7 +25,7 @@ class CreateCabinetDialog extends StatelessWidget {
               padding: const EdgeInsets.all(15.0),
               child: TextFormField(
                   onChanged: (value) {
-                    formKey.currentState.validate();
+                    formKey.currentState?.validate();
                   },
                   maxLength: 40,
                   maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -52,7 +52,8 @@ class CreateCabinetDialog extends StatelessWidget {
                       primary: Theme.of(context).primaryColorDark)),
               ElevatedButton(
                   onPressed: () {
-                    if (formKey.currentState.validate()) {
+                    if (formKey.currentState != null &&
+                        formKey.currentState!.validate()) {
                       CabinetRepository().addToAuthUser(
                           CabinetModel(name: nameController.text));
                       Get.back();

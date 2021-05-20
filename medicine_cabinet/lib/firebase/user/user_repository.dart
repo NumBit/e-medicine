@@ -12,23 +12,23 @@ class UserRepository extends Repository<UserModel> {
         );
 
   @override
-  Stream<UserModel> streamModel(String id) {
-    return collection
-        .snapshots()
-        .map((snap) => snap.docs.map((e) => UserModel.fromMap(e)).first);
+  Stream<UserModel> streamModel(String? id) {
+    if (id == null) return Stream.empty();
+    return collection.snapshots().map((snap) => snap.docs
+        .map((e) =>
+            UserModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>))
+        .first);
   }
 
   Stream<UserModel> get(String id) {
-    return collection
-        .doc(id)
-        .snapshots()
-        .map((snap) => UserModel.fromMap(snap));
+    return collection.doc(id).snapshots().map((snap) =>
+        UserModel.fromMap(snap as QueryDocumentSnapshot<Map<String, dynamic>>));
   }
 
-  Stream<UserModel> getMyUser() {
+  Stream<UserModel?> getMyUser() {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      return null;
+      return Stream.empty();
     }
     var myUid = user.uid;
     return collection
@@ -36,17 +36,25 @@ class UserRepository extends Repository<UserModel> {
         .snapshots()
         .map((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => UserModel.fromMap(e)).toList().first;
+        return value.docs
+            .map((e) => UserModel.fromMap(
+                e as QueryDocumentSnapshot<Map<String, dynamic>>))
+            .toList()
+            .first;
       } else {
         return null;
       }
     });
   }
 
-  Future<UserModel> getByEmail(String email) {
+  Future<UserModel?> getByEmail(String email) {
     return collection.where("email", isEqualTo: email).get().then((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => UserModel.fromMap(e)).toList().first;
+        return value.docs
+            .map((e) => UserModel.fromMap(
+                e as QueryDocumentSnapshot<Map<String, dynamic>>))
+            .toList()
+            .first;
       } else {
         return null;
       }

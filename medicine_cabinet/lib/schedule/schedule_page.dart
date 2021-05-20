@@ -9,7 +9,7 @@ import 'package:medicine_cabinet/schedule/schedule_item.dart';
 import 'package:medicine_cabinet/schedule/week_calendar.dart';
 
 class SchedulePage extends StatelessWidget {
-  const SchedulePage({Key key}) : super(key: key);
+  const SchedulePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +50,12 @@ class SchedulePage extends StatelessWidget {
 
 class SchedulesList extends StatelessWidget {
   const SchedulesList({
-    Key key,
-    @required this.events,
-    @required this.date,
+    Key? key,
+    required this.events,
+    required this.date,
   }) : super(key: key);
 
-  final List<ScheduleModel> events;
+  final List<ScheduleModel>? events;
   final SelectedDate date;
 
   @override
@@ -64,13 +64,13 @@ class SchedulesList extends StatelessWidget {
       child: Container(
         child: Obx(() {
           var selectedDay = date.date.value;
-          var schedulesList = events
+          var schedulesList = events!
               .where((element) =>
-                  getDateOnly(element.timestamp.toDate()) == selectedDay)
+                  getDateOnly(element.timestamp!.toDate()) == selectedDay)
               .map((e) => ScheduleItem(model: e))
               .toList();
           schedulesList
-              .sort((a, b) => a.model.timestamp.compareTo(b.model.timestamp));
+              .sort((a, b) => a.model.timestamp!.compareTo(b.model.timestamp!));
           return ListView(
             children: schedulesList,
           );
@@ -82,7 +82,7 @@ class SchedulesList extends StatelessWidget {
 
 class AddScheduleButton extends StatelessWidget {
   const AddScheduleButton({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

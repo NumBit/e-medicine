@@ -11,11 +11,11 @@ import 'package:medicine_cabinet/main/state/user_state.dart';
 import 'drug_header.dart';
 
 class DrugDetailPage extends StatelessWidget {
-  final String id;
+  final String? id;
   final List<String> categories;
   final List<String> dosages;
   const DrugDetailPage({
-    Key key,
+    Key? key,
     this.categories = const ["Fever", "Pain", "Pain", "Pain", "Pain"],
     this.dosages = const ["50mg", "100mg"],
     this.id,
@@ -28,28 +28,21 @@ class DrugDetailPage extends StatelessWidget {
         stream: DrugRepository(userState.openCabinetId.value).streamModel(id),
         initialData: DrugModel(
             id: "", description: "", icon: "", substance: "", name: ""),
-        builder: (context, model) {
-          if (model.data == null) {
+        builder: (context, snapshot) {
+          if (snapshot.data == null)
             return Center(child: Container(child: Text("Please go back")));
-          }
+          var drug = snapshot.data!;
           return Scaffold(
             backgroundColor: Theme.of(context).primaryColor,
             body: CustomScrollView(
               slivers: [
                 DetailAppBar(
-                  model: model.data,
+                  model: drug,
                 ),
                 SliverList(
                     delegate: SliverChildListDelegate([
-                  DrugHeader(categories: categories, model: model.data),
-                  Description(description: model.data.description),
-                  // Divider(
-                  //   color: Theme.of(context).primaryColorDark,
-                  //   height: 20,
-                  //   thickness: 5,
-                  //   indent: 20,
-                  //   endIndent: 20,
-                  // ),
+                  DrugHeader(model: drug),
+                  Description(description: drug.description),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -59,14 +52,14 @@ class DrugDetailPage extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                                 primary: Theme.of(context).primaryColorDark),
                             onPressed: () {
-                              Get.dialog(AddPackage(drugId: model.data.id));
+                              Get.dialog(AddPackage(drugId: drug.id));
                             },
                             child: Text("Add Package")),
                       ),
                     ],
                   ),
                 ])),
-                PackagesList(model: model.data),
+                PackagesList(model: drug),
               ],
             ),
           );

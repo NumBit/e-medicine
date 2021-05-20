@@ -13,39 +13,48 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
         );
 
   @override
-  Stream<UserCabinetModel> streamModel(String id) {
-    return collection
-        .snapshots()
-        .map((snap) => snap.docs.map((e) => UserCabinetModel.fromMap(e)).first);
+  Stream<UserCabinetModel> streamModel(String? id) {
+    return collection.snapshots().map((snap) => snap.docs
+        .map((e) => UserCabinetModel.fromMap(
+            e as QueryDocumentSnapshot<Map<String, dynamic>>))
+        .first);
   }
 
   Stream<List<UserCabinetModel>> getMyCabinets() {
     var user = FirebaseAuth.instance.currentUser;
-    if (user == null) return null;
+    if (user == null) return Stream.empty();
     return collection
         .where("user_id", isEqualTo: user.uid)
         .snapshots()
         .map((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => UserCabinetModel.fromMap(e)).toList();
+        return value.docs
+            .map((e) => UserCabinetModel.fromMap(
+                e as QueryDocumentSnapshot<Map<String, dynamic>>))
+            .toList();
       }
       return [];
     });
   }
 
-  Stream<List<UserCabinetModel>> getCabinetUsers(String cabinetId) {
+  Stream<List<UserCabinetModel>> getCabinetUsers(String? cabinetId) {
+    if (cabinetId == null) return Stream.empty();
     return collection
         .where("cabinet_id", isEqualTo: cabinetId)
         .snapshots()
         .map((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => UserCabinetModel.fromMap(e)).toList();
+        return value.docs
+            .map((e) => UserCabinetModel.fromMap(
+                e as QueryDocumentSnapshot<Map<String, dynamic>>))
+            .toList();
       }
       return [];
     });
   }
 
-  Future<bool> isCabinetUser(String cabinetId, String userId) async {
+  Future<bool> isCabinetUser(String? cabinetId, String? userId) async {
+    if (cabinetId == null || userId == null) return false;
     var res = await collection
         .where("cabinet_id", isEqualTo: cabinetId)
         .where("user_id", isEqualTo: userId)
@@ -56,13 +65,14 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
     return true;
   }
 
-  Future<bool> addByEmail(String email, String cabinetId) async {
+  Future<bool> addByEmail(String? email, String? cabinetId) async {
+    if (email == null || cabinetId == null) return false;
     var user = await UserRepository().getByEmail(email);
     if (user == null) {
       snackBarMessage("User not found", "Check email format");
       return false;
     }
-    var isShared = await isCabinetUser(cabinetId, user.userId);
+    var isShared = await isCabinetUser(cabinetId, user.userId ?? "");
     print(isShared);
     if (isShared) {
       snackBarMessage("Already shared", email);
@@ -77,7 +87,8 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
     return true;
   }
 
-  void deleteAll(String cabinetId) {
+  void deleteAll(String? cabinetId) {
+    if (cabinetId == null) return null;
     collection
         .where("cabinet_id", isEqualTo: cabinetId)
         .snapshots()
@@ -88,25 +99,24 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
     });
   }
 
-  Future<UserCabinetModel> get(String docId) async {
-    var res = await collection
-        .doc(docId)
-        .get()
-        .then((e) => UserCabinetModel.fromMap(e));
+  Future<UserCabinetModel?> get(String? docId) async {
+    if (docId == null) return null;
+    var res = await collection.doc(docId).get().then((e) =>
+        UserCabinetModel.fromMap(
+            e as QueryDocumentSnapshot<Map<String, dynamic>>));
     return res;
   }
 
   @override
-  Future<void> delete(String docId) async {
+  Future<void> delete(String? docId) async {
+    if (docId == null) return;
     var doc = await get(docId);
-
     collection
         .doc(docId)
         .delete()
         .then((value) => print("Operation success."))
         .catchError(
             (error) => snackBarMessage("Operation failed", "Nothing removed"));
-
     var userRepo = UserRepository();
     userRepo.setEmptyCabinet(doc?.cabinetId ?? "");
   }

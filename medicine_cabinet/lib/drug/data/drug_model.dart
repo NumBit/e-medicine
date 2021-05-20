@@ -3,12 +3,12 @@ import 'package:medicine_cabinet/firebase/model.dart';
 
 class DrugModel extends Model {
   final String id;
-  final String cabinetId;
-  final String name;
-  final String substance;
-  final String description;
-  final String icon;
-  final Timestamp createdAt;
+  final String? cabinetId;
+  final String? name;
+  final String? substance;
+  final String? description;
+  final String? icon;
+  final Timestamp? createdAt;
 
   DrugModel(
       {this.id = "",
@@ -19,15 +19,15 @@ class DrugModel extends Model {
       this.icon,
       this.createdAt});
 
-  DrugModel.fromMap(QueryDocumentSnapshot snapshot)
-      : id = snapshot.id ?? "",
+  DrugModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
+      : id = snapshot.id,
         cabinetId = snapshot.data()["cabinet_id"] ?? "",
         name = snapshot.data()["name"] ?? "",
         substance = snapshot.data()["substance"] ?? "",
         description = snapshot.data()["description"] ?? "",
         icon = snapshot.data()["icon"] ??
             "{\"codePoint\":60518,\"fontFamily\":\"MaterialIcons\",\"fontPackage\":null,\"matchTextDirection\":false}",
-        createdAt = snapshot.data()["created_at"] ?? "";
+        createdAt = snapshot.data()["created_at"] ?? "" as Timestamp?;
 
   @override
   Map<String, dynamic> toJson() => {
