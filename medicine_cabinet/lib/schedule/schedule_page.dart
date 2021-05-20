@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/error/loading_widget.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
@@ -22,7 +21,7 @@ class SchedulePage extends StatelessWidget {
           stream: ScheduleRepository().streamModels(),
           builder: (context, schedules) {
             if (!schedules.hasData) return LoadingWidget();
-            var events = listToEventList(schedules.data);
+            var events = schedules.data;
             return Column(
               children: [
                 WeekCalendar(events: events),
@@ -56,7 +55,7 @@ class SchedulesList extends StatelessWidget {
     @required this.date,
   }) : super(key: key);
 
-  final EventList<ScheduleModel> events;
+  final List<ScheduleModel> events;
   final SelectedDate date;
 
   @override
@@ -65,7 +64,8 @@ class SchedulesList extends StatelessWidget {
       child: Container(
         child: Obx(() {
           var schedulesList = events
-              .getEvents(date.date.value)
+              .where((element) =>
+                  getDateOnly(element.timestamp.toDate()) == date.date.value)
               .map((e) => ScheduleItem(model: e))
               .toList();
           schedulesList
@@ -98,13 +98,6 @@ class AddScheduleButton extends StatelessWidget {
   }
 }
 
-EventList<ScheduleModel> listToEventList(List<ScheduleModel> list) {
-  var events =
-      EventList<ScheduleModel>(events: Map<DateTime, List<ScheduleModel>>());
-  for (var item in list) {
-    events.add(
-        DateTime(item.getDate().year, item.getDate().month, item.getDate().day),
-        item);
-  }
-  return events;
+DateTime getDateOnly(DateTime dateTime) {
+  return DateTime(dateTime.year, dateTime.month, dateTime.day);
 }
