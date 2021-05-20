@@ -4,9 +4,11 @@ import 'package:medicine_cabinet/cabinet/cabinet_page.dart';
 import 'package:medicine_cabinet/cabinets/cabinets_list_page.dart';
 import 'package:medicine_cabinet/drug/add_edit/add_drug.dart';
 import 'package:medicine_cabinet/drug/add_edit/edit_drug.dart';
+import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/profile/profile_page.dart';
 import 'package:medicine_cabinet/schedule/create_schedule.dart';
+import 'package:medicine_cabinet/schedule/data/schedule_model.dart';
 import 'package:medicine_cabinet/schedule/edit_one_schedule.dart';
 import 'package:medicine_cabinet/schedule/edit_schedule_plan.dart';
 import 'package:medicine_cabinet/schedule/schedule_page.dart';
@@ -18,15 +20,15 @@ class TabNavigation extends StatefulWidget {
 
 class TabState extends State<TabNavigation>
     with SingleTickerProviderStateMixin {
-  TabController _controller;
+  TabController? _controller;
 
   @override
   void initState() {
     var nav = Get.put(NavigationState());
     super.initState();
     _controller = TabController(length: 3, vsync: this);
-    _controller.addListener(() {
-      nav.navigatorId.value = _controller.index;
+    _controller!.addListener(() {
+      nav.navigatorId.value = _controller!.index;
     });
   }
 
@@ -35,8 +37,9 @@ class TabState extends State<TabNavigation>
     NavigationState nav = Get.find();
     return WillPopScope(
       onWillPop: () async {
-        var isFirst =
-            !await Get.nestedKey(nav.navigatorId.value).currentState.maybePop();
+        var isFirst = !await Get.nestedKey(nav.navigatorId.value)!
+            .currentState!
+            .maybePop();
         return isFirst;
       },
       child: Scaffold(
@@ -58,12 +61,12 @@ class TabState extends State<TabNavigation>
 
 class BottomTabBar extends StatelessWidget {
   const BottomTabBar({
-    Key key,
-    @required controller,
-  })  : _controller = controller,
+    Key? key,
+    required controller,
+  })   : _controller = controller,
         super(key: key);
 
-  final TabController _controller;
+  final TabController? _controller;
 
   @override
   Widget build(BuildContext context) {
@@ -97,11 +100,11 @@ class BottomTabBar extends StatelessWidget {
 }
 
 class ProfileNNavigatorPage extends StatelessWidget {
-  final GlobalKey<NavigatorState> navigatorKey;
+  final GlobalKey<NavigatorState>? navigatorKey;
 
   const ProfileNNavigatorPage({
-    Key key,
-    @required this.navigatorKey,
+    Key? key,
+    required this.navigatorKey,
   }) : super(key: key);
 
   @override
@@ -118,11 +121,11 @@ class ProfileNNavigatorPage extends StatelessWidget {
 }
 
 class ScheduleNavigatorPage extends StatefulWidget {
-  final GlobalKey<NavigatorState> navigatorKey;
+  final GlobalKey<NavigatorState>? navigatorKey;
 
   const ScheduleNavigatorPage({
-    Key key,
-    @required this.navigatorKey,
+    Key? key,
+    required this.navigatorKey,
   }) : super(key: key);
 
   @override
@@ -144,11 +147,14 @@ class _ScheduleNavigatorPageState extends State<ScheduleNavigatorPage>
           return GetPageRoute(page: () => CreateSchedule());
         else if (routeSettings.name == "/edit_one_schedule")
           return GetPageRoute(
-              page: () => EditOneSchedule(model: routeSettings.arguments));
+              page: () => EditOneSchedule(
+                  model: routeSettings.arguments == null
+                      ? ScheduleModel()
+                      : routeSettings.arguments as ScheduleModel));
         else if (routeSettings.name == "/edit_schedule_plan")
           return GetPageRoute(
-              page: () =>
-                  EditSchedulePlan(schedulerId: routeSettings.arguments));
+              page: () => EditSchedulePlan(
+                  schedulerId: routeSettings.arguments as String?));
         return GetPageRoute(
             page: () => Container(
                   color: Colors.deepOrange,
@@ -167,11 +173,11 @@ class _ScheduleNavigatorPageState extends State<ScheduleNavigatorPage>
 }
 
 class CabinetNavigatorPage extends StatefulWidget {
-  final GlobalKey<NavigatorState> navigatorKey;
+  final GlobalKey<NavigatorState>? navigatorKey;
 
   const CabinetNavigatorPage({
-    Key key,
-    @required this.navigatorKey,
+    Key? key,
+    required this.navigatorKey,
   }) : super(key: key);
 
   @override
@@ -205,7 +211,10 @@ class _CabinetNavigatorPageState extends State<CabinetNavigatorPage>
           return GetPageRoute(page: () => CabinetsListPage());
         else if (routeSettings.name == "/edit_drug")
           return GetPageRoute(
-              page: () => EditDrug(model: routeSettings.arguments));
+              page: () => EditDrug(
+                  model: routeSettings.arguments == null
+                      ? DrugModel()
+                      : routeSettings.arguments as DrugModel));
         return GetPageRoute(
             page: () => Container(
                   color: Colors.deepOrange,

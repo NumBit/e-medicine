@@ -6,7 +6,7 @@ import 'cabinet_card.dart';
 import 'create_cabinet_dialog.dart';
 
 class CabinetsListPage extends StatelessWidget {
-  const CabinetsListPage({Key key}) : super(key: key);
+  const CabinetsListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class CabinetsListPage extends StatelessWidget {
           initialData: [],
           builder: (context, cabinets) {
             return ListView(
-                children: cabinets.data
+                children: cabinets.data!
                     .map((cab) => CabinetCard(
                           model: cab,
                         ))

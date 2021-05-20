@@ -5,8 +5,8 @@ import 'package:medicine_cabinet/main/state/navigation_state.dart';
 
 class DetailAppBar extends StatelessWidget {
   const DetailAppBar({
-    Key key,
-    this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   final DrugModel model;
@@ -26,7 +26,7 @@ class DetailAppBar extends StatelessWidget {
           ),
           onPressed: () {
             NavigationState nav = Get.find();
-            print("tap" + model.name);
+            print("tap" + model.name!);
             print(Get.key);
             Get.toNamed(
               "/edit_drug",
@@ -37,13 +37,13 @@ class DetailAppBar extends StatelessWidget {
         )
       ],
       title: Tooltip(
-        message: model.name,
+        message: model.name!,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
               child: Text(
-                model.name,
+                model.name!,
                 textAlign: TextAlign.start,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(

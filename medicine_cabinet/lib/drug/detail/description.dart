@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Description extends StatefulWidget {
-  Description({Key key, this.description}) : super(key: key);
-  final String description;
+  Description({Key? key, this.description}) : super(key: key);
+  final String? description;
 
   @override
   _DescriptionState createState() => _DescriptionState();
@@ -62,7 +62,7 @@ class _DescriptionState extends State<Description> {
                           fontWeight: FontWeight.w500),
                     ),
                     Text(
-                      widget.description,
+                      widget.description!,
                       maxLines: 5,
                       overflow: TextOverflow.fade,
                       style: TextStyle(color: Colors.white, fontSize: 18),
@@ -78,8 +78,8 @@ class _DescriptionState extends State<Description> {
 
 class DescriptionDialog extends StatelessWidget {
   const DescriptionDialog({
-    Key key,
-    @required this.widget,
+    Key? key,
+    required this.widget,
   }) : super(key: key);
 
   final Description widget;
@@ -111,7 +111,7 @@ class DescriptionDialog extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               width: 2000,
               child: Text(
-                widget.description,
+                widget.description!,
                 style: TextStyle(
                     color: Theme.of(context).primaryColorDark, fontSize: 18),
               ),

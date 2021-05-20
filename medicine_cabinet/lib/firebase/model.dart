@@ -1,5 +1,5 @@
 abstract class Model {
-  final String id;
+  final String? id;
 
   Model({this.id = ""});
   toJson();

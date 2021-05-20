@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:medicine_cabinet/firebase/model.dart';
 
 class UserCabinetModel extends Model {
-  final String id;
-  final String userId;
-  final String userEmail;
-  final String cabinetId;
-  final bool admin;
+  final String? id;
+  final String? userId;
+  final String? userEmail;
+  final String? cabinetId;
+  final bool? admin;
 
   UserCabinetModel(
       {this.id, this.userId, this.cabinetId, this.userEmail, this.admin})

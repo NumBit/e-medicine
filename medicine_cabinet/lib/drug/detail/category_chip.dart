@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CategoryChip extends StatelessWidget {
-  final String category;
+  final String? category;
   const CategoryChip({
-    Key key,
+    Key? key,
     this.category,
   }) : super(key: key);
 
@@ -14,7 +14,7 @@ class CategoryChip extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       backgroundColor: Theme.of(context).primaryColorDark,
       label: Text(
-        category,
+        category!,
         style: TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,

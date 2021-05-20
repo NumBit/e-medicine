@@ -7,7 +7,7 @@ import 'data/cabinet_model.dart';
 import 'data/cabinet_repository.dart';
 
 class CabinetAppBar extends StatelessWidget {
-  const CabinetAppBar({Key key}) : super(key: key);
+  const CabinetAppBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

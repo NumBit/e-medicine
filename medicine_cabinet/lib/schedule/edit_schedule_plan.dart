@@ -13,9 +13,9 @@ import 'package:medicine_cabinet/schedule/schedule_form_fields.dart';
 import 'package:uuid/uuid.dart';
 
 class EditSchedulePlan extends StatelessWidget {
-  final String schedulerId;
-  final DateTime date;
-  const EditSchedulePlan({Key key, this.date, this.schedulerId})
+  final String? schedulerId;
+  final DateTime? date;
+  const EditSchedulePlan({Key? key, this.date, this.schedulerId})
       : super(key: key);
 
   @override
@@ -54,15 +54,15 @@ class EditSchedulePlan extends StatelessWidget {
               stream: SchedulerRepository().streamModel(schedulerId),
               builder: (context, scheduler) {
                 if (!scheduler.hasData) return LoadingWidget();
-                drugNameController.text = scheduler.data.name;
-                dosageController.text = scheduler.data.dosage;
-                countController.text = scheduler.data.count.toString();
-                repeatController.text = scheduler.data.repeatTimes.toString();
-                repeat.value = scheduler.data.repeatType;
-                startTime = scheduler.data.timeFrom;
-                endTime = scheduler.data.timeTo;
-                startDate = scheduler.data.dayFrom.toDate();
-                endDate = scheduler.data.dayTo.toDate();
+                drugNameController.text = scheduler.data!.name!;
+                dosageController.text = scheduler.data!.dosage!;
+                countController.text = scheduler.data!.count.toString();
+                repeatController.text = scheduler.data!.repeatTimes.toString();
+                repeat.value = scheduler.data!.repeatType!;
+                startTime = scheduler.data!.timeFrom!;
+                endTime = scheduler.data!.timeTo!;
+                startDate = scheduler.data!.dayFrom!.toDate();
+                endDate = scheduler.data!.dayTo!.toDate();
                 startTimeController.text = MaterialLocalizations.of(context)
                     .formatTimeOfDay(startTime);
                 endTimeController.text =
@@ -138,7 +138,7 @@ class EditSchedulePlan extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () {
                             ScheduleRepository()
-                                .deleteAll(scheduler.data.schedulerKey);
+                                .deleteAll(scheduler.data!.schedulerKey!);
                             Get.back(
                                 id: Get.find<NavigationState>()
                                     .navigatorId
@@ -161,7 +161,7 @@ class EditSchedulePlan extends StatelessWidget {
                                   endDate,
                                   startTime,
                                   endTime,
-                                  scheduler.data.schedulerKey);
+                                  scheduler.data!.schedulerKey);
                             },
                             child: Text("Edit")),
                       ],
@@ -185,14 +185,14 @@ class EditSchedulePlan extends StatelessWidget {
       DateTime endDate,
       TimeOfDay startTime,
       TimeOfDay endTime,
-      String oldSchedulerKey) async {
-    if (formKey.currentState.validate()) {
+      String? oldSchedulerKey) async {
+    if (formKey.currentState!.validate()) {
       var repeatHours = int.parse(repeatController.text);
       var count = int.parse(countController.text);
       NavigationState nav = Get.find();
       var schedulerKey = Uuid().v4();
       var scheduleRepo = ScheduleRepository();
-      scheduleRepo.deleteAll(oldSchedulerKey);
+      scheduleRepo.deleteAll(oldSchedulerKey!);
 
       var scheduler = SchedulerModel(
           id: schedulerId,

@@ -10,8 +10,8 @@ class ScheduleItem extends StatelessWidget {
   final ScheduleModel model;
 
   const ScheduleItem({
-    Key key,
-    this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   @override
@@ -21,7 +21,7 @@ class ScheduleItem extends StatelessWidget {
       child: Card(
         elevation: 5,
         child: MyExpansionTile(
-          key: Key(model.id),
+          key: Key(model.id!),
           title: ScheduleCardTitle(model: model),
           children: [ScheduleActions(model: model)],
         ),
@@ -32,8 +32,8 @@ class ScheduleItem extends StatelessWidget {
 
 class ScheduleActions extends StatelessWidget {
   const ScheduleActions({
-    Key key,
-    @required this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   final ScheduleModel model;
@@ -64,8 +64,8 @@ class ScheduleActions extends StatelessWidget {
 
 class ScheduleCardTitle extends StatelessWidget {
   const ScheduleCardTitle({
-    Key key,
-    @required this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   final ScheduleModel model;
@@ -95,8 +95,8 @@ class ScheduleCardTitle extends StatelessWidget {
 
 class DosageAndCount extends StatelessWidget {
   const DosageAndCount({
-    Key key,
-    @required this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   final ScheduleModel model;
@@ -104,7 +104,7 @@ class DosageAndCount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      model.dosage + " x " + model.count.toString(),
+      model.dosage! + " x " + model.count.toString(),
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
           color: Theme.of(context).primaryColorDark,
@@ -116,8 +116,8 @@ class DosageAndCount extends StatelessWidget {
 
 class DrugNameTitle extends StatelessWidget {
   const DrugNameTitle({
-    Key key,
-    @required this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   final ScheduleModel model;
@@ -125,7 +125,7 @@ class DrugNameTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      model.name,
+      model.name!,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
           color: Theme.of(context).primaryColor,

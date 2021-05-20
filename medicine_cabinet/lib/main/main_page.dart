@@ -9,17 +9,17 @@ import 'package:medicine_cabinet/profile/login_page.dart';
 import 'package:get/get.dart';
 
 class MainPage extends StatelessWidget {
-  const MainPage({Key key}) : super(key: key);
+  const MainPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Get.put(UserState());
     UserState userState = Get.find<UserState>();
-    return StreamBuilder<User>(
+    return StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, user) {
           print("ACCOUNT: Auth state changed!");
-          return StreamBuilder<UserModel>(
+          return StreamBuilder<UserModel?>(
               stream: UserRepository().getMyUser(),
               builder: (context, userModel) {
                 if (FirebaseAuth.instance.currentUser == null) {
@@ -31,7 +31,7 @@ class MainPage extends StatelessWidget {
                   return LoadingPage();
                 } else {
                   print("ACCOUNT: AUTH");
-                  userState.fromModel(userModel.data);
+                  userState.fromModel(userModel.data!);
                   return TabNavigation();
                 }
               });

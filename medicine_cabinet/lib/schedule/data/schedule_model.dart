@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/firebase/model.dart';
 
 class ScheduleModel extends Model {
-  final String id;
-  final String ownerId;
-  final String schedulerId;
-  final String schedulerKey;
-  final String name;
-  final String dosage;
-  final int count;
-  final Timestamp timestamp;
-  final bool isTaken;
+  final String? id;
+  final String? ownerId;
+  final String? schedulerId;
+  final String? schedulerKey;
+  final String? name;
+  final String? dosage;
+  final int? count;
+  final Timestamp? timestamp;
+  final bool? isTaken;
 
   ScheduleModel(
       {this.id,
@@ -34,7 +34,7 @@ class ScheduleModel extends Model {
         name = snapshot.data()["name"] ?? "",
         dosage = snapshot.data()["dosage"] ?? "",
         count = snapshot.data()["count"] ?? 0,
-        timestamp = snapshot.data()["timestamp"] ?? "",
+        timestamp = snapshot.data()["timestamp"] ?? "" as Timestamp?,
         isTaken = snapshot.data()["is_taken"] ?? false;
 
   @override
@@ -44,33 +44,33 @@ class ScheduleModel extends Model {
         if (schedulerKey != null) "scheduler_key": schedulerKey,
         if (name != null) "name": name,
         if (dosage != null) "dosage": dosage,
-        if (count != null && count >= 0) "count": count,
+        if (count != null && count! >= 0) "count": count,
         if (timestamp != null) "timestamp": timestamp,
         if (isTaken != null) "is_taken": isTaken,
       };
 
   @override
   DateTime getDate() {
-    return timestamp.toDate();
+    return timestamp!.toDate();
   }
 
   @override
-  Widget getDot() {
+  Widget? getDot() {
     return null;
   }
 
   @override
-  Widget getIcon() {
+  Widget? getIcon() {
     return null;
   }
 
   @override
-  int getId() {
+  int? getId() {
     return null;
   }
 
   @override
-  String getTitle() {
+  String? getTitle() {
     return name;
   }
 }

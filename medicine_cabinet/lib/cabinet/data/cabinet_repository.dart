@@ -14,15 +14,15 @@ class CabinetRepository extends Repository<CabinetModel> {
         );
 
   @override
-  Stream<CabinetModel> streamModel(String id) {
+  Stream<CabinetModel> streamModel(String? id) {
     return collection.snapshots().map((snap) => snap.docs
         .where((element) => element.id == id)
-        .map((e) => CabinetModel.fromMap(e))
+        .map((e) => CabinetModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>))
         .first);
   }
 
   @override
-  Future<String> add(CabinetModel model) async {
+  Future<String?> add(CabinetModel model) async {
     DocumentReference cabinet;
 
     model = CabinetModel(name: model.name);
@@ -36,7 +36,7 @@ class CabinetRepository extends Repository<CabinetModel> {
   }
 
   @override
-  void delete(String docId) {
+  void delete(String? docId) {
     collection
         .doc(docId)
         .delete()
@@ -46,7 +46,7 @@ class CabinetRepository extends Repository<CabinetModel> {
     UserCabinetRepository().deleteAll(docId);
   }
 
-  Future<String> addToAuthUser(CabinetModel model) async {
+  Future<String?> addToAuthUser(CabinetModel model) async {
     DocumentReference cabinet;
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;
@@ -64,7 +64,7 @@ class CabinetRepository extends Repository<CabinetModel> {
     return cabinet.id;
   }
 
-  Stream<List<CabinetModel>> streamModels() {
+  Stream<List<CabinetModel>>? streamModels() {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;
     return collection
@@ -72,14 +72,14 @@ class CabinetRepository extends Repository<CabinetModel> {
         .snapshots()
         .map((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => CabinetModel.fromMap(e)).toList();
+        return value.docs.map((e) => CabinetModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>)).toList();
       }
       return [];
     });
   }
 
   Stream<int> cabinetCount() {
-    var myUid = FirebaseAuth.instance.currentUser.uid;
+    var myUid = FirebaseAuth.instance.currentUser!.uid;
     return UserCabinetRepository()
         .collection
         .where("user_id", isEqualTo: myUid)
@@ -91,13 +91,13 @@ class CabinetRepository extends Repository<CabinetModel> {
 
 //TODO
   Stream<List<CabinetModel>> drugCount() {
-    var myUid = FirebaseAuth.instance.currentUser.uid;
+    var myUid = FirebaseAuth.instance.currentUser!.uid;
     return collection
         .where("owner_id", isEqualTo: myUid)
         .snapshots()
         .map((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => CabinetModel.fromMap(e)).toList();
+        return value.docs.map((e) => CabinetModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>)).toList();
       }
       return [];
     });
@@ -105,13 +105,13 @@ class CabinetRepository extends Repository<CabinetModel> {
 
 //TODO
   Stream<List<CabinetModel>> pillCount() {
-    var myUid = FirebaseAuth.instance.currentUser.uid;
+    var myUid = FirebaseAuth.instance.currentUser!.uid;
     return collection
         .where("owner_id", isEqualTo: myUid)
         .snapshots()
         .map((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => CabinetModel.fromMap(e)).toList();
+        return value.docs.map((e) => CabinetModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>)).toList();
       }
       return [];
     });

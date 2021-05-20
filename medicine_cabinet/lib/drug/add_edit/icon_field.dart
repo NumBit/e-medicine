@@ -5,8 +5,8 @@ import 'package:medicine_cabinet/drug/data/selected_icon.dart';
 
 class IconField extends StatelessWidget {
   const IconField({
-    Key key,
-    @required this.icon,
+    Key? key,
+    required this.icon,
   }) : super(key: key);
 
   final SelectedIcon icon;

@@ -7,12 +7,12 @@ import 'package:medicine_cabinet/main/state/user_state.dart';
 
 class UserCabinetTile extends StatelessWidget {
   final UserCabinetModel model;
-  const UserCabinetTile({Key key, this.model}) : super(key: key);
+  const UserCabinetTile({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(model.userEmail),
+      title: Text(model.userEmail!),
       trailing: Tooltip(
         message: "Cancel sharing this cabinet",
         child: InkWell(

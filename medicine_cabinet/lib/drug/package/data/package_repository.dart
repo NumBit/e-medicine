@@ -4,8 +4,8 @@ import 'package:medicine_cabinet/firebase/constants/collections.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 
 class PackageRepository extends Repository<PackageModel> {
-  final String drugId;
-  PackageRepository(String drugId)
+  final String? drugId;
+  PackageRepository(String? drugId)
       : this.drugId = drugId,
         super(
           FirebaseFirestore.instance.collection(Collections.packages),
@@ -17,7 +17,7 @@ class PackageRepository extends Repository<PackageModel> {
         .where("drug_id", isEqualTo: drugId)
         .snapshots()
         .map((snap) => snap.docs.where((element) => element.id == id).map((e) {
-              return PackageModel.fromMap(e);
+              return PackageModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>);
             }).first);
   }
 
@@ -27,17 +27,17 @@ class PackageRepository extends Repository<PackageModel> {
         .snapshots()
         .map((snap) {
       return snap.docs.map((e) {
-        return PackageModel.fromMap(e);
+        return PackageModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>);
       }).toList();
     });
   }
 
   void increase(PackageModel model) {
-    super.update(PackageModel(id: model.id, count: model.count + 1));
+    super.update(PackageModel(id: model.id, count: model.count! + 1));
   }
 
   void decrease(PackageModel model) {
-    super.update(PackageModel(id: model.id, count: model.count - 1));
+    super.update(PackageModel(id: model.id, count: model.count! - 1));
   }
 
   void deleteAllDrugPackages() {

@@ -9,13 +9,13 @@ import 'package:medicine_cabinet/main/state/user_state.dart';
 
 class EditCabinet extends StatelessWidget {
   final CabinetModel model;
-  const EditCabinet({Key key, this.model}) : super(key: key);
+  const EditCabinet({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
     final nameController = TextEditingController();
-    nameController.text = model.name;
+    nameController.text = model.name!;
     return SimpleDialog(
       title: Text("Edit Cabinet"),
       children: [
@@ -27,7 +27,7 @@ class EditCabinet extends StatelessWidget {
                   padding: const EdgeInsets.all(15.0),
                   child: TextFormField(
                       onChanged: (value) {
-                        formKey.currentState.validate();
+                        formKey.currentState?.validate();
                       },
                       maxLength: 40,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -67,7 +67,8 @@ class EditCabinet extends StatelessWidget {
                     ),
                     ElevatedButton(
                         onPressed: () {
-                          if (formKey.currentState.validate()) {
+                          if (formKey.currentState != null &&
+                              formKey.currentState!.validate()) {
                             CabinetRepository().update(CabinetModel(
                                 id: model.id, name: nameController.text));
                             Get.back();

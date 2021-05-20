@@ -71,7 +71,7 @@ class LoginPage extends StatelessWidget {
                 LoginButton(
                   text: "Login",
                   onPressed: () {
-                    if (formKey.currentState.validate()) {
+                    if (formKey.currentState!.validate()) {
                       _login(context, email.text, pass.text);
                     }
                   },

@@ -14,7 +14,7 @@ import 'icon_field.dart';
 
 class EditDrug extends StatelessWidget {
   final DrugModel model;
-  const EditDrug({Key key, this.model}) : super(key: key);
+  const EditDrug({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class EditDrug extends StatelessWidget {
     final descriptionController =
         TextEditingController(text: model.description);
     SelectedIcon icon = Get.put(SelectedIcon());
-    icon.icon.value = deserializeIcon(jsonDecode(model.icon));
+    icon.icon.value = deserializeIcon(jsonDecode(model.icon!));
     UserState userState = Get.find();
     return Container(
       child: Scaffold(
@@ -46,8 +46,8 @@ class EditDrug extends StatelessWidget {
                         label: "Name",
                         helper: "Required",
                         maxLength: 40,
-                        validator: (String value) {
-                          if (value == null || value.isBlank)
+                        validator: (String? value) {
+                          if (value == null || value.isBlank!)
                             return 'Name cannot be empty';
                           return null;
                         }),
@@ -68,7 +68,7 @@ class EditDrug extends StatelessWidget {
                         ElevatedButton(
                             onPressed: () {
                               NavigationState nav = Get.find();
-                              print(Get.key.currentState.bucket.toString());
+                              print(Get.key.currentState!.bucket.toString());
                               Get.offNamedUntil("/", ModalRoute.withName("/"),
                                   id: nav.navigatorId.value);
                               DrugRepository(userState.openCabinetId.value)
@@ -81,14 +81,14 @@ class EditDrug extends StatelessWidget {
                             onPressed: () {
                               NavigationState nav = Get.find();
 
-                              if (formKey.currentState.validate()) {
+                              if (formKey.currentState!.validate()) {
                                 var drug = DrugModel(
                                   id: model.id,
                                   name: nameController.text,
                                   substance: substanceController.text,
                                   description: descriptionController.text,
                                   icon: jsonEncode(
-                                      serializeIcon(icon.icon.value)),
+                                      serializeIcon(icon.icon.value!)),
                                 );
                                 DrugRepository(userState.openCabinetId.value)
                                     .update(drug);

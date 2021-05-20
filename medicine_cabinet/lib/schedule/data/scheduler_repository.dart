@@ -12,15 +12,15 @@ class SchedulerRepository extends Repository<SchedulerModel> {
         );
 
   @override
-  Stream<SchedulerModel> streamModel(String id) {
+  Stream<SchedulerModel> streamModel(String? id) {
     return collection.snapshots().map((snap) => snap.docs
         .where((element) => element.id == id)
-        .map((e) => SchedulerModel.fromMap(e))
+        .map((e) => SchedulerModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>))
         .first);
   }
 
   @override
-  Future<String> add(SchedulerModel model) async {
+  Future<String?> add(SchedulerModel model) async {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;
     DocumentReference cabinet;
@@ -46,7 +46,7 @@ class SchedulerRepository extends Repository<SchedulerModel> {
   }
 
   @override
-  void delete(String docId) {
+  void delete(String? docId) {
     collection
         .doc(docId)
         .delete()
@@ -56,7 +56,7 @@ class SchedulerRepository extends Repository<SchedulerModel> {
     //TODO cleanup UserCabinetRepository().deleteAll(docId);
   }
 
-  Stream<List<SchedulerModel>> streamModels() {
+  Stream<List<SchedulerModel>>? streamModels() {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;
     return collection
@@ -64,7 +64,7 @@ class SchedulerRepository extends Repository<SchedulerModel> {
         .snapshots()
         .map((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => SchedulerModel.fromMap(e)).toList();
+        return value.docs.map((e) => SchedulerModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>)).toList();
       }
       return [];
     });

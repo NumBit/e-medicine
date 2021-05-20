@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:medicine_cabinet/firebase/model.dart';
 
 class UserModel extends Model {
-  final String id;
-  final String userId;
-  final String name;
-  final String email;
-  final String openCabinetId;
+  final String? id;
+  final String? userId;
+  final String? name;
+  final String? email;
+  final String? openCabinetId;
   //final List<String> cabinets;
 
   UserModel({this.id, this.userId, this.name, this.email, this.openCabinetId})

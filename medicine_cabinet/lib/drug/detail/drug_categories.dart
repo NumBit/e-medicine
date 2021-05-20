@@ -4,8 +4,8 @@ import 'category_chip.dart';
 
 class DrugCategories extends StatelessWidget {
   const DrugCategories({
-    Key key,
-    @required this.categories,
+    Key? key,
+    required this.categories,
   }) : super(key: key);
 
   final List<String> categories;

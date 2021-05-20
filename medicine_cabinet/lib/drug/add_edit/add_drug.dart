@@ -13,7 +13,7 @@ import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 
 class AddDrug extends StatelessWidget {
-  const AddDrug({Key key}) : super(key: key);
+  const AddDrug({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +39,8 @@ class AddDrug extends StatelessWidget {
                     label: "Name",
                     helper: "Required",
                     maxLength: 40,
-                    validator: (String value) {
-                      if (value == null || value.isBlank)
+                    validator: (String? value) {
+                      if (value == null || value.isBlank!)
                         return 'Name cannot be empty';
                       return null;
                     }),
@@ -58,7 +58,7 @@ class AddDrug extends StatelessWidget {
                 IconField(icon: icon),
                 ElevatedButton(
                   onPressed: () {
-                    if (formKey.currentState.validate()) {
+                    if (formKey.currentState!.validate()) {
                       NavigationState nav = Get.find();
                       UserState userState = Get.find();
                       var drug = DrugModel(
@@ -67,7 +67,7 @@ class AddDrug extends StatelessWidget {
                         substance: substanceController.text,
                         description: descriptionController.text,
                         createdAt: Timestamp.now(),
-                        icon: jsonEncode(serializeIcon(icon.icon.value)),
+                        icon: jsonEncode(serializeIcon(icon.icon.value!)),
                       );
                       DrugRepository(userState.openCabinetId.value).add(drug);
                       Get.back(id: nav.navigatorId.value);

@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/firebase/model.dart';
 
 class SchedulerModel extends Model {
-  final String id;
-  final String ownerId;
-  final String schedulerKey;
-  final String name;
-  final String dosage;
-  final int count;
-  final String repeatType;
-  final int repeatTimes;
-  final Timestamp dayFrom;
-  final Timestamp dayTo;
-  final TimeOfDay timeFrom;
-  final TimeOfDay timeTo;
+  final String? id;
+  final String? ownerId;
+  final String? schedulerKey;
+  final String? name;
+  final String? dosage;
+  final int? count;
+  final String? repeatType;
+  final int? repeatTimes;
+  final Timestamp? dayFrom;
+  final Timestamp? dayTo;
+  final TimeOfDay? timeFrom;
+  final TimeOfDay? timeTo;
 
   SchedulerModel(
       {this.id,
@@ -40,8 +40,8 @@ class SchedulerModel extends Model {
         count = snapshot.data()["count"] ?? 0,
         repeatType = snapshot.data()["repeat_type"] ?? "",
         repeatTimes = snapshot.data()["repeat_times"] ?? 0,
-        dayFrom = snapshot.data()["dayFrom"] ?? "",
-        dayTo = snapshot.data()["dayTo"] ?? "",
+        dayFrom = snapshot.data()["dayFrom"] ?? "" as Timestamp?,
+        dayTo = snapshot.data()["dayTo"] ?? "" as Timestamp?,
         timeFrom = TimeOfDay(
             hour: snapshot.data()["timeFromH"] ?? 0,
             minute: snapshot.data()["timeFromM"] ?? 0),
@@ -56,14 +56,14 @@ class SchedulerModel extends Model {
         if (name != null) "name": name,
         if (dosage != null) "dosage": dosage,
         if (repeatType != null) "repeat_type": repeatType,
-        if (repeatTimes != null && repeatTimes >= 0)
+        if (repeatTimes != null && repeatTimes! >= 0)
           "repeat_times": repeatTimes,
-        if (count != null && count >= 0) "count": count,
+        if (count != null && count! >= 0) "count": count,
         if (dayFrom != null) "dayFrom": dayFrom,
         if (dayTo != null) "dayTo": dayTo,
-        if (timeFrom != null) "timeFromH": timeFrom.hour,
-        if (timeFrom != null) "timeFromM": timeFrom.minute,
-        if (timeTo != null) "timeToH": timeTo.hour,
-        if (timeTo != null) "timeToM": timeTo.minute,
+        if (timeFrom != null) "timeFromH": timeFrom!.hour,
+        if (timeFrom != null) "timeFromM": timeFrom!.minute,
+        if (timeTo != null) "timeToH": timeTo!.hour,
+        if (timeTo != null) "timeToM": timeTo!.minute,
       };
 }

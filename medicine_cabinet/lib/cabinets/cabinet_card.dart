@@ -14,8 +14,8 @@ import 'package:medicine_cabinet/main/state/user_state.dart';
 class CabinetCard extends StatelessWidget {
   final UserCabinetModel model;
   const CabinetCard({
-    Key key,
-    this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   @override
@@ -23,16 +23,15 @@ class CabinetCard extends StatelessWidget {
     UserState userState = Get.find();
     return StreamBuilder<CabinetModel>(
       stream: CabinetRepository().streamModel(model.cabinetId),
-      initialData: null,
       builder: (context, snapshot) {
         if (snapshot.data == null) return LoadingWidget();
-
+        var cabinet = snapshot.data!;
         return Padding(
           padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
           child: Card(
             elevation: 5,
             child: ExpansionTile(
-              key: ObjectKey(snapshot.data.id),
+              key: ObjectKey(cabinet.id),
               leading: Icon(
                 Icons.medical_services_outlined,
                 color: Theme.of(context).primaryColorDark,
@@ -42,12 +41,12 @@ class CabinetCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      snapshot.data.name,
+                      cabinet.name!,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
-                  if (userState.openCabinetId.value == snapshot.data.id)
+                  if (userState.openCabinetId.value == cabinet.id)
                     Tooltip(
                       message: "Opened cabinet",
                       child: Icon(
@@ -64,7 +63,7 @@ class CabinetCard extends StatelessWidget {
                   children: [
                     TextButton(
                         onPressed: () {
-                          Get.dialog(EditCabinet(model: snapshot.data));
+                          Get.dialog(EditCabinet(model: cabinet));
                         },
                         child: Text(
                           "Edit",
@@ -73,7 +72,7 @@ class CabinetCard extends StatelessWidget {
                         )),
                     TextButton(
                         onPressed: () {
-                          Get.dialog(ShareCabinet(model: snapshot.data));
+                          Get.dialog(ShareCabinet(model: cabinet));
                         },
                         child: Text(
                           "Share",
@@ -83,10 +82,10 @@ class CabinetCard extends StatelessWidget {
                     TextButton(
                         onPressed: () {
                           NavigationState nav = Get.find();
-                          userState.openCabinetId.value = snapshot.data.id;
+                          userState.openCabinetId.value = cabinet.id;
                           UserRepository().update(UserModel(
                             id: userState.id.value,
-                            openCabinetId: snapshot.data.id,
+                            openCabinetId: cabinet.id,
                           ));
                           Get.offAllNamed("/", id: nav.navigatorId.value);
                         },

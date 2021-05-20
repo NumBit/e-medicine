@@ -8,15 +8,15 @@ import 'package:medicine_cabinet/drug/package/data/package_repository.dart';
 class PackageCard extends StatelessWidget {
   final PackageModel model;
   const PackageCard({
-    Key key,
-    this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ExpansionTile(
-        key: Key(model.id),
+        key: Key(model.id!),
         title: PackageCardTitle(model: model),
         children: [
           PackageCardExpanded(model: model),
@@ -28,8 +28,8 @@ class PackageCard extends StatelessWidget {
 
 class PackageCardExpanded extends StatelessWidget {
   const PackageCardExpanded({
-    Key key,
-    @required this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   final PackageModel model;
@@ -96,8 +96,8 @@ class PackageCardExpanded extends StatelessWidget {
 
 class PackageCardTitle extends StatelessWidget {
   const PackageCardTitle({
-    Key key,
-    @required this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   final PackageModel model;
@@ -110,7 +110,7 @@ class PackageCardTitle extends StatelessWidget {
         SizedBox(
           width: 90,
           child: Text(
-            model.dosage,
+            model.dosage!,
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -118,10 +118,10 @@ class PackageCardTitle extends StatelessWidget {
           ),
         ),
         Text(
-          DateFormat('dd.MM.yyyy').format(model.expiration.toDate()),
+          DateFormat('dd.MM.yyyy').format(model.expiration!.toDate()),
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: (model.expiration.millisecondsSinceEpoch >
+            color: (model.expiration!.millisecondsSinceEpoch >
                     Timestamp.now().millisecondsSinceEpoch)
                 ? Theme.of(context).primaryColorDark
                 : Theme.of(context).errorColor,
@@ -144,8 +144,8 @@ class PackageCardTitle extends StatelessWidget {
 
 class DeletePackage extends StatelessWidget {
   const DeletePackage({
-    Key key,
-    @required this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   final PackageModel model;

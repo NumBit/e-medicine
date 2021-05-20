@@ -8,9 +8,9 @@ import 'package:table_calendar/table_calendar.dart';
 import 'data/selected_date.dart';
 
 class WeekCalendar extends StatefulWidget {
-  final List<ScheduleModel> events;
+  final List<ScheduleModel>? events;
   const WeekCalendar({
-    Key key,
+    Key? key,
     this.events,
   }) : super(key: key);
 
@@ -19,9 +19,9 @@ class WeekCalendar extends StatefulWidget {
 }
 
 class _WeekCalendarState extends State<WeekCalendar> {
-  DateTime _selectedDay;
+  DateTime? _selectedDay;
   var _focusedDay = DateTime.now();
-  ValueNotifier<List<ScheduleModel>> _selectedEvents;
+  late ValueNotifier<List<ScheduleModel>> _selectedEvents;
 
   @override
   void initState() {
@@ -37,10 +37,10 @@ class _WeekCalendarState extends State<WeekCalendar> {
     super.dispose();
   }
 
-  List<ScheduleModel> _getEventsForDay(DateTime day) {
-    // Implementation example
+  List<ScheduleModel> _getEventsForDay(DateTime? day) {
     return widget.events
-            .where((element) => getDateOnly(element.timestamp.toDate()) == day)
+            ?.where(
+                (element) => getDateOnly(element.timestamp!.toDate()) == day)
             .toList() ??
         [];
   }
@@ -69,9 +69,9 @@ class _WeekCalendarState extends State<WeekCalendar> {
                 calendarFormat: CalendarFormat.week,
                 availableCalendarFormats: {CalendarFormat.week: 'Week'},
                 rowHeight: 80,
-                eventLoader: (date) => widget.events
+                eventLoader: (date) => widget.events!
                     .where((e) =>
-                        getDateOnly(e.timestamp.toDate()) ==
+                        getDateOnly(e.timestamp!.toDate()) ==
                         DateTime(date.year, date.month, date.day))
                     .toList(),
                 calendarBuilders:

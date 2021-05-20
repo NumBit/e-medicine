@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
+import 'package:medicine_cabinet/error/loading_widget.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
@@ -14,7 +15,7 @@ class ProfilePage extends StatelessWidget {
   final int pills;
 
   const ProfilePage({
-    Key key,
+    Key? key,
     this.drugs = 21,
     this.pills = 190,
   }) : super(key: key);
@@ -81,12 +82,14 @@ class ProfilePage extends StatelessWidget {
             padding: const EdgeInsets.only(top: 20.0),
             child: Column(
               children: [
-                StreamBuilder<UserModel>(
+                StreamBuilder<UserModel?>(
                     stream: UserRepository().getMyUser(),
                     initialData: UserModel(name: ""),
-                    builder: (context, user) {
+                    builder: (context, snapshot) {
+                      if (snapshot.data == null) return LoadingWidget();
+                      var user = snapshot.data!;
                       return Text(
-                        user.data.name,
+                        user.name!,
                         textScaleFactor: 1.5,
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -141,7 +144,7 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-Widget _getColumn(context, String text, int number) {
+Widget _getColumn(context, String text, int? number) {
   return Material(
     elevation: 5,
     color: Colors.white,

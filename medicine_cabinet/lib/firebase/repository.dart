@@ -3,7 +3,7 @@ import 'package:medicine_cabinet/firebase/model.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 
 abstract class Repository<T extends Model> {
-  CollectionReference collection;
+  late CollectionReference collection;
 
   Repository(CollectionReference collection) {
     this.collection = collection;
@@ -11,7 +11,7 @@ abstract class Repository<T extends Model> {
 
   Stream<T> streamModel(String id);
 
-  Future<String> add(T model) {
+  Future<String?> add(T model) {
     return collection
         .add(model.toJson())
         .then((value) => value.id)
@@ -30,7 +30,7 @@ abstract class Repository<T extends Model> {
             (error) => snackBarMessage("Operation failed", "Nothing updated"));
   }
 
-  void delete(String docId) {
+  void delete(String? docId) {
     collection
         .doc(docId)
         .delete()

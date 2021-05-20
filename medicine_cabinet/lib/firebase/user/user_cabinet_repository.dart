@@ -17,10 +17,10 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
   Stream<UserCabinetModel> streamModel(String id) {
     return collection
         .snapshots()
-        .map((snap) => snap.docs.map((e) => UserCabinetModel.fromMap(e)).first);
+        .map((snap) => snap.docs.map((e) => UserCabinetModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>)).first);
   }
 
-  Stream<List<UserCabinetModel>> getMyCabinets() {
+  Stream<List<UserCabinetModel>>? getMyCabinets() {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;
     return collection
@@ -28,25 +28,25 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
         .snapshots()
         .map((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => UserCabinetModel.fromMap(e)).toList();
+        return value.docs.map((e) => UserCabinetModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>)).toList();
       }
       return [];
     });
   }
 
-  Stream<List<UserCabinetModel>> getCabinetUsers(String cabinetId) {
+  Stream<List<UserCabinetModel>> getCabinetUsers(String? cabinetId) {
     return collection
         .where("cabinet_id", isEqualTo: cabinetId)
         .snapshots()
         .map((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => UserCabinetModel.fromMap(e)).toList();
+        return value.docs.map((e) => UserCabinetModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>)).toList();
       }
       return [];
     });
   }
 
-  Future<bool> isCabinetUser(String cabinetId, String userId) async {
+  Future<bool> isCabinetUser(String? cabinetId, String? userId) async {
     var res = await collection
         .where("cabinet_id", isEqualTo: cabinetId)
         .where("user_id", isEqualTo: userId)
@@ -57,7 +57,7 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
     return true;
   }
 
-  Future<bool> addByEmail(String email, String cabinetId) async {
+  Future<bool> addByEmail(String email, String? cabinetId) async {
     var user = await UserRepository().getByEmail(email);
     if (user == null) {
       snackBarMessage("User not found", "Check email format");
@@ -78,7 +78,7 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
     return true;
   }
 
-  void deleteAll(String cabinetId) {
+  void deleteAll(String? cabinetId) {
     collection
         .where("cabinet_id", isEqualTo: cabinetId)
         .snapshots()
@@ -89,16 +89,16 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
     });
   }
 
-  Future<UserCabinetModel> get(String docId) async {
+  Future<UserCabinetModel> get(String? docId) async {
     var res = await collection
         .doc(docId)
         .get()
-        .then((e) => UserCabinetModel.fromMap(e));
+        .then((e) => UserCabinetModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>));
     return res;
   }
 
   @override
-  Future<void> delete(String docId) async {
+  Future<void> delete(String? docId) async {
     var doc = await get(docId);
 
     collection

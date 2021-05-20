@@ -12,7 +12,7 @@ class DrugGridItem extends StatelessWidget {
   final int count = 3;
   final DrugModel model;
 
-  DrugGridItem({Key key, this.model}) : super(key: key);
+  DrugGridItem({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,15 +54,15 @@ class DrugGridItem extends StatelessWidget {
 
 class CardStats extends StatelessWidget {
   const CardStats({
-    Key key,
-    @required this.categories,
-    @required this.count,
+    Key? key,
+    required this.categories,
+    required this.count,
     this.substance,
   }) : super(key: key);
 
   final List<String> categories;
   final int count;
-  final String substance;
+  final String? substance;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class CardStats extends StatelessWidget {
       children: [
         Flexible(
           child: Text(
-            substance,
+            substance!,
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
           ),
@@ -88,8 +88,8 @@ class CardStats extends StatelessWidget {
 
 class CardIcon extends StatelessWidget {
   const CardIcon({
-    Key key,
-    @required this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   final DrugModel model;
@@ -98,7 +98,7 @@ class CardIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Icon(
-        deserializeIcon(jsonDecode(model.icon)),
+        deserializeIcon(jsonDecode(model.icon!)),
         color: Theme.of(context).primaryColorDark,
         size: 50,
       ),
@@ -108,8 +108,8 @@ class CardIcon extends StatelessWidget {
 
 class CardName extends StatelessWidget {
   const CardName({
-    Key key,
-    @required this.model,
+    Key? key,
+    required this.model,
   }) : super(key: key);
 
   final DrugModel model;
@@ -118,7 +118,7 @@ class CardName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flexible(
       child: Text(
-        model.name,
+        model.name!,
         overflow: TextOverflow.ellipsis,
         maxLines: 2,
         textScaleFactor: 1.5,
@@ -148,10 +148,10 @@ class InkWellOverlay extends StatelessWidget {
     this.child,
   });
 
-  final VoidCallback openContainer;
-  final double width;
-  final double height;
-  final Widget child;
+  final VoidCallback? openContainer;
+  final double? width;
+  final double? height;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
