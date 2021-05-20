@@ -63,9 +63,10 @@ class SchedulesList extends StatelessWidget {
     return Expanded(
       child: Container(
         child: Obx(() {
+          var selectedDay = date.date.value;
           var schedulesList = events
               .where((element) =>
-                  getDateOnly(element.timestamp.toDate()) == date.date.value)
+                  getDateOnly(element.timestamp.toDate()) == selectedDay)
               .map((e) => ScheduleItem(model: e))
               .toList();
           schedulesList
