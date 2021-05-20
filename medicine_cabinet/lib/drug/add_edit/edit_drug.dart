@@ -26,7 +26,7 @@ class EditDrug extends StatelessWidget {
     final descriptionController =
         TextEditingController(text: model.description);
     SelectedIcon icon = Get.put(SelectedIcon());
-    icon.icon.value = mapToIconData(jsonDecode(model.icon));
+    icon.icon.value = deserializeIcon(jsonDecode(model.icon));
     UserState userState = Get.find();
     return Container(
       child: Scaffold(
@@ -88,7 +88,7 @@ class EditDrug extends StatelessWidget {
                                   substance: substanceController.text,
                                   description: descriptionController.text,
                                   icon: jsonEncode(
-                                      iconDataToMap(icon.icon.value)),
+                                      serializeIcon(icon.icon.value)),
                                 );
                                 DrugRepository(userState.openCabinetId.value)
                                     .update(drug);

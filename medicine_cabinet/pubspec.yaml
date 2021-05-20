@@ -23,6 +23,8 @@ environment:
 dependencies:
     flutter:
         sdk: flutter
+    
+    animations: ^2.0.0
     cloud_firestore: ^2.2.0
     expandable: ^5.0.1
     firebase_analytics: ^8.1.0

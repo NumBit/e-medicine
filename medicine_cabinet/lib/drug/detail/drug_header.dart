@@ -43,7 +43,7 @@ class DrugHeader extends StatelessWidget {
           ),
           if (drug.icon.isNotEmpty)
             Icon(
-              mapToIconData(jsonDecode(drug.icon)),
+              deserializeIcon(jsonDecode(drug.icon)),
               color: Theme.of(context).primaryColorDark,
               size: 100,
             ),
