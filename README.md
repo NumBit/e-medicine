@@ -1,4 +1,5 @@
 # e-medicine
+[![Flutter](https://github.com/NumBit/e-medicine/actions/workflows/flutter.yml/badge.svg)](https://github.com/NumBit/e-medicine/actions/workflows/flutter.yml)
 
 
 Authors: 
