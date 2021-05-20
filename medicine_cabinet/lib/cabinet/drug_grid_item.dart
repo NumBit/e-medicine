@@ -71,7 +71,7 @@ class CardStats extends StatelessWidget {
       children: [
         Flexible(
           child: Text(
-            substance!,
+            substance ?? "Not set",
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
           ),
@@ -118,7 +118,7 @@ class CardName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flexible(
       child: Text(
-        model.name!,
+        model.name ?? "Not set",
         overflow: TextOverflow.ellipsis,
         maxLines: 2,
         textScaleFactor: 1.5,

@@ -27,6 +27,7 @@ class CabinetsListPage extends StatelessWidget {
           stream: UserCabinetRepository().getMyCabinets(),
           initialData: [],
           builder: (context, cabinets) {
+            if (cabinets.data == null) return ListView();
             return ListView(
                 children: cabinets.data!
                     .map((cab) => CabinetCard(

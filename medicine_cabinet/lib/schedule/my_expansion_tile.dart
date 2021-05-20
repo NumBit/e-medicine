@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -49,9 +47,7 @@ class MyExpansionTile extends StatefulWidget {
     this.expandedCrossAxisAlignment,
     this.expandedAlignment,
     this.childrenPadding,
-  })  : assert(initiallyExpanded != null),
-        assert(maintainState != null),
-        assert(
+  })  : assert(
           expandedCrossAxisAlignment != CrossAxisAlignment.baseline,
           'CrossAxisAlignment.baseline is not supported since the expanded children '
           'are aligned in a column, not a row. Try to use another constant.',
@@ -166,6 +162,7 @@ class _MyExpansionTileState extends State<MyExpansionTile>
   final ColorTween _backgroundColorTween = ColorTween();
 
   late AnimationController _controller;
+  // ignore: unused_field
   Animation<double>? _iconTurns;
   late Animation<double> _heightFactor;
   late Animation<Color?> _borderColor;

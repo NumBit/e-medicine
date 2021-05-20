@@ -16,11 +16,13 @@ class DrugRepository extends Repository<DrugModel> {
 
   @override
   Stream<DrugModel> streamModel(String? id) {
+    if (id == null) return Stream.empty();
     return collection
         .where("cabinet_id", isEqualTo: cabinetId)
         .snapshots()
         .map((snap) => snap.docs.where((element) => element.id == id).map((e) {
-              return DrugModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>);
+              return DrugModel.fromMap(
+                  e as QueryDocumentSnapshot<Map<String, dynamic>>);
             }).first);
   }
 
@@ -30,12 +32,14 @@ class DrugRepository extends Repository<DrugModel> {
         .snapshots()
         .map((snap) {
       return snap.docs
-          .where((element) => DrugModel.fromMap(element as QueryDocumentSnapshot<Map<String, dynamic>>)
+          .where((element) => DrugModel.fromMap(
+                  element as QueryDocumentSnapshot<Map<String, dynamic>>)
               .name!
               .toLowerCase()
               .contains(filter.toLowerCase()))
           .map((e) {
-        return DrugModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>);
+        return DrugModel.fromMap(
+            e as QueryDocumentSnapshot<Map<String, dynamic>>);
       }).toList();
     });
   }
@@ -60,5 +64,13 @@ class DrugRepository extends Repository<DrugModel> {
         .catchError(
             (error) => snackBarMessage("Operation failed", "Nothing removed"));
     PackageRepository(docId).deleteAllDrugPackages();
+  }
+
+  Future<int> count() async {
+    var count = await collection
+        .where("cabinet_id", isEqualTo: cabinetId)
+        .get()
+        .then((value) => value.size);
+    return count;
   }
 }

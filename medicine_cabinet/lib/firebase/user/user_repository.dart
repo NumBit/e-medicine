@@ -12,7 +12,8 @@ class UserRepository extends Repository<UserModel> {
         );
 
   @override
-  Stream<UserModel> streamModel(String id) {
+  Stream<UserModel> streamModel(String? id) {
+    if (id == null) return Stream.empty();
     return collection.snapshots().map((snap) => snap.docs
         .map((e) =>
             UserModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>))
@@ -24,10 +25,10 @@ class UserRepository extends Repository<UserModel> {
         UserModel.fromMap(snap as QueryDocumentSnapshot<Map<String, dynamic>>));
   }
 
-  Stream<UserModel?>? getMyUser() {
+  Stream<UserModel?> getMyUser() {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      return null;
+      return Stream.empty();
     }
     var myUid = user.uid;
     return collection

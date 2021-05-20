@@ -9,7 +9,7 @@ abstract class Repository<T extends Model> {
     this.collection = collection;
   }
 
-  Stream<T> streamModel(String id);
+  Stream<T?> streamModel(String? id);
 
   Future<String?> add(T model) {
     return collection

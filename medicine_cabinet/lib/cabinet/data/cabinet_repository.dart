@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
+import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 import 'package:medicine_cabinet/firebase/constants/collections.dart';
 import 'package:medicine_cabinet/firebase/user/user_cabinet_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_cabinet_repository.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
+import 'package:medicine_cabinet/main/state/user_state.dart';
 
 class CabinetRepository extends Repository<CabinetModel> {
   CabinetRepository()
@@ -17,7 +20,8 @@ class CabinetRepository extends Repository<CabinetModel> {
   Stream<CabinetModel> streamModel(String? id) {
     return collection.snapshots().map((snap) => snap.docs
         .where((element) => element.id == id)
-        .map((e) => CabinetModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>))
+        .map((e) => CabinetModel.fromMap(
+            e as QueryDocumentSnapshot<Map<String, dynamic>>))
         .first);
   }
 
@@ -37,6 +41,7 @@ class CabinetRepository extends Repository<CabinetModel> {
 
   @override
   void delete(String? docId) {
+    if (docId == null) return;
     collection
         .doc(docId)
         .delete()
@@ -64,46 +69,57 @@ class CabinetRepository extends Repository<CabinetModel> {
     return cabinet.id;
   }
 
-  Stream<List<CabinetModel>>? streamModels() {
+  Stream<List<CabinetModel>> streamModels() {
     var user = FirebaseAuth.instance.currentUser;
-    if (user == null) return null;
+    if (user == null) return Stream.empty();
     return collection
         .where("owner_id", isEqualTo: user.uid)
         .snapshots()
         .map((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => CabinetModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>)).toList();
+        return value.docs
+            .map((e) => CabinetModel.fromMap(
+                e as QueryDocumentSnapshot<Map<String, dynamic>>))
+            .toList();
       }
       return [];
     });
   }
 
   Stream<int> cabinetCount() {
-    var myUid = FirebaseAuth.instance.currentUser!.uid;
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) return Stream.empty();
     return UserCabinetRepository()
         .collection
-        .where("user_id", isEqualTo: myUid)
+        .where("user_id", isEqualTo: user.uid)
         .snapshots()
         .map((value) {
       return value.size;
     });
   }
 
-//TODO
-  Stream<List<CabinetModel>> drugCount() {
-    var myUid = FirebaseAuth.instance.currentUser!.uid;
-    return collection
-        .where("owner_id", isEqualTo: myUid)
+  void drugCount() {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+    UserState userState = Get.find();
+    UserCabinetRepository()
+        .collection
+        .where("user_id", isEqualTo: user.uid)
         .snapshots()
-        .map((value) {
-      if (value.size > 0) {
-        return value.docs.map((e) => CabinetModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>)).toList();
-      }
-      return [];
+        .forEach((element) {
+      int count = 0;
+      element = element as QuerySnapshot<Map<String, dynamic>>;
+      element.docs.forEach((e) async {
+        var userCabinet = UserCabinetModel.fromMap(e);
+        print("CabinetId: " + userCabinet.cabinetId!);
+        var tmpCount = await DrugRepository(userCabinet.cabinetId).count();
+        count += tmpCount;
+        print("VAR: " + count.toString());
+        userState.drugsCount.value = count;
+      });
     });
   }
 
-//TODO
   Stream<List<CabinetModel>> pillCount() {
     var myUid = FirebaseAuth.instance.currentUser!.uid;
     return collection
@@ -111,91 +127,14 @@ class CabinetRepository extends Repository<CabinetModel> {
         .snapshots()
         .map((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => CabinetModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>)).toList();
+        return value.docs
+            .map((e) => CabinetModel.fromMap(
+                e as QueryDocumentSnapshot<Map<String, dynamic>>))
+            .toList();
       }
       return [];
     });
   }
 
-/*
-  Future work: cabinet sharring
-
-  Stream<List<OwnerModel>> streamOwners(String cabinetId) {
-    return collection
-        .doc(cabinetId)
-        .collection(Collections.owners)
-        .snapshots()
-        .map((snap) {
-      return snap.docs
-          .map((e) {
-            return OwnerModel.fromMap(e);
-          })
-          .where((element) => !element.isAdmin)
-          .toList();
-    });
-  }
-  
-  */
-/*
-  Future<void> addOwner(String cabinetId, String newOwnerEmail) async {
-    try {
-      var user = await UserRepository(context).getByEmail(newOwnerEmail);
-      if (user == null) {
-        snackBarMessage(context, "User not found");
-        return;
-      }
-      var owner = await getOwner(cabinetId, user.id);
-      if (owner != null) {
-        snackBarMessage(context, "Already added");
-        return;
-      }
-      collection
-          .doc(cabinetId)
-          .collection(Collections.owners)
-          .add({"user_id": user.id, "admin": false, "email": user.email});
-      snackBarMessage(context, "Shared");
-    } catch (error) {
-      snackBarMessage(context, "Something went wrong");
-    }
-  }
-*/
-/*
-  Future<OwnerModel> getOwner(String cabinetId, String userId) {
-    return collection
-        .doc(cabinetId)
-        .collection(Collections.owners)
-        .where("user_id", isEqualTo: userId)
-        .get()
-        .then((value) {
-      if (value.size > 0) {
-        return value.docs.map((e) => OwnerModel.fromMap(e)).toList().first;
-      } else {
-        return null;
-      }
-    }).catchError((error) => null);
-  }
-*/
-/*
-  Future<void> removeOwner(String cabinetId, String ownerId) async {
-    try {
-      var owner = await getOwner(cabinetId, ownerId);
-      if (owner == null) {
-        snackBarMessage(context, "Something went wrong");
-        return;
-      }
-      if (owner.isAdmin) {
-        snackBarMessage(context, "Not authorized");
-        return;
-      }
-      collection
-          .doc(cabinetId)
-          .collection(Collections.owners)
-          .doc(owner.id)
-          .delete();
-      snackBarMessage(context, "Share removed");
-    } catch (error) {
-      snackBarMessage(context, "Something went wrong");
-    }
-  }*/
-
+  //TODO pill count
 }

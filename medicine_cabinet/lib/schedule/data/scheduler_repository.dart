@@ -15,7 +15,8 @@ class SchedulerRepository extends Repository<SchedulerModel> {
   Stream<SchedulerModel> streamModel(String? id) {
     return collection.snapshots().map((snap) => snap.docs
         .where((element) => element.id == id)
-        .map((e) => SchedulerModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>))
+        .map((e) => SchedulerModel.fromMap(
+            e as QueryDocumentSnapshot<Map<String, dynamic>>))
         .first);
   }
 
@@ -64,7 +65,10 @@ class SchedulerRepository extends Repository<SchedulerModel> {
         .snapshots()
         .map((value) {
       if (value.size > 0) {
-        return value.docs.map((e) => SchedulerModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>)).toList();
+        return value.docs
+            .map((e) => SchedulerModel.fromMap(
+                e as QueryDocumentSnapshot<Map<String, dynamic>>))
+            .toList();
       }
       return [];
     });

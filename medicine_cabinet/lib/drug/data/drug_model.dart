@@ -20,7 +20,7 @@ class DrugModel extends Model {
       this.createdAt});
 
   DrugModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : id = snapshot.id ?? "",
+      : id = snapshot.id,
         cabinetId = snapshot.data()["cabinet_id"] ?? "",
         name = snapshot.data()["name"] ?? "",
         substance = snapshot.data()["substance"] ?? "",

@@ -41,7 +41,7 @@ class CabinetCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      cabinet.name!,
+                      cabinet.name ?? "Not set",
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 20),
                     ),
@@ -82,7 +82,7 @@ class CabinetCard extends StatelessWidget {
                     TextButton(
                         onPressed: () {
                           NavigationState nav = Get.find();
-                          userState.openCabinetId.value = cabinet.id;
+                          userState.openCabinetId.value = cabinet.id ?? "";
                           UserRepository().update(UserModel(
                             id: userState.id.value,
                             openCabinetId: cabinet.id,

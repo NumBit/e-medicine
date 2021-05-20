@@ -13,7 +13,7 @@ class UserCabinetModel extends Model {
       : super(id: id);
 
   UserCabinetModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : id = snapshot.id ?? "",
+      : id = snapshot.id,
         userId = snapshot.data()["user_id"] ?? "",
         userEmail = snapshot.data()["user_email"] ?? "",
         cabinetId = snapshot.data()["cabinet_id"] ?? "",

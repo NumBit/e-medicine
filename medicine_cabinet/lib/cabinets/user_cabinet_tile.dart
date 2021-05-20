@@ -12,7 +12,7 @@ class UserCabinetTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(model.userEmail!),
+      title: Text(model.userEmail ?? "Not set"),
       trailing: Tooltip(
         message: "Cancel sharing this cabinet",
         child: InkWell(
