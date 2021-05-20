@@ -32,7 +32,6 @@ dependencies:
   firebase_auth: ^1.0.3
   cloud_firestore: ^1.0.4
   table_calendar: ^3.0.0
-  flutter_calendar_carousel: ^2.0.0
   expandable: ^5.0.1
   flutter_iconpicker: ^3.0.0
   animations: ^2.0.0

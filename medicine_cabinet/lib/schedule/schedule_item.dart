@@ -49,14 +49,14 @@ class ScheduleActions extends StatelessWidget {
                   arguments: model,
                   id: Get.find<NavigationState>().navigatorId.value);
             },
-            child: Text("Edit one")),
+            child: Text("Edit")),
         TextButton(
             onPressed: () {
               Get.toNamed("/edit_schedule_plan",
                   arguments: model.schedulerId,
                   id: Get.find<NavigationState>().navigatorId.value);
             },
-            child: Text("Edit all"))
+            child: Text("Reschedule"))
       ],
     );
   }
