@@ -11,8 +11,6 @@ import 'package:medicine_cabinet/main/menu.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 
-import 'chip_filter.dart';
-
 class CabinetPage extends StatelessWidget {
   const CabinetPage();
 

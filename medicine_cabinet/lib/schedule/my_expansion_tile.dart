@@ -166,6 +166,7 @@ class _MyExpansionTileState extends State<MyExpansionTile>
   final ColorTween _backgroundColorTween = ColorTween();
 
   AnimationController _controller;
+  // ignore: unused_field
   Animation<double> _iconTurns;
   Animation<double> _heightFactor;
   Animation<Color> _borderColor;

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 // import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:medicine_cabinet/firebase/model.dart';
 
@@ -49,28 +48,28 @@ class ScheduleModel extends Model {
         if (isTaken != null) "is_taken": isTaken,
       };
 
-  @override
-  DateTime getDate() {
-    return timestamp.toDate();
-  }
+  // @override
+  // DateTime getDate() {
+  //   return timestamp.toDate();
+  // }
 
-  @override
-  Widget getDot() {
-    return null;
-  }
+  // @override
+  // Widget getDot() {
+  //   return null;
+  // }
 
-  @override
-  Widget getIcon() {
-    return null;
-  }
+  // @override
+  // Widget getIcon() {
+  //   return null;
+  // }
 
-  @override
-  int getId() {
-    return null;
-  }
+  // @override
+  // int getId() {
+  //   return null;
+  // }
 
-  @override
-  String getTitle() {
-    return name;
-  }
+  // @override
+  // String getTitle() {
+  //   return name;
+  // }
 }

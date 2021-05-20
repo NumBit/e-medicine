@@ -8,7 +8,6 @@ import 'package:medicine_cabinet/schedule/create_schedule.dart';
 import 'package:medicine_cabinet/schedule/data/schedule_repository.dart';
 import 'package:medicine_cabinet/schedule/data/scheduler_model.dart';
 import 'package:medicine_cabinet/schedule/data/scheduler_repository.dart';
-import 'package:medicine_cabinet/schedule/repeating.dart';
 import 'package:medicine_cabinet/schedule/schedule_form_fields.dart';
 import 'package:uuid/uuid.dart';
 

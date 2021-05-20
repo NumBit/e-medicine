@@ -7,9 +7,6 @@ import 'package:medicine_cabinet/schedule/data/schedule_model.dart';
 import 'package:medicine_cabinet/schedule/data/schedule_repository.dart';
 import 'package:medicine_cabinet/schedule/schedule_form_fields.dart';
 
-import 'create_schedule.dart';
-import 'data/time_picker_field.dart';
-
 class EditOneSchedule extends StatelessWidget {
   final ScheduleModel model;
   final DateTime date;

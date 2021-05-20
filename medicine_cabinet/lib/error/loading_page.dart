@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:medicine_cabinet/error/loading_widget.dart';
 
 class LoadingPage extends StatelessWidget {
