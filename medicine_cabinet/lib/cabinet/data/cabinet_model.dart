@@ -8,7 +8,7 @@ class CabinetModel extends Model {
 
   CabinetModel({this.id, this.name, this.ownerId}) : super(id: id);
 
-  CabinetModel.fromMap(DocumentSnapshot snapshot)
+  CabinetModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id ?? "",
         name = snapshot.data()["name"] ?? "",
         ownerId = snapshot.data()["owner_id"] ?? "";

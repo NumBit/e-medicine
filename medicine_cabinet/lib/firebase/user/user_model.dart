@@ -12,7 +12,7 @@ class UserModel extends Model {
   UserModel({this.id, this.userId, this.name, this.email, this.openCabinetId})
       : super(id: id);
 
-  UserModel.fromMap(DocumentSnapshot snapshot)
+  UserModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id ?? "",
         userId = snapshot.data()["user_id"] ?? "",
         name = snapshot.data()["name"] ?? "",

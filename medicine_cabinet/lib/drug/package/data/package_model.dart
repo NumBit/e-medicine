@@ -12,7 +12,7 @@ class PackageModel extends Model {
       {this.id, this.drugId, this.dosage, this.expiration, this.count})
       : super(id: id);
 
-  PackageModel.fromMap(DocumentSnapshot snapshot)
+  PackageModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id ?? "",
         drugId = snapshot.data()["drug_id"] ?? "",
         dosage = snapshot.data()["dosage"] ?? "",

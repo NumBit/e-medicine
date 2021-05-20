@@ -30,9 +30,8 @@ class DrugRepository extends Repository<DrugModel> {
         .snapshots()
         .map((snap) {
       return snap.docs
-          .where((element) => element
-              .data()['name']
-              .toString()
+          .where((element) => DrugModel.fromMap(element)
+              .name
               .toLowerCase()
               .contains(filter.toLowerCase()))
           .map((e) {

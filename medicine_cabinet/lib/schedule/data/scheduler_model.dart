@@ -31,7 +31,7 @@ class SchedulerModel extends Model {
       this.timeTo})
       : super(id: id);
 
-  SchedulerModel.fromMap(DocumentSnapshot snapshot)
+  SchedulerModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id ?? "",
         ownerId = snapshot.data()["owner_id"] ?? "",
         schedulerKey = snapshot.data()["scheduler_key"] ?? "",
