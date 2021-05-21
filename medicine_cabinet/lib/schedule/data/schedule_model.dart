@@ -12,6 +12,7 @@ class ScheduleModel extends Model {
   final Timestamp? timestamp;
   final bool? isTaken;
   final bool? notify;
+  final int? notifyId;
 
   ScheduleModel(
       {this.id,
@@ -23,7 +24,8 @@ class ScheduleModel extends Model {
       this.count,
       this.timestamp,
       this.isTaken,
-      this.notify})
+      this.notify,
+      this.notifyId})
       : super(id: id);
 
   ScheduleModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -36,7 +38,8 @@ class ScheduleModel extends Model {
         count = snapshot.data()["count"] ?? 0,
         timestamp = snapshot.data()["timestamp"] ?? "" as Timestamp?,
         isTaken = snapshot.data()["is_taken"] ?? false,
-        notify = snapshot.data()["notify"] ?? false;
+        notify = snapshot.data()["notify"] ?? false,
+        notifyId = snapshot.data()["notify_id"] ?? 0;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -49,5 +52,6 @@ class ScheduleModel extends Model {
         if (timestamp != null) "timestamp": timestamp,
         if (isTaken != null) "is_taken": isTaken,
         if (notify != null) "notify": notify,
+        if (notifyId != null) "notify_id": notifyId,
       };
 }

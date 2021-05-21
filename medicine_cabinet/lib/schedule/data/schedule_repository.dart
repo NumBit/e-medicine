@@ -36,7 +36,8 @@ class ScheduleRepository extends Repository<ScheduleModel> {
         count: model.count,
         timestamp: model.timestamp,
         isTaken: model.isTaken ?? false,
-        notify: model.notify ?? false);
+        notify: model.notify ?? false,
+        notifyId: model.notifyId);
     try {
       cabinet = await collection.add(item.toJson());
     } catch (e) {
