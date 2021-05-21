@@ -27,19 +27,23 @@ class TimePickers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
-        StartTimeField(
-            startTimeController: startTimeController,
-            startTime: startTime,
-            setStartTime: setStartTime),
+        Flexible(
+          child: StartTimeField(
+              startTimeController: startTimeController,
+              startTime: startTime,
+              setStartTime: setStartTime),
+        ),
         Obx(() {
           if (repeat.value != Repeating.XHours) return Container();
-          return EndTimeField(
-              endTimeController: endTimeController,
-              endTime: endTime,
-              setEndTime: setEndTime,
-              startTime: startTime);
+          return Flexible(
+            child: EndTimeField(
+                endTimeController: endTimeController,
+                endTime: endTime,
+                setEndTime: setEndTime,
+                startTime: startTime),
+          );
         }),
       ],
     );
@@ -120,18 +124,22 @@ class DatePickers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
-        StartDateField(
-            startDateController: startDateController,
-            setStartDate: setStartDate),
+        Flexible(
+          child: StartDateField(
+              startDateController: startDateController,
+              setStartDate: setStartDate),
+        ),
         Obx(() {
           if (repeat.value == Repeating.Never) return Container();
-          return EndDateField(
-              endDateController: endDateController,
-              setEndDate: setEndDate,
-              endDate: endDate,
-              startDate: startDate);
+          return Flexible(
+            child: EndDateField(
+                endDateController: endDateController,
+                setEndDate: setEndDate,
+                endDate: endDate,
+                startDate: startDate),
+          );
         }),
       ],
     );

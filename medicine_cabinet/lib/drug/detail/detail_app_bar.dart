@@ -13,7 +13,6 @@ class DetailAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(model);
     return SliverAppBar(
       pinned: true,
       floating: true,
@@ -26,8 +25,6 @@ class DetailAppBar extends StatelessWidget {
           ),
           onPressed: () {
             NavigationState nav = Get.find();
-            print("tap" + model.name!);
-            print(Get.key);
             Get.toNamed(
               "/edit_drug",
               arguments: model,

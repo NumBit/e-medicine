@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
+import 'package:medicine_cabinet/notifications/notifications.dart';
 import 'package:medicine_cabinet/schedule/data/schedule_model.dart';
 import 'package:medicine_cabinet/schedule/data/schedule_repository.dart';
 import 'package:medicine_cabinet/schedule/data/scheduler_model.dart';
@@ -37,6 +38,7 @@ class CreateSchedule extends StatelessWidget {
         TextEditingController(text: DateFormat("dd.MM.yyyy").format(startDate));
 
     var repeat = Repeating.Never.obs;
+    var notification = false.obs;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -48,86 +50,125 @@ class CreateSchedule extends StatelessWidget {
           key: formKey,
           child: Column(
             children: [
-              Column(
-                children: [
-                  DrugNameField(drugNameController: drugNameController),
-                  DosageField(dosageController: dosageController),
-                  CountField(countController: countController),
-                  Divider(
-                    indent: 8,
-                    endIndent: 8,
-                    thickness: 3,
-                  ),
-                  RepeatSelection(
-                      repeat: repeat, repeatController: repeatController),
-                  SizedBox(height: 20),
-                  DatePickers(
-                    startDateController: startDateController,
-                    repeat: repeat,
-                    endDateController: endDateController,
-                    endDate: endDate,
-                    startDate: startDate,
-                    setStartDate: (value) {
-                      if (value != null) {
-                        startDate = value;
-                        startDateController.text =
-                            DateFormat("dd.MM.yyyy").format(value);
-                      }
-                    },
-                    setEndDate: (value) {
-                      if (value != null) {
-                        endDate = value;
-                        endDateController.text =
-                            DateFormat("dd.MM.yyyy").format(value);
-                      }
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TimePickers(
-                    startTimeController: startTimeController,
-                    startTime: startTime,
-                    repeat: repeat,
-                    endTimeController: endTimeController,
-                    endTime: endTime,
-                    setStartTime: (value) {
-                      if (value != null) {
-                        startTime = value;
-                        startTimeController.text =
-                            MaterialLocalizations.of(context)
-                                .formatTimeOfDay(value);
-                      }
-                    },
-                    setEndTime: (value) {
-                      if (value != null) {
-                        endTime = value;
-                        endTimeController.text =
-                            MaterialLocalizations.of(context)
-                                .formatTimeOfDay(value);
-                      }
-                    },
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        createSchedules(
-                            formKey,
-                            repeat,
-                            drugNameController,
-                            countController,
-                            dosageController,
-                            repeatController,
-                            startDate,
-                            endDate,
-                            startTime,
-                            endTime);
-                      },
-                      child: Text("Create")),
-                ],
+              SizedBox(height: 8),
+              DrugNameField(drugNameController: drugNameController),
+              DosageField(dosageController: dosageController),
+              CountField(countController: countController),
+              OptionDivider(),
+              NotificationOption(notification: notification),
+              OptionDivider(),
+              RepeatSelection(
+                  repeat: repeat, repeatController: repeatController),
+              OptionDivider(),
+              DatePickers(
+                startDateController: startDateController,
+                repeat: repeat,
+                endDateController: endDateController,
+                endDate: endDate,
+                startDate: startDate,
+                setStartDate: (value) {
+                  if (value != null) {
+                    startDate = value;
+                    startDateController.text =
+                        DateFormat("dd.MM.yyyy").format(value);
+                  }
+                },
+                setEndDate: (value) {
+                  if (value != null) {
+                    endDate = value;
+                    endDateController.text =
+                        DateFormat("dd.MM.yyyy").format(value);
+                  }
+                },
               ),
+              OptionDivider(),
+              TimePickers(
+                startTimeController: startTimeController,
+                startTime: startTime,
+                repeat: repeat,
+                endTimeController: endTimeController,
+                endTime: endTime,
+                setStartTime: (value) {
+                  if (value != null) {
+                    startTime = value;
+                    startTimeController.text = MaterialLocalizations.of(context)
+                        .formatTimeOfDay(value);
+                  }
+                },
+                setEndTime: (value) {
+                  if (value != null) {
+                    endTime = value;
+                    endTimeController.text = MaterialLocalizations.of(context)
+                        .formatTimeOfDay(value);
+                  }
+                },
+              ),
+              OptionDivider(),
+              ElevatedButton(
+                  onPressed: () {
+                    createSchedules(
+                        formKey,
+                        repeat,
+                        drugNameController,
+                        countController,
+                        dosageController,
+                        repeatController,
+                        startDate,
+                        endDate,
+                        startTime,
+                        endTime);
+                  },
+                  child: Text("Create")),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class OptionDivider extends StatelessWidget {
+  const OptionDivider({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      indent: 8,
+      endIndent: 8,
+      thickness: 1,
+    );
+  }
+}
+
+class NotificationOption extends StatelessWidget {
+  const NotificationOption({
+    Key? key,
+    required this.notification,
+  }) : super(key: key);
+
+  final RxBool notification;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Enable notification",
+            style: TextStyle(
+                fontSize: 16, color: Theme.of(context).primaryColorDark),
+          ),
+          Obx(() => Switch(
+              value: notification.value,
+              activeColor: Theme.of(context).primaryColor,
+              onChanged: (value) {
+                notification.value = value;
+              }))
+        ],
       ),
     );
   }
@@ -272,15 +313,19 @@ void createScheduleXHoursRepeat(
   while (!start.isAfter(endDate)) {
     var startTimeTmp = startTime;
     while (toDouble(startTimeTmp) <= toDouble(endTime)) {
-      print(startTimeTmp.hour);
       scheduleRepo.add(ScheduleModel(
           schedulerId: schedulerId,
           schedulerKey: schedulerKey,
           name: drugNameController.text,
           dosage: dosageController.text,
           count: count,
-          timestamp: Timestamp.fromDate(DateTime(start.year, start.month,
-              start.day, startTimeTmp.hour, startTimeTmp.minute))));
+          timestamp: Timestamp.fromDate(DateTime(
+            start.year,
+            start.month,
+            start.day,
+            startTimeTmp.hour,
+            startTimeTmp.minute,
+          ))));
 
       startTimeTmp = startTimeTmp.hour + repeatHours >= 24
           ? startTimeTmp.replacing(hour: 23, minute: 59)
@@ -308,8 +353,13 @@ void createScheduleXDaysRepeat(
         schedulerKey: schedulerKey,
         name: drugNameController.text,
         count: count,
-        timestamp: Timestamp.fromDate(DateTime(start.year, start.month,
-            start.day, startTime.hour, startTime.minute)),
+        timestamp: Timestamp.fromDate(DateTime(
+          start.year,
+          start.month,
+          start.day,
+          startTime.hour,
+          startTime.minute,
+        )),
         dosage: dosageController.text));
     start = start.add(Duration(days: repeatHours));
   }
@@ -332,8 +382,13 @@ void createScheduleWeekRepeat(
         schedulerKey: schedulerKey,
         name: drugNameController.text,
         count: count,
-        timestamp: Timestamp.fromDate(DateTime(start.year, start.month,
-            start.day, startTime.hour, startTime.minute)),
+        timestamp: Timestamp.fromDate(DateTime(
+          start.year,
+          start.month,
+          start.day,
+          startTime.hour,
+          startTime.minute,
+        )),
         dosage: dosageController.text));
     start = start.add(Duration(days: 7));
   }
@@ -356,30 +411,46 @@ void createScheduleDayRepeat(
         schedulerKey: schedulerKey,
         name: drugNameController.text,
         count: count,
-        timestamp: Timestamp.fromDate(DateTime(start.year, start.month,
-            start.day, startTime.hour, startTime.minute)),
+        timestamp: Timestamp.fromDate(DateTime(
+          start.year,
+          start.month,
+          start.day,
+          startTime.hour,
+          startTime.minute,
+        )),
         dosage: dosageController.text));
     start = start.add(Duration(days: 1));
   }
 }
 
 void createScheduleNoRepeat(
-    ScheduleRepository scheduleRepo,
-    String? schedulerId,
-    String schedulerKey,
-    TextEditingController drugNameController,
-    int count,
-    DateTime startDate,
-    TimeOfDay startTime,
-    TextEditingController dosageController) {
-  scheduleRepo.add(ScheduleModel(
-      schedulerId: schedulerId,
-      schedulerKey: schedulerKey,
-      name: drugNameController.text,
-      count: count,
-      timestamp: Timestamp.fromDate(DateTime(startDate.year, startDate.month,
-          startDate.day, startTime.hour, startTime.minute)),
-      dosage: dosageController.text));
+  ScheduleRepository scheduleRepo,
+  String? schedulerId,
+  String schedulerKey,
+  TextEditingController drugNameController,
+  int count,
+  DateTime startDate,
+  TimeOfDay startTime,
+  TextEditingController dosageController,
+) {
+  var date = DateTime(
+    startDate.year,
+    startDate.month,
+    startDate.day,
+    startTime.hour,
+    startTime.minute,
+  );
+  createNotification(
+      1, "Time to take ${count.toString()}x ${drugNameController.text}.", date);
+  scheduleRepo.add(
+    ScheduleModel(
+        schedulerId: schedulerId,
+        schedulerKey: schedulerKey,
+        name: drugNameController.text,
+        count: count,
+        timestamp: Timestamp.fromDate(date),
+        dosage: dosageController.text),
+  );
 }
 
 double toDouble(TimeOfDay myTime) => myTime.hour + myTime.minute / 60.0;
