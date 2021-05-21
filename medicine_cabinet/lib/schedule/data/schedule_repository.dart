@@ -29,13 +29,14 @@ class ScheduleRepository extends Repository<ScheduleModel> {
     var item = ScheduleModel(
         ownerId: user.uid,
         schedulerId: model
-            .schedulerId, // TODO WARNING, SET THIS IN FRONTEND (id from SchedulerRepo.Add)
+            .schedulerId, // WARNING, SET THIS IN FRONTEND (id from SchedulerRepo.Add)
         schedulerKey: model.schedulerKey,
         name: model.name,
         dosage: model.dosage,
         count: model.count,
         timestamp: model.timestamp,
-        isTaken: model.isTaken ?? false);
+        isTaken: model.isTaken ?? false,
+        notify: model.notify ?? false);
     try {
       cabinet = await collection.add(item.toJson());
     } catch (e) {

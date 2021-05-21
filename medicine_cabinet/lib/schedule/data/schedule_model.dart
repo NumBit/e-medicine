@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:medicine_cabinet/firebase/model.dart';
 
 class ScheduleModel extends Model {
@@ -12,6 +11,7 @@ class ScheduleModel extends Model {
   final int? count;
   final Timestamp? timestamp;
   final bool? isTaken;
+  final bool? notify;
 
   ScheduleModel(
       {this.id,
@@ -22,7 +22,8 @@ class ScheduleModel extends Model {
       this.dosage,
       this.count,
       this.timestamp,
-      this.isTaken})
+      this.isTaken,
+      this.notify})
       : super(id: id);
 
   ScheduleModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -34,7 +35,8 @@ class ScheduleModel extends Model {
         dosage = snapshot.data()["dosage"] ?? "",
         count = snapshot.data()["count"] ?? 0,
         timestamp = snapshot.data()["timestamp"] ?? "" as Timestamp?,
-        isTaken = snapshot.data()["is_taken"] ?? false;
+        isTaken = snapshot.data()["is_taken"] ?? false,
+        notify = snapshot.data()["notify"] ?? false;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -46,30 +48,6 @@ class ScheduleModel extends Model {
         if (count != null && count! >= 0) "count": count,
         if (timestamp != null) "timestamp": timestamp,
         if (isTaken != null) "is_taken": isTaken,
+        if (notify != null) "notify": notify,
       };
-
-  // @override
-  // DateTime getDate() {
-  //   return timestamp.toDate();
-  // }
-
-  // @override
-  // Widget getDot() {
-  //   return null;
-  // }
-
-  // @override
-  // Widget getIcon() {
-  //   return null;
-  // }
-
-  // @override
-  // int getId() {
-  //   return null;
-  // }
-
-  // @override
-  // String getTitle() {
-  //   return name;
-  // }
 }
