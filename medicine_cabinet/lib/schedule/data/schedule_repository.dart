@@ -64,17 +64,27 @@ class ScheduleRepository extends Repository<ScheduleModel> {
     });
   }
 
-  void deleteAll(String schedulerKey) {
-    print("DELETE BY->" + schedulerKey);
+  void deleteAll(String? schedulerKey) {
+    if (schedulerKey == null) return;
     collection
         .where("scheduler_key", isEqualTo: schedulerKey)
         .snapshots()
         .forEach((snap) {
       snap.docs.forEach((e) {
-        print("XY->");
         print(e.id);
         super.delete(e.id);
       });
     });
+  }
+
+  Stream<List<ScheduleModel>> listByKey(String? schedulerKey) {
+    if (schedulerKey == null) return Stream.empty();
+    return collection
+        .where("scheduler_key", isEqualTo: schedulerKey)
+        .snapshots()
+        .map((snap) => snap.docs
+            .map((e) => ScheduleModel.fromMap(
+                e as QueryDocumentSnapshot<Map<String, dynamic>>))
+            .toList());
   }
 }
