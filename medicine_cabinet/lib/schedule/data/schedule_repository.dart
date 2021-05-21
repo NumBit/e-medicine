@@ -77,12 +77,11 @@ class ScheduleRepository extends Repository<ScheduleModel> {
     });
   }
 
-  Stream<List<ScheduleModel>> listByKey(String? schedulerKey) {
-    if (schedulerKey == null) return Stream.empty();
+  Future<List<ScheduleModel>> listByKey(String? schedulerKey) {
     return collection
         .where("scheduler_key", isEqualTo: schedulerKey)
-        .snapshots()
-        .map((snap) => snap.docs
+        .get()
+        .then((snap) => snap.docs
             .map((e) => ScheduleModel.fromMap(
                 e as QueryDocumentSnapshot<Map<String, dynamic>>))
             .toList());
