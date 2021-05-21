@@ -71,4 +71,15 @@ class UserRepository extends Repository<UserModel> {
       });
     });
   }
+
+  Future<int> getNextNotifyId() async {
+    var user = await getMyUser().first;
+    if (user == null) return 0;
+    int counter = user.notifyCounter ?? 0;
+    int res = counter;
+    counter++;
+    if (counter == (2 ^ 32 - 2)) counter = 0;
+    update(UserModel(id: user.id, notifyCounter: counter));
+    return res;
+  }
 }

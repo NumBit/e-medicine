@@ -7,9 +7,16 @@ class UserModel extends Model {
   final String? name;
   final String? email;
   final String? openCabinetId;
+  final int? notifyCounter;
   //final List<String> cabinets;
 
-  UserModel({this.id, this.userId, this.name, this.email, this.openCabinetId})
+  UserModel(
+      {this.id,
+      this.userId,
+      this.name,
+      this.email,
+      this.openCabinetId,
+      this.notifyCounter})
       : super(id: id);
 
   UserModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -17,7 +24,8 @@ class UserModel extends Model {
         userId = snapshot.data()["user_id"] ?? "",
         name = snapshot.data()["name"] ?? "",
         email = snapshot.data()["email"] ?? "",
-        openCabinetId = snapshot.data()["default_cabinet"] ?? "";
+        openCabinetId = snapshot.data()["default_cabinet"] ?? "",
+        notifyCounter = snapshot.data()["notify_counter"] ?? 0;
   //cabinets = snapshot.data()["cabinets"] ?? "";
 
   @override
@@ -26,6 +34,7 @@ class UserModel extends Model {
         if (name != null) "name": name,
         if (email != null) "email": email,
         if (openCabinetId != null) "default_cabinet": openCabinetId,
+        if (notifyCounter != null) "notify_counter": notifyCounter,
         //if (cabinets != null) "cabinets": cabinets,
       };
 }
