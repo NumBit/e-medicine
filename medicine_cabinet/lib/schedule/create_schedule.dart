@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/notifications/notifications.dart';
 import 'package:medicine_cabinet/schedule/data/schedule_model.dart';
@@ -22,20 +22,18 @@ class CreateSchedule extends StatelessWidget {
     final dosageController = TextEditingController(text: "");
     final countController = TextEditingController();
     final repeatController = TextEditingController(text: "0");
-    var startTime = TimeOfDay.now();
-    final startTimeController = TextEditingController(
-        text: MaterialLocalizations.of(context).formatTimeOfDay(startTime));
-    var startDate =
-        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-    final startDateController =
-        TextEditingController(text: DateFormat("dd.MM.yyyy").format(startDate));
-    var endTime = TimeOfDay.now();
-    final endTimeController = TextEditingController(
-        text: MaterialLocalizations.of(context).formatTimeOfDay(endTime));
-    var endDate =
-        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-    final endDateController =
-        TextEditingController(text: DateFormat("dd.MM.yyyy").format(startDate));
+    var startTime = TimeOfDay.now().obs;
+    var startDate = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    ).obs;
+    var endTime = TimeOfDay.now().obs;
+    var endDate = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    ).obs;
 
     var repeat = Repeating.Never.obs;
     var notification = false.obs;
@@ -57,118 +55,40 @@ class CreateSchedule extends StatelessWidget {
               OptionDivider(),
               NotificationOption(notification: notification),
               OptionDivider(),
-              RepeatSelection(
-                  repeat: repeat, repeatController: repeatController),
+              RepeatSelection(repeat: repeat),
               OptionDivider(),
               DatePickers(
-                startDateController: startDateController,
                 repeat: repeat,
-                endDateController: endDateController,
                 endDate: endDate,
                 startDate: startDate,
-                setStartDate: (value) {
-                  if (value != null) {
-                    startDate = value;
-                    startDateController.text =
-                        DateFormat("dd.MM.yyyy").format(value);
-                  }
-                },
-                setEndDate: (value) {
-                  if (value != null) {
-                    endDate = value;
-                    endDateController.text =
-                        DateFormat("dd.MM.yyyy").format(value);
-                  }
-                },
               ),
               OptionDivider(),
               TimePickers(
-                startTimeController: startTimeController,
                 startTime: startTime,
                 repeat: repeat,
-                endTimeController: endTimeController,
                 endTime: endTime,
-                setStartTime: (value) {
-                  if (value != null) {
-                    startTime = value;
-                    startTimeController.text = MaterialLocalizations.of(context)
-                        .formatTimeOfDay(value);
-                  }
-                },
-                setEndTime: (value) {
-                  if (value != null) {
-                    endTime = value;
-                    endTimeController.text = MaterialLocalizations.of(context)
-                        .formatTimeOfDay(value);
-                  }
-                },
               ),
               OptionDivider(),
               ElevatedButton(
                   onPressed: () {
                     createSchedules(
-                        formKey,
-                        repeat,
-                        drugNameController,
-                        countController,
-                        dosageController,
-                        repeatController,
-                        startDate,
-                        endDate,
-                        startTime,
-                        endTime);
+                      formKey,
+                      repeat,
+                      drugNameController,
+                      countController,
+                      dosageController,
+                      repeatController,
+                      startDate.value,
+                      endDate.value,
+                      startTime.value,
+                      endTime.value,
+                      notification.value,
+                    );
                   },
                   child: Text("Create")),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class OptionDivider extends StatelessWidget {
-  const OptionDivider({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Divider(
-      indent: 8,
-      endIndent: 8,
-      thickness: 1,
-    );
-  }
-}
-
-class NotificationOption extends StatelessWidget {
-  const NotificationOption({
-    Key? key,
-    required this.notification,
-  }) : super(key: key);
-
-  final RxBool notification;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "Enable notification",
-            style: TextStyle(
-                fontSize: 16, color: Theme.of(context).primaryColorDark),
-          ),
-          Obx(() => Switch(
-              value: notification.value,
-              activeColor: Theme.of(context).primaryColor,
-              onChanged: (value) {
-                notification.value = value;
-              }))
-        ],
       ),
     );
   }
@@ -185,13 +105,13 @@ void createSchedules(
   DateTime endDate,
   TimeOfDay startTime,
   TimeOfDay endTime,
+  bool notification,
 ) async {
   if (formKey.currentState!.validate()) {
     var repeatHours = int.parse(repeatController.text);
     var count = int.parse(countController.text);
     NavigationState nav = Get.find();
     var schedulerKey = Uuid().v4();
-    var scheduleRepo = ScheduleRepository();
     var schedulerId = await SchedulerRepository().add(SchedulerModel(
         schedulerKey: schedulerKey,
         name: drugNameController.text,
@@ -205,38 +125,39 @@ void createSchedules(
         timeTo: endTime));
 
     createRepeatingSchedules(
-        repeat,
-        scheduleRepo,
-        schedulerId,
-        schedulerKey,
-        drugNameController,
-        count,
-        startDate,
-        startTime,
-        dosageController,
-        endDate,
-        repeatHours,
-        endTime);
+      repeat,
+      schedulerId,
+      schedulerKey,
+      drugNameController,
+      count,
+      startDate,
+      startTime,
+      dosageController,
+      endDate,
+      repeatHours,
+      endTime,
+      notification,
+    );
     Get.back(id: nav.navigatorId.value);
   }
 }
 
 void createRepeatingSchedules(
-    RxString repeat,
-    ScheduleRepository scheduleRepo,
-    String? schedulerId,
-    String schedulerKey,
-    TextEditingController drugNameController,
-    int count,
-    DateTime startDate,
-    TimeOfDay startTime,
-    TextEditingController dosageController,
-    DateTime endDate,
-    int repeatHours,
-    TimeOfDay endTime) {
+  RxString repeat,
+  String? schedulerId,
+  String schedulerKey,
+  TextEditingController drugNameController,
+  int count,
+  DateTime startDate,
+  TimeOfDay startTime,
+  TextEditingController dosageController,
+  DateTime endDate,
+  int repeatHours,
+  TimeOfDay endTime,
+  bool notification,
+) {
   if (repeat.value == Repeating.Never) {
     createScheduleNoRepeat(
-      scheduleRepo,
       schedulerId,
       schedulerKey,
       drugNameController,
@@ -244,88 +165,103 @@ void createRepeatingSchedules(
       startDate,
       startTime,
       dosageController,
+      notification,
     );
   } else if (repeat.value == Repeating.Day) {
     createScheduleDayRepeat(
       startDate,
       endDate,
-      scheduleRepo,
       schedulerId,
       schedulerKey,
       drugNameController,
       count,
       startTime,
       dosageController,
+      notification,
     );
   } else if (repeat.value == Repeating.Week) {
     createScheduleWeekRepeat(
       startDate,
       endDate,
-      scheduleRepo,
       schedulerId,
       schedulerKey,
       drugNameController,
       count,
       startTime,
       dosageController,
+      notification,
     );
   } else if (repeat.value == Repeating.XDays) {
     createScheduleXDaysRepeat(
-        startDate,
-        endDate,
-        scheduleRepo,
-        schedulerId,
-        schedulerKey,
-        drugNameController,
-        count,
-        startTime,
-        dosageController,
-        repeatHours);
+      startDate,
+      endDate,
+      schedulerId,
+      schedulerKey,
+      drugNameController,
+      count,
+      startTime,
+      dosageController,
+      repeatHours,
+      notification,
+    );
   } else if (repeat.value == Repeating.XHours) {
     createScheduleXHoursRepeat(
-        startDate,
-        endDate,
-        startTime,
-        endTime,
-        scheduleRepo,
-        schedulerId,
-        schedulerKey,
-        drugNameController,
-        count,
-        dosageController,
-        repeatHours);
+      startDate,
+      endDate,
+      startTime,
+      endTime,
+      schedulerId,
+      schedulerKey,
+      drugNameController,
+      count,
+      dosageController,
+      repeatHours,
+      notification,
+    );
   }
 }
 
 void createScheduleXHoursRepeat(
-    DateTime startDate,
-    DateTime endDate,
-    TimeOfDay startTime,
-    TimeOfDay endTime,
-    ScheduleRepository scheduleRepo,
-    String? schedulerId,
-    String schedulerKey,
-    TextEditingController drugNameController,
-    int count,
-    TextEditingController dosageController,
-    int repeatHours) {
+  DateTime startDate,
+  DateTime endDate,
+  TimeOfDay startTime,
+  TimeOfDay endTime,
+  String? schedulerId,
+  String schedulerKey,
+  TextEditingController drugNameController,
+  int count,
+  TextEditingController dosageController,
+  int repeatHours,
+  bool notification,
+) async {
   var start = startDate;
   while (!start.isAfter(endDate)) {
     var startTimeTmp = startTime;
     while (toDouble(startTimeTmp) <= toDouble(endTime)) {
-      scheduleRepo.add(ScheduleModel(
-          schedulerId: schedulerId,
-          schedulerKey: schedulerKey,
-          name: drugNameController.text,
-          dosage: dosageController.text,
-          count: count,
-          timestamp: Timestamp.fromDate(DateTime(
-            start.year,
-            start.month,
-            start.day,
-            startTimeTmp.hour,
-            startTimeTmp.minute,
-          ))));
+      var date = DateTime(
+        start.year,
+        start.month,
+        start.day,
+        startTimeTmp.hour,
+        startTimeTmp.minute,
+      );
+      var notificationId = await UserRepository().getNextNotifyId();
+      if (notification)
+        createNotification(
+          notificationId,
+          "Time to take ${count.toString()}x ${drugNameController.text}.",
+          date,
+        );
+      ScheduleRepository().add(ScheduleModel(
+        schedulerId: schedulerId,
+        schedulerKey: schedulerKey,
+        name: drugNameController.text,
+        dosage: dosageController.text,
+        count: count,
+        timestamp: Timestamp.fromDate(date),
+        notify: notification,
+        notifyId: notificationId,
+      ));
 
       startTimeTmp = startTimeTmp.hour + repeatHours >= 24
           ? startTimeTmp.replacing(hour: 23, minute: 59)
@@ -336,95 +272,130 @@ void createScheduleXHoursRepeat(
 }
 
 void createScheduleXDaysRepeat(
-    DateTime startDate,
-    DateTime endDate,
-    ScheduleRepository scheduleRepo,
-    String? schedulerId,
-    String schedulerKey,
-    TextEditingController drugNameController,
-    int count,
-    TimeOfDay startTime,
-    TextEditingController dosageController,
-    int repeatHours) {
+  DateTime startDate,
+  DateTime endDate,
+  String? schedulerId,
+  String schedulerKey,
+  TextEditingController drugNameController,
+  int count,
+  TimeOfDay startTime,
+  TextEditingController dosageController,
+  int repeatHours,
+  bool notification,
+) async {
   var start = startDate;
+  var date = DateTime(
+    start.year,
+    start.month,
+    start.day,
+    startTime.hour,
+    startTime.minute,
+  );
+  var notificationId = await UserRepository().getNextNotifyId();
+  if (notification)
+    createNotification(
+      notificationId,
+      "Time to take ${count.toString()}x ${drugNameController.text}.",
+      date,
+    );
   while (!start.isAfter(endDate)) {
-    scheduleRepo.add(ScheduleModel(
-        schedulerId: schedulerId,
-        schedulerKey: schedulerKey,
-        name: drugNameController.text,
-        count: count,
-        timestamp: Timestamp.fromDate(DateTime(
-          start.year,
-          start.month,
-          start.day,
-          startTime.hour,
-          startTime.minute,
-        )),
-        dosage: dosageController.text));
+    ScheduleRepository().add(ScheduleModel(
+      schedulerId: schedulerId,
+      schedulerKey: schedulerKey,
+      name: drugNameController.text,
+      count: count,
+      timestamp: Timestamp.fromDate(date),
+      dosage: dosageController.text,
+      notify: notification,
+      notifyId: notificationId,
+    ));
     start = start.add(Duration(days: repeatHours));
   }
 }
 
 void createScheduleWeekRepeat(
-    DateTime startDate,
-    DateTime endDate,
-    ScheduleRepository scheduleRepo,
-    String? schedulerId,
-    String schedulerKey,
-    TextEditingController drugNameController,
-    int count,
-    TimeOfDay startTime,
-    TextEditingController dosageController) {
+  DateTime startDate,
+  DateTime endDate,
+  String? schedulerId,
+  String schedulerKey,
+  TextEditingController drugNameController,
+  int count,
+  TimeOfDay startTime,
+  TextEditingController dosageController,
+  bool notification,
+) async {
   var start = startDate;
   while (!start.isAfter(endDate)) {
-    scheduleRepo.add(ScheduleModel(
-        schedulerId: schedulerId,
-        schedulerKey: schedulerKey,
-        name: drugNameController.text,
-        count: count,
-        timestamp: Timestamp.fromDate(DateTime(
-          start.year,
-          start.month,
-          start.day,
-          startTime.hour,
-          startTime.minute,
-        )),
-        dosage: dosageController.text));
+    var date = DateTime(
+      start.year,
+      start.month,
+      start.day,
+      startTime.hour,
+      startTime.minute,
+    );
+    var notificationId = await UserRepository().getNextNotifyId();
+    if (notification)
+      createNotification(
+        notificationId,
+        "Time to take ${count.toString()}x ${drugNameController.text}.",
+        date,
+      );
+    ScheduleRepository().add(ScheduleModel(
+      schedulerId: schedulerId,
+      schedulerKey: schedulerKey,
+      name: drugNameController.text,
+      count: count,
+      timestamp: Timestamp.fromDate(date),
+      dosage: dosageController.text,
+      notify: notification,
+      notifyId: notificationId,
+    ));
     start = start.add(Duration(days: 7));
   }
 }
 
 void createScheduleDayRepeat(
-    DateTime startDate,
-    DateTime endDate,
-    ScheduleRepository scheduleRepo,
-    String? schedulerId,
-    String schedulerKey,
-    TextEditingController drugNameController,
-    int count,
-    TimeOfDay startTime,
-    TextEditingController dosageController) {
+  DateTime startDate,
+  DateTime endDate,
+  String? schedulerId,
+  String schedulerKey,
+  TextEditingController drugNameController,
+  int count,
+  TimeOfDay startTime,
+  TextEditingController dosageController,
+  bool notification,
+) async {
   var start = startDate;
   while (!start.isAfter(endDate)) {
-    scheduleRepo.add(ScheduleModel(
-        schedulerId: schedulerId,
-        schedulerKey: schedulerKey,
-        name: drugNameController.text,
-        count: count,
-        timestamp: Timestamp.fromDate(DateTime(
-          start.year,
-          start.month,
-          start.day,
-          startTime.hour,
-          startTime.minute,
-        )),
-        dosage: dosageController.text));
+    var date = DateTime(
+      start.year,
+      start.month,
+      start.day,
+      startTime.hour,
+      startTime.minute,
+    );
+    var notificationId = await UserRepository().getNextNotifyId();
+    if (notification)
+      createNotification(
+        notificationId,
+        "Time to take ${count.toString()}x ${drugNameController.text}.",
+        date,
+      );
+    ScheduleRepository().add(ScheduleModel(
+      schedulerId: schedulerId,
+      schedulerKey: schedulerKey,
+      name: drugNameController.text,
+      count: count,
+      timestamp: Timestamp.fromDate(date),
+      dosage: dosageController.text,
+      notify: notification,
+      notifyId: notificationId,
+    ));
     start = start.add(Duration(days: 1));
   }
 }
 
 void createScheduleNoRepeat(
-  ScheduleRepository scheduleRepo,
   String? schedulerId,
   String schedulerKey,
   TextEditingController drugNameController,
@@ -432,7 +403,8 @@ void createScheduleNoRepeat(
   DateTime startDate,
   TimeOfDay startTime,
   TextEditingController dosageController,
-) {
+  bool notification,
+) async {
   var date = DateTime(
     startDate.year,
     startDate.month,
@@ -440,16 +412,24 @@ void createScheduleNoRepeat(
     startTime.hour,
     startTime.minute,
   );
-  createNotification(
-      1, "Time to take ${count.toString()}x ${drugNameController.text}.", date);
-  scheduleRepo.add(
+  var notificationId = await UserRepository().getNextNotifyId();
+  if (notification)
+    createNotification(
+      notificationId,
+      "Time to take ${count.toString()}x ${drugNameController.text}.",
+      date,
+    );
+  ScheduleRepository().add(
     ScheduleModel(
-        schedulerId: schedulerId,
-        schedulerKey: schedulerKey,
-        name: drugNameController.text,
-        count: count,
-        timestamp: Timestamp.fromDate(date),
-        dosage: dosageController.text),
+      schedulerId: schedulerId,
+      schedulerKey: schedulerKey,
+      name: drugNameController.text,
+      count: count,
+      timestamp: Timestamp.fromDate(date),
+      dosage: dosageController.text,
+      notify: notification,
+      notifyId: notificationId,
+    ),
   );
 }
 

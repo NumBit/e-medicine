@@ -1,34 +1,34 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TimePickerField extends StatelessWidget {
   const TimePickerField({
     Key? key,
-    required this.controller,
     this.label,
-    this.onTap,
-    this.time,
+    required this.time,
     this.validator,
   }) : super(key: key);
 
-  final TextEditingController controller;
   final String? label;
-  final Function? onTap;
-  final TimeOfDay? time;
+  final Rx<TimeOfDay> time;
   final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
+    var controller = TextEditingController(text: time.value.format(context));
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
           showTimePicker(
             initialEntryMode: TimePickerEntryMode.dial,
-            initialTime: time!,
+            initialTime: time.value,
             context: context,
-          ).then(onTap as FutureOr Function(TimeOfDay?));
+          ).then((value) {
+            if (value == null) return;
+            time.value = value;
+            controller.text = value.format(context);
+          });
         },
         child: TextFormField(
           enabled: false,

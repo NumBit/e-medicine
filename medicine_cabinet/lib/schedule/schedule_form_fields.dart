@@ -8,41 +8,26 @@ import 'package:medicine_cabinet/schedule/repeating.dart';
 class TimePickers extends StatelessWidget {
   const TimePickers({
     Key? key,
-    required this.startTimeController,
     required this.startTime,
     required this.repeat,
-    required this.endTimeController,
     required this.endTime,
-    required this.setStartTime,
-    required this.setEndTime,
   }) : super(key: key);
 
-  final TextEditingController startTimeController;
-  final TimeOfDay startTime;
+  final Rx<TimeOfDay> startTime;
   final RxString repeat;
-  final TextEditingController endTimeController;
-  final TimeOfDay endTime;
-  final Function setStartTime;
-  final Function setEndTime;
+  final Rx<TimeOfDay> endTime;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Flexible(
-          child: StartTimeField(
-              startTimeController: startTimeController,
-              startTime: startTime,
-              setStartTime: setStartTime),
+          child: StartTimeField(startTime: startTime),
         ),
         Obx(() {
           if (repeat.value != Repeating.XHours) return Container();
           return Flexible(
-            child: EndTimeField(
-                endTimeController: endTimeController,
-                endTime: endTime,
-                setEndTime: setEndTime,
-                startTime: startTime),
+            child: EndTimeField(endTime: endTime, startTime: startTime),
           );
         }),
       ],
@@ -53,26 +38,20 @@ class TimePickers extends StatelessWidget {
 class EndTimeField extends StatelessWidget {
   const EndTimeField({
     Key? key,
-    required this.endTimeController,
     required this.endTime,
-    required this.setEndTime,
     required this.startTime,
   }) : super(key: key);
 
-  final TextEditingController endTimeController;
-  final TimeOfDay endTime;
-  final Function setEndTime;
-  final TimeOfDay startTime;
+  final Rx<TimeOfDay> endTime;
+  final Rx<TimeOfDay> startTime;
 
   @override
   Widget build(BuildContext context) {
     return TimePickerField(
-        controller: endTimeController,
         label: "Last time",
         time: endTime,
-        onTap: setEndTime,
         validator: (value) {
-          if (toDouble(endTime) < toDouble(startTime))
+          if (toDouble(endTime.value) < toDouble(startTime.value))
             return "End time must be after start time";
           return null;
         });
@@ -82,22 +61,16 @@ class EndTimeField extends StatelessWidget {
 class StartTimeField extends StatelessWidget {
   const StartTimeField({
     Key? key,
-    required this.startTimeController,
     required this.startTime,
-    required this.setStartTime,
   }) : super(key: key);
 
-  final TextEditingController startTimeController;
-  final TimeOfDay startTime;
-  final Function setStartTime;
+  final Rx<TimeOfDay> startTime;
 
   @override
   Widget build(BuildContext context) {
     return TimePickerField(
-      controller: startTimeController,
       label: "Time",
       time: startTime,
-      onTap: setStartTime,
     );
   }
 }
@@ -106,21 +79,13 @@ class DatePickers extends StatelessWidget {
   const DatePickers({
     Key? key,
     required this.repeat,
-    required this.startDateController,
-    required this.endDateController,
     required this.startDate,
     required this.endDate,
-    required this.setStartDate,
-    required this.setEndDate,
   }) : super(key: key);
 
   final RxString repeat;
-  final TextEditingController startDateController;
-  final TextEditingController endDateController;
-  final DateTime startDate;
-  final DateTime endDate;
-  final Function setStartDate;
-  final Function setEndDate;
+  final Rx<DateTime> startDate;
+  final Rx<DateTime> endDate;
 
   @override
   Widget build(BuildContext context) {
@@ -128,17 +93,13 @@ class DatePickers extends StatelessWidget {
       children: [
         Flexible(
           child: StartDateField(
-              startDateController: startDateController,
-              setStartDate: setStartDate),
+            date: startDate,
+          ),
         ),
         Obx(() {
           if (repeat.value == Repeating.Never) return Container();
           return Flexible(
-            child: EndDateField(
-                endDateController: endDateController,
-                setEndDate: setEndDate,
-                endDate: endDate,
-                startDate: startDate),
+            child: EndDateField(endDate: endDate, startDate: startDate.value),
           );
         }),
       ],
@@ -149,25 +110,20 @@ class DatePickers extends StatelessWidget {
 class EndDateField extends StatelessWidget {
   const EndDateField({
     Key? key,
-    required this.endDateController,
-    required this.setEndDate,
     required this.endDate,
     required this.startDate,
   }) : super(key: key);
 
-  final TextEditingController endDateController;
-  final Function setEndDate;
-  final DateTime endDate;
+  final Rx<DateTime> endDate;
   final DateTime startDate;
 
   @override
   Widget build(BuildContext context) {
     return DatePickerField(
-      controller: endDateController,
+      date: endDate,
       label: "End Day",
-      onTap: setEndDate,
       validator: (value) {
-        if (endDate.isBefore(startDate))
+        if (endDate.value.isBefore(startDate))
           return "End date must be after start date";
         return null;
       },
@@ -178,19 +134,17 @@ class EndDateField extends StatelessWidget {
 class StartDateField extends StatelessWidget {
   const StartDateField({
     Key? key,
-    required this.startDateController,
-    required this.setStartDate,
+    required this.date,
   }) : super(key: key);
 
-  final TextEditingController startDateController;
-  final Function setStartDate;
+  final Rx<DateTime> date;
 
   @override
   Widget build(BuildContext context) {
     return DatePickerField(
-        controller: startDateController,
-        label: "Starting Day",
-        onTap: setStartDate);
+      date: date,
+      label: "Starting Day",
+    );
   }
 }
 
@@ -198,18 +152,17 @@ class RepeatSelection extends StatelessWidget {
   const RepeatSelection({
     Key? key,
     required this.repeat,
-    required this.repeatController,
   }) : super(key: key);
 
   final RxString repeat;
-  final TextEditingController repeatController;
 
   @override
   Widget build(BuildContext context) {
+    var repeatController = TextEditingController(text: repeat.value);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
+        Flexible(
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: DropdownButtonFormField<String>(
@@ -314,6 +267,53 @@ class DrugNameField extends StatelessWidget {
         if (value == null || value.isBlank!) return "Drug cannot be empty";
         return null;
       },
+    );
+  }
+}
+
+class NotificationOption extends StatelessWidget {
+  const NotificationOption({
+    Key? key,
+    required this.notification,
+  }) : super(key: key);
+
+  final RxBool notification;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Enable notification",
+            style: TextStyle(
+                fontSize: 16, color: Theme.of(context).primaryColorDark),
+          ),
+          Obx(() => Switch(
+              value: notification.value,
+              activeColor: Theme.of(context).primaryColor,
+              onChanged: (value) {
+                notification.value = value;
+              }))
+        ],
+      ),
+    );
+  }
+}
+
+class OptionDivider extends StatelessWidget {
+  const OptionDivider({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      indent: 8,
+      endIndent: 8,
+      thickness: 1,
     );
   }
 }

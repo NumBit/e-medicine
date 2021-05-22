@@ -1,33 +1,36 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class DatePickerField extends StatelessWidget {
   const DatePickerField({
     Key? key,
-    required this.controller,
     this.label,
-    this.onTap,
+    required this.date,
     this.validator,
   }) : super(key: key);
 
-  final TextEditingController controller;
+  final Rx<DateTime> date;
   final String? label;
-  final Function? onTap;
   final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
+    var controller = TextEditingController(
+        text: DateFormat("dd.MM.yyyy").format(date.value));
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
           showDatePicker(
                   context: context,
-                  initialDate: DateTime.now(),
+                  initialDate: date.value,
                   firstDate: DateTime(2000),
                   lastDate: DateTime(2500))
-              .then(onTap as FutureOr Function(DateTime?));
+              .then((value) {
+            if (value == null) return;
+            controller.text = DateFormat("dd.MM.yyyy").format(value);
+          });
         },
         child: TextFormField(
           enabled: false,
