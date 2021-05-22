@@ -36,7 +36,8 @@ class SchedulerRepository extends Repository<SchedulerModel> {
         dayFrom: model.dayFrom,
         dayTo: model.dayTo,
         timeFrom: model.timeFrom,
-        timeTo: model.timeTo);
+        timeTo: model.timeTo,
+        notify: model.notify);
     try {
       cabinet = await collection.add(item.toJson());
     } catch (e) {
@@ -54,12 +55,11 @@ class SchedulerRepository extends Repository<SchedulerModel> {
         .then((value) => print("Operation success."))
         .catchError(
             (error) => snackBarMessage("Operation failed", "Nothing removed"));
-    //TODO cleanup UserCabinetRepository().deleteAll(docId);
   }
 
-  Stream<List<SchedulerModel>>? streamModels() {
+  Stream<List<SchedulerModel>> streamModels() {
     var user = FirebaseAuth.instance.currentUser;
-    if (user == null) return null;
+    if (user == null) return Stream.empty();
     return collection
         .where("owner_id", isEqualTo: user.uid)
         .snapshots()

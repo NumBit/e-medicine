@@ -15,6 +15,7 @@ class SchedulerModel extends Model {
   final Timestamp? dayTo;
   final TimeOfDay? timeFrom;
   final TimeOfDay? timeTo;
+  final bool? notify;
 
   SchedulerModel(
       {this.id,
@@ -28,7 +29,8 @@ class SchedulerModel extends Model {
       this.dayFrom,
       this.dayTo,
       this.timeFrom,
-      this.timeTo})
+      this.timeTo,
+      this.notify})
       : super(id: id);
 
   SchedulerModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -40,14 +42,16 @@ class SchedulerModel extends Model {
         count = snapshot.data()["count"] ?? 0,
         repeatType = snapshot.data()["repeat_type"] ?? "",
         repeatTimes = snapshot.data()["repeat_times"] ?? 0,
+        notify = snapshot.data()["notify"] ?? false,
         dayFrom = snapshot.data()["dayFrom"] ?? "" as Timestamp?,
         dayTo = snapshot.data()["dayTo"] ?? "" as Timestamp?,
         timeFrom = TimeOfDay(
             hour: snapshot.data()["timeFromH"] ?? 0,
             minute: snapshot.data()["timeFromM"] ?? 0),
         timeTo = TimeOfDay(
-            hour: snapshot.data()["timeToH"] ?? 0,
-            minute: snapshot.data()["timeToM"] ?? 0);
+          hour: snapshot.data()["timeToH"] ?? 0,
+          minute: snapshot.data()["timeToM"] ?? 0,
+        );
 
   @override
   Map<String, dynamic> toJson() => {
@@ -65,5 +69,6 @@ class SchedulerModel extends Model {
         if (timeFrom != null) "timeFromM": timeFrom!.minute,
         if (timeTo != null) "timeToH": timeTo!.hour,
         if (timeTo != null) "timeToM": timeTo!.minute,
+        if (notify != null) "notify": notify,
       };
 }
