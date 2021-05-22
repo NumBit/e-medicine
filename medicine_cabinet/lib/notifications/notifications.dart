@@ -3,6 +3,7 @@ import 'package:timezone/timezone.dart' as tz;
 import '../main.dart';
 
 void createNotification(int id, String body, DateTime date) async {
+  if (DateTime.now().isAfter(date)) return;
   await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
       "Time to take your medication",
@@ -22,4 +23,8 @@ void createNotification(int id, String body, DateTime date) async {
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime);
+}
+
+void cancelNotification(int id) async {
+  await flutterLocalNotificationsPlugin.cancel(id);
 }
