@@ -38,6 +38,7 @@ dependencies:
     select_form_field: ^2.0.0
     table_calendar: ^3.0.0
     uuid: ^3.0.4
+    firebase_storage: ^8.1.0
 
 dev_dependencies:
     flutter_test:
