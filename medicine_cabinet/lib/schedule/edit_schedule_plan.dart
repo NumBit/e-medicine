@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:medicine_cabinet/error/loading_widget.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
+import 'package:medicine_cabinet/notifications/notifications.dart';
 import 'package:medicine_cabinet/schedule/create_schedule.dart';
 import 'package:medicine_cabinet/schedule/data/schedule_repository.dart';
 import 'package:medicine_cabinet/schedule/data/scheduler_model.dart';
@@ -24,22 +24,21 @@ class EditSchedulePlan extends StatelessWidget {
     final dosageController = TextEditingController(text: "");
     final countController = TextEditingController();
     final repeatController = TextEditingController();
-    var startTime = TimeOfDay.now();
-    final startTimeController = TextEditingController(
-        text: MaterialLocalizations.of(context).formatTimeOfDay(startTime));
-    var startDate =
-        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-    final startDateController =
-        TextEditingController(text: DateFormat("dd.MM.yyyy").format(startDate));
-    var endTime = TimeOfDay.now();
-    final endTimeController = TextEditingController(
-        text: MaterialLocalizations.of(context).formatTimeOfDay(endTime));
-    var endDate =
-        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-    final endDateController =
-        TextEditingController(text: DateFormat("dd.MM.yyyy").format(startDate));
+    var startTime = TimeOfDay.now().obs;
+    var endTime = TimeOfDay.now().obs;
+    var startDate = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    ).obs;
+    var endDate = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    ).obs;
 
     var repeat = "Never".obs;
+    var notification = false.obs;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -51,93 +50,49 @@ class EditSchedulePlan extends StatelessWidget {
           key: formKey,
           child: StreamBuilder<SchedulerModel>(
               stream: SchedulerRepository().streamModel(schedulerId),
-              builder: (context, scheduler) {
-                if (!scheduler.hasData) return LoadingWidget();
-                drugNameController.text = scheduler.data!.name!;
-                dosageController.text = scheduler.data!.dosage!;
-                countController.text = scheduler.data!.count.toString();
-                repeatController.text = scheduler.data!.repeatTimes.toString();
-                repeat.value = scheduler.data!.repeatType!;
-                startTime = scheduler.data!.timeFrom!;
-                endTime = scheduler.data!.timeTo!;
-                startDate = scheduler.data!.dayFrom!.toDate();
-                endDate = scheduler.data!.dayTo!.toDate();
-                startTimeController.text = MaterialLocalizations.of(context)
-                    .formatTimeOfDay(startTime);
-                endTimeController.text =
-                    MaterialLocalizations.of(context).formatTimeOfDay(endTime);
-                startDateController.text =
-                    DateFormat("dd.MM.yyyy").format(startDate);
-                endDateController.text =
-                    DateFormat("dd.MM.yyyy").format(startDate);
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return LoadingWidget();
+                var scheduler = snapshot.data!;
+                drugNameController.text = scheduler.name!;
+                dosageController.text = scheduler.dosage!;
+                countController.text = scheduler.count.toString();
+                repeatController.text = scheduler.repeatTimes.toString();
+                repeat.value = scheduler.repeatType!;
+                startTime.value = scheduler.timeFrom!;
+                endTime.value = scheduler.timeTo!;
+                startDate.value = scheduler.dayFrom!.toDate();
+                endDate.value = scheduler.dayTo!.toDate();
+                if (scheduler.notify != null)
+                  notification.value = scheduler.notify!;
 
                 return Column(
                   children: [
+                    SizedBox(height: 8),
                     DrugNameField(drugNameController: drugNameController),
                     DosageField(dosageController: dosageController),
                     CountField(countController: countController),
-                    Divider(
-                      indent: 8,
-                      endIndent: 8,
-                      thickness: 3,
-                    ),
-                    RepeatSelection(
-                        repeat: repeat, repeatController: repeatController),
-                    SizedBox(height: 20),
+                    OptionDivider(),
+                    RepeatSelection(repeat: repeat),
+                    OptionDivider(),
                     DatePickers(
-                      startDateController: startDateController,
                       repeat: repeat,
-                      endDateController: endDateController,
                       endDate: endDate,
                       startDate: startDate,
-                      setStartDate: (value) {
-                        if (value != null) {
-                          startDate = value;
-                          startDateController.text =
-                              DateFormat("dd.MM.yyyy").format(value);
-                        }
-                      },
-                      setEndDate: (value) {
-                        if (value != null) {
-                          endDate = value;
-                          endDateController.text =
-                              DateFormat("dd.MM.yyyy").format(value);
-                        }
-                      },
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    OptionDivider(),
                     TimePickers(
-                      startTimeController: startTimeController,
                       startTime: startTime,
                       repeat: repeat,
-                      endTimeController: endTimeController,
                       endTime: endTime,
-                      setStartTime: (value) {
-                        if (value != null) {
-                          startTime = value;
-                          startTimeController.text =
-                              MaterialLocalizations.of(context)
-                                  .formatTimeOfDay(value);
-                        }
-                      },
-                      setEndTime: (value) {
-                        if (value != null) {
-                          endTime = value;
-                          endTimeController.text =
-                              MaterialLocalizations.of(context)
-                                  .formatTimeOfDay(value);
-                        }
-                      },
                     ),
+                    OptionDivider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         ElevatedButton(
                           onPressed: () {
                             ScheduleRepository()
-                                .deleteAll(scheduler.data!.schedulerKey!);
+                                .deleteAll(scheduler.schedulerKey!);
                             Get.back(
                                 id: Get.find<NavigationState>()
                                     .navigatorId
@@ -150,17 +105,19 @@ class EditSchedulePlan extends StatelessWidget {
                         ElevatedButton(
                             onPressed: () {
                               editSchedules(
-                                  formKey,
-                                  repeat,
-                                  drugNameController,
-                                  countController,
-                                  dosageController,
-                                  repeatController,
-                                  startDate,
-                                  endDate,
-                                  startTime,
-                                  endTime,
-                                  scheduler.data!.schedulerKey);
+                                formKey,
+                                repeat,
+                                drugNameController,
+                                countController,
+                                dosageController,
+                                repeatController,
+                                startDate.value,
+                                endDate.value,
+                                startTime.value,
+                                endTime.value,
+                                scheduler.schedulerKey,
+                                notification.value,
+                              );
                             },
                             child: Text("Edit")),
                       ],
@@ -174,23 +131,29 @@ class EditSchedulePlan extends StatelessWidget {
   }
 
   void editSchedules(
-      GlobalKey<FormState> formKey,
-      RxString repeat,
-      TextEditingController drugNameController,
-      TextEditingController countController,
-      TextEditingController dosageController,
-      TextEditingController repeatController,
-      DateTime startDate,
-      DateTime endDate,
-      TimeOfDay startTime,
-      TimeOfDay endTime,
-      String? oldSchedulerKey) async {
+    GlobalKey<FormState> formKey,
+    RxString repeat,
+    TextEditingController drugNameController,
+    TextEditingController countController,
+    TextEditingController dosageController,
+    TextEditingController repeatController,
+    DateTime startDate,
+    DateTime endDate,
+    TimeOfDay startTime,
+    TimeOfDay endTime,
+    String? oldSchedulerKey,
+    bool notification,
+  ) async {
     if (formKey.currentState!.validate()) {
       var repeatHours = int.parse(repeatController.text);
       var count = int.parse(countController.text);
       NavigationState nav = Get.find();
       var schedulerKey = Uuid().v4();
       var scheduleRepo = ScheduleRepository();
+      var schedules = await scheduleRepo.listByKey(oldSchedulerKey);
+      schedules.forEach((element) {
+        if (element.notifyId != null) cancelNotification(element.notifyId!);
+      });
       scheduleRepo.deleteAll(oldSchedulerKey!);
 
       var scheduler = SchedulerModel(
@@ -208,7 +171,6 @@ class EditSchedulePlan extends StatelessWidget {
       SchedulerRepository().update(scheduler);
       createRepeatingSchedules(
           repeat,
-          scheduleRepo,
           schedulerId,
           schedulerKey,
           drugNameController,
@@ -218,7 +180,8 @@ class EditSchedulePlan extends StatelessWidget {
           dosageController,
           endDate,
           repeatHours,
-          endTime);
+          endTime,
+          notification);
       Get.back(id: nav.navigatorId.value);
     }
   }

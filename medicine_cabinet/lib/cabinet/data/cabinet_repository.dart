@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
+import 'package:medicine_cabinet/drug/package/data/package_repository.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 import 'package:medicine_cabinet/firebase/constants/collections.dart';
 import 'package:medicine_cabinet/firebase/user/user_cabinet_model.dart';
@@ -111,28 +112,36 @@ class CabinetRepository extends Repository<CabinetModel> {
       element = element as QuerySnapshot<Map<String, dynamic>>;
       element.docs.forEach((e) async {
         var userCabinet = UserCabinetModel.fromMap(e);
-        print("CabinetId: " + userCabinet.cabinetId!);
         var tmpCount = await DrugRepository(userCabinet.cabinetId).count();
         count += tmpCount;
-        print("VAR: " + count.toString());
         userState.drugsCount.value = count;
       });
     });
   }
 
-  Stream<List<CabinetModel>> pillCount() {
-    var myUid = FirebaseAuth.instance.currentUser!.uid;
-    return collection
-        .where("owner_id", isEqualTo: myUid)
+  void pillCount() {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+    UserState userState = Get.find();
+    userState.pillCount.value = 0;
+    UserCabinetRepository()
+        .collection
+        .where("user_id", isEqualTo: user.uid)
         .snapshots()
-        .map((value) {
-      if (value.size > 0) {
-        return value.docs
-            .map((e) => CabinetModel.fromMap(
-                e as QueryDocumentSnapshot<Map<String, dynamic>>))
-            .toList();
-      }
-      return [];
+        .forEach((element) {
+      int count = 0;
+      element = element as QuerySnapshot<Map<String, dynamic>>;
+      element.docs.forEach((e) async {
+        var userCabinet = UserCabinetModel.fromMap(e);
+        print("CabinetId: " + userCabinet.cabinetId!);
+        DrugRepository(userCabinet.cabinetId).streamModels().forEach((drugs) {
+          drugs.forEach((drug) async {
+            var pills = await PackageRepository(drug.id).countPills();
+            userState.pillCount.value += pills;
+          });
+        });
+        userState.drugsCount.value = count;
+      });
     });
   }
 

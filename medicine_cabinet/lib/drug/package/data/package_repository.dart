@@ -50,4 +50,28 @@ class PackageRepository extends Repository<PackageModel> {
       });
     });
   }
+
+  Future<int> count() async {
+    var count = await collection
+        .where("drug_id", isEqualTo: drugId)
+        .get()
+        .then((value) => value.size);
+    return count;
+  }
+
+  Future<int> countPills() async {
+    var count = await collection
+        .where("drug_id", isEqualTo: drugId)
+        .get()
+        .then((element) {
+      element = element as QuerySnapshot<Map<String, dynamic>>;
+      int pills = 0;
+      element.docs.forEach((e) {
+        var package = PackageModel.fromMap(e);
+        pills += package.count ?? 0;
+      });
+      return pills;
+    });
+    return count;
+  }
 }

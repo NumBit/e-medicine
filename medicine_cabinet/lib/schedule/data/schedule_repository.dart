@@ -29,13 +29,15 @@ class ScheduleRepository extends Repository<ScheduleModel> {
     var item = ScheduleModel(
         ownerId: user.uid,
         schedulerId: model
-            .schedulerId, // TODO WARNING, SET THIS IN FRONTEND (id from SchedulerRepo.Add)
+            .schedulerId, // WARNING, SET THIS IN FRONTEND (id from SchedulerRepo.Add)
         schedulerKey: model.schedulerKey,
         name: model.name,
         dosage: model.dosage,
         count: model.count,
         timestamp: model.timestamp,
-        isTaken: model.isTaken ?? false);
+        isTaken: model.isTaken ?? false,
+        notify: model.notify ?? false,
+        notifyId: model.notifyId);
     try {
       cabinet = await collection.add(item.toJson());
     } catch (e) {
@@ -62,17 +64,26 @@ class ScheduleRepository extends Repository<ScheduleModel> {
     });
   }
 
-  void deleteAll(String schedulerKey) {
-    print("DELETE BY->" + schedulerKey);
+  void deleteAll(String? schedulerKey) {
+    if (schedulerKey == null) return;
     collection
         .where("scheduler_key", isEqualTo: schedulerKey)
         .snapshots()
         .forEach((snap) {
       snap.docs.forEach((e) {
-        print("XY->");
         print(e.id);
         super.delete(e.id);
       });
     });
+  }
+
+  Future<List<ScheduleModel>> listByKey(String? schedulerKey) {
+    return collection
+        .where("scheduler_key", isEqualTo: schedulerKey)
+        .get()
+        .then((snap) => snap.docs
+            .map((e) => ScheduleModel.fromMap(
+                e as QueryDocumentSnapshot<Map<String, dynamic>>))
+            .toList());
   }
 }
