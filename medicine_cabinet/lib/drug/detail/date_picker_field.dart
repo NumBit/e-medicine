@@ -30,6 +30,7 @@ class DatePickerField extends StatelessWidget {
               .then((value) {
             if (value == null) return;
             controller.text = DateFormat("dd.MM.yyyy").format(value);
+            date.value = value;
           });
         },
         child: TextFormField(
