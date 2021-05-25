@@ -15,9 +15,9 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserState userModel = Get.find();
     CabinetRepository().drugCount();
     CabinetRepository().pillCount();
-    UserState userModel = Get.find();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
