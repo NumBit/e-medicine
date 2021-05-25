@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:medicine_cabinet/drug/add_edit/custom_form_field.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
+import 'package:medicine_cabinet/profile/profile_picture.dart';
 
 class EditProfile extends StatelessWidget {
   final String? name;
@@ -11,6 +13,7 @@ class EditProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final picker = ImagePicker();
     final nameController = TextEditingController(text: name);
     final formKey = GlobalKey<FormState>();
     return Container(
@@ -41,6 +44,17 @@ class EditProfile extends StatelessWidget {
                         }
                       },
                       child: Text("Save")),
+                  ElevatedButton(
+                      onPressed: () async {
+                        final pickedFile =
+                            await picker.getImage(source: ImageSource.gallery);
+                        if (pickedFile != null) {
+                          ProfilePicture pic = Get.find();
+                          pic.imagePath.value = pickedFile.path;
+                        }
+                        Get.back();
+                      },
+                      child: Text("Pick user photo"))
                 ],
               )),
         ],

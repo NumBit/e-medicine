@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,12 +11,14 @@ import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 import 'package:medicine_cabinet/profile/edit_profile.dart';
 import 'package:medicine_cabinet/profile/login_button.dart';
+import 'package:medicine_cabinet/profile/profile_picture.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage();
 
   @override
   Widget build(BuildContext context) {
+    var picture = Get.put(ProfilePicture());
     CabinetRepository().drugCount();
     CabinetRepository().pillCount();
     UserState userModel = Get.find();
@@ -67,9 +71,18 @@ class ProfilePage extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(500),
-              child: Image.network(
-                "https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg",
-              ),
+              child: Obx(() {
+                var path = picture.imagePath.value;
+                if (path == "" || !File(path).existsSync())
+                  return Image.asset(
+                    "assets/avatar.png",
+                    fit: BoxFit.cover,
+                  );
+                return Image.file(
+                  File(picture.imagePath.value),
+                  fit: BoxFit.cover,
+                );
+              }),
             ),
             //  asset("assets/avatar.png"),
           ),
