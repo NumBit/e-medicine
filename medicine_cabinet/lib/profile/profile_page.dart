@@ -11,136 +11,134 @@ import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 import 'package:medicine_cabinet/profile/edit_profile.dart';
 import 'package:medicine_cabinet/profile/login_button.dart';
-import 'package:medicine_cabinet/profile/profile_picture.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage();
 
   @override
   Widget build(BuildContext context) {
-    var picture = Get.put(ProfilePicture());
+    // var picture = Get.put(ProfilePicture());
+    UserState userModel = Get.find();
     CabinetRepository().drugCount();
     CabinetRepository().pillCount();
-    UserState userModel = Get.find();
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.edit,
-              color: Theme.of(context).primaryColorDark,
+        appBar: AppBar(
+          elevation: 0,
+          iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.edit,
+                color: Theme.of(context).primaryColorDark,
+              ),
+              onPressed: () {
+                Get.dialog(EditProfile(name: userModel.name.value));
+              },
             ),
-            onPressed: () {
-              Get.dialog(EditProfile(name: userModel.name.value));
-            },
+          ],
+          title: Text(
+            "Profile",
+            style: TextStyle(
+                color: Theme.of(context).primaryColorDark,
+                fontWeight: FontWeight.w400,
+                fontSize: 30),
           ),
-        ],
-        title: Text(
-          "Profile",
-          style: TextStyle(
-              color: Theme.of(context).primaryColorDark,
-              fontWeight: FontWeight.w400,
-              fontSize: 30),
         ),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Container(
-            height: 200,
-            width: 200,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(500),
-              border: Border.all(color: Color(0x66EDB88B)),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xffEDB88B),
-                  offset: Offset(2, 4),
-                  blurRadius: 5.0,
-                  spreadRadius: 1.0,
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(500),
-              child: Obx(() {
-                var path = picture.imagePath.value;
-                if (path == "" || !File(path).existsSync())
-                  return Image.asset(
-                    "assets/avatar.png",
-                    fit: BoxFit.cover,
-                  );
-                return Image.file(
-                  File(picture.imagePath.value),
-                  fit: BoxFit.cover,
-                );
-              }),
-            ),
-            //  asset("assets/avatar.png"),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: Column(
-              children: [
-                StreamBuilder<UserModel?>(
-                    stream: UserRepository().getMyUser(),
-                    initialData: UserModel(name: ""),
-                    builder: (context, snapshot) {
-                      if (snapshot.data == null) return LoadingWidget();
-                      var user = snapshot.data!;
-                      return Text(
-                        user.name!,
-                        textScaleFactor: 1.5,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColorDark),
-                      );
-                    }),
-                Text(
-                  FirebaseAuth.instance.currentUser?.email ?? "No email",
-                  textScaleFactor: 1.2,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                StreamBuilder<int>(
-                    stream: CabinetRepository().cabinetCount(),
-                    initialData: 0,
-                    builder: (context, cabinetsCount) {
-                      return _getColumn(
-                          context, "Cabinets", cabinetsCount.data);
-                    }),
-                Obx(() =>
-                    _getColumn(context, "Drugs", userModel.drugsCount.value)),
-                Obx(() =>
-                    _getColumn(context, "Pills", userModel.pillCount.value)),
-              ],
-            ),
-          ),
-          LoginButton(
-            "Logout",
-            onPressed: () {
-              _signOut();
-              Get.back();
-            },
-          )
-        ],
-      ),
-    );
+        body: StreamBuilder<UserModel?>(
+            stream: UserRepository().getMyUser(),
+            builder: (context, snapshot) {
+              if (snapshot.data == null) return LoadingWidget();
+              var user = snapshot.data!;
+              var path = user.profilePicture;
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    height: 200,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(500),
+                      border: Border.all(color: Color(0x66EDB88B)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xffEDB88B),
+                          offset: Offset(2, 4),
+                          blurRadius: 5.0,
+                          spreadRadius: 1.0,
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(500),
+                      child: (path == null ||
+                              path == "" ||
+                              !File(path).existsSync())
+                          ? Image.asset(
+                              "assets/avatar.png",
+                              fit: BoxFit.cover,
+                            )
+                          : Image.file(
+                              File(path),
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                    //  asset("assets/avatar.png"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          user.name!,
+                          textScaleFactor: 1.5,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColorDark),
+                        ),
+                        Text(
+                          FirebaseAuth.instance.currentUser?.email ??
+                              "No email",
+                          textScaleFactor: 1.2,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        StreamBuilder<int>(
+                            stream: CabinetRepository().cabinetCount(),
+                            initialData: 0,
+                            builder: (context, cabinetsCount) {
+                              return _getColumn(
+                                  context, "Cabinets", cabinetsCount.data);
+                            }),
+                        Obx(() => _getColumn(
+                            context, "Drugs", userModel.drugsCount.value)),
+                        Obx(() => _getColumn(
+                            context, "Pills", userModel.pillCount.value)),
+                      ],
+                    ),
+                  ),
+                  LoginButton(
+                    "Logout",
+                    onPressed: () {
+                      _signOut();
+                      Get.back();
+                    },
+                  )
+                ],
+              );
+            }));
   }
 
   void _signOut() {

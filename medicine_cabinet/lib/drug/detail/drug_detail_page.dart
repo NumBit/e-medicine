@@ -1,12 +1,20 @@
+import 'dart:io';
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
+import 'package:medicine_cabinet/drug/data/drug_photo_model.dart';
+import 'package:medicine_cabinet/drug/data/drug_photo_repository.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/drug/detail/add_package.dart';
 import 'package:medicine_cabinet/drug/detail/description.dart';
 import 'package:medicine_cabinet/drug/detail/detail_app_bar.dart';
 import 'package:medicine_cabinet/drug/detail/packages_list.dart';
+import 'package:medicine_cabinet/error/loading_widget.dart';
+import 'package:medicine_cabinet/firebase/storage/storage.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 import 'drug_header.dart';
 
@@ -24,14 +32,25 @@ class DrugDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserState userState = Get.find();
+    final items = (<Widget>[]).obs;
     return StreamBuilder<DrugModel>(
         stream: DrugRepository(userState.openCabinetId.value).streamModel(id),
         initialData: DrugModel(
-            id: "", description: "", icon: "", substance: "", name: ""),
+          id: "",
+          description: "",
+          icon: "",
+          substance: "",
+          name: "",
+        ),
         builder: (context, snapshot) {
           if (snapshot.data == null)
             return Center(child: Container(child: Text("Please go back")));
           var drug = snapshot.data!;
+          items.value = [];
+          items.add(Container(
+              width: MediaQuery.of(context).size.width,
+              child: DrugHeader(model: drug)));
+          items.add(AddPhoto(items: items));
           return Scaffold(
             backgroundColor: Theme.of(context).primaryColor,
             body: CustomScrollView(
@@ -41,22 +60,22 @@ class DrugDetailPage extends StatelessWidget {
                 ),
                 SliverList(
                     delegate: SliverChildListDelegate([
-                  DrugHeader(model: drug),
+                  Carousel(drugId: drug.id),
                   Description(description: drug.description),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: ElevatedButton(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: Theme.of(context).primaryColorDark),
                             onPressed: () {
                               Get.dialog(AddPackage(drugId: drug.id));
                             },
                             child: Text("Add Package")),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ])),
                 PackagesList(model: drug),
@@ -64,5 +83,139 @@ class DrugDetailPage extends StatelessWidget {
             ),
           );
         });
+  }
+}
+
+class Carousel extends StatelessWidget {
+  const Carousel({
+    Key? key,
+    required this.drugId,
+  }) : super(key: key);
+
+  final String drugId;
+
+  @override
+  Widget build(BuildContext context) {
+    final current = 0.obs;
+    return Container(
+        color: Colors.white,
+        child: StreamBuilder<List<DrugPhotoModel>>(
+            stream: DrugPhotoRepository(drugId).streamModels(),
+            initialData: [],
+            builder: (context, snapshot) {
+              if (snapshot.data == null) return LoadingWidget();
+              final items = snapshot.data!
+                  .map((e) => NetworkImage("") as Widget)
+                  .toList();
+              return Column(children: [
+                CarouselSlider(
+                  items: items,
+                  options: CarouselOptions(
+                    height: 150,
+                    enableInfiniteScroll: false,
+                    viewportFraction: 1,
+                    onPageChanged: (index, reason) => current.value = index,
+                  ),
+                ),
+                CarouselIndicator(items: items, current: current),
+              ]);
+            }));
+  }
+}
+
+class CarouselIndicator extends StatelessWidget {
+  const CarouselIndicator({
+    Key? key,
+    required this.items,
+    required RxInt current,
+  })   : _current = current,
+        super(key: key);
+
+  final List<Widget> items;
+  final RxInt _current;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: items.map((obj) {
+            int index = items.indexOf(obj);
+            return Container(
+              width: 8.0,
+              height: 8.0,
+              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _current.value == index
+                    ? Theme.of(context).primaryColorDark
+                    : Theme.of(context).primaryColorDark.withOpacity(0.4),
+              ),
+            );
+          }).toList(),
+        ));
+  }
+}
+
+class AddPhoto extends StatelessWidget {
+  final RxList<Widget> items;
+  const AddPhoto({Key? key, required this.items}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      width: 70,
+      height: 70,
+      decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.5),
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: Theme.of(context).primaryColorDark,
+            width: 3,
+          )),
+      child: IconButton(
+        icon: Icon(
+          Icons.add_photo_alternate_outlined,
+          size: 35,
+          color: Theme.of(context).primaryColorDark,
+        ),
+        onPressed: () async {
+          var pickedFile =
+              await ImagePicker().getImage(source: ImageSource.gallery);
+          if (pickedFile != null)
+            items.value = [
+              ...items.sublist(0, items.length - 1),
+              InkWell(
+                child: Image.file(File(pickedFile.path)),
+                onTap: () => Get.dialog(Dialog(
+                    child: Stack(
+                  children: [
+                    Container(
+                      width: 50000,
+                      child: Image.file(
+                        File(pickedFile.path),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: IconButton(
+                        icon: Icon(Icons.delete),
+                        color: Colors.red,
+                        onPressed: () {
+                          // TODO: remove
+                        },
+                      ),
+                    )
+                  ],
+                ))),
+              ),
+              AddPhoto(items: items)
+            ];
+        },
+        tooltip: "Add Picture",
+      ),
+    );
   }
 }

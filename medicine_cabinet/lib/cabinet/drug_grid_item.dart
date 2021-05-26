@@ -76,10 +76,6 @@ class CardStats extends StatelessWidget {
             maxLines: 2,
           ),
         ),
-        // Text(
-        //   categories.first,
-        //   textScaleFactor: 1.2,
-        // ),
         getCounterText(count)
       ],
     );

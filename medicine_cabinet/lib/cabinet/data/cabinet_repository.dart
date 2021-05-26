@@ -129,21 +129,16 @@ class CabinetRepository extends Repository<CabinetModel> {
         .where("user_id", isEqualTo: user.uid)
         .snapshots()
         .forEach((element) {
-      int count = 0;
       element = element as QuerySnapshot<Map<String, dynamic>>;
       element.docs.forEach((e) async {
         var userCabinet = UserCabinetModel.fromMap(e);
-        print("CabinetId: " + userCabinet.cabinetId!);
         DrugRepository(userCabinet.cabinetId).streamModels().forEach((drugs) {
           drugs.forEach((drug) async {
             var pills = await PackageRepository(drug.id).countPills();
             userState.pillCount.value += pills;
           });
         });
-        userState.drugsCount.value = count;
       });
     });
   }
-
-  //TODO pill count
 }

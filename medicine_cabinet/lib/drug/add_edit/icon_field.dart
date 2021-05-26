@@ -26,6 +26,7 @@ class IconField extends StatelessWidget {
           TextButton(
               onPressed: () {
                 FlutterIconPicker.showIconPicker(context,
+                        iconPackMode: IconPack.custom,
                         iconColor: Theme.of(context).primaryColorDark)
                     .then((value) {
                   if (value != null) icon.icon.value = value;
