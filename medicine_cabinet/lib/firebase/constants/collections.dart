@@ -1,6 +1,7 @@
 class Collections {
   static final String cabinets = "cabinets";
   static final String drugs = "drugs";
+  static final String drugPhotos = "drug_photos";
   static final String packages = "packages";
   static final String categories = "categories";
   static final String users = "users";
