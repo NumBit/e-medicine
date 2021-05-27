@@ -37,7 +37,6 @@ dependencies:
     get: ^4.1.4
     image_picker: ^0.7.5+2
     intl: ^0.17.0
-    lint: ^1.5.3
     rxdart: ^0.27.0
     select_form_field: ^2.0.0
     table_calendar: ^3.0.0
@@ -46,6 +45,7 @@ dependencies:
 dev_dependencies:
     flutter_test:
         sdk: flutter
+    lint: ^1.5.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
