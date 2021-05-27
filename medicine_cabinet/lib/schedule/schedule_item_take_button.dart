@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:medicine_cabinet/notifications/notifications.dart';
 import 'package:medicine_cabinet/schedule/data/schedule_model.dart';
 import 'package:medicine_cabinet/schedule/data/schedule_repository.dart';
 
@@ -15,9 +16,19 @@ class ScheduleItemTakeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FilterChip(
       selected: model.isTaken!,
-      onSelected: (_) {
+      onSelected: (taken) {
         ScheduleRepository()
-            .update(ScheduleModel(id: model.id, isTaken: !model.isTaken!));
+            .update(ScheduleModel(id: model.id, isTaken: taken));
+        if (model.notify!) {
+          if (taken)
+            cancelNotification(model.notifyId!);
+          else
+            createNotification(
+              model.notifyId!,
+              "Time to take ${model.count}x ${model.name}.",
+              model.timestamp!.toDate(),
+            );
+        }
       },
       elevation: 5,
       selectedColor: Theme.of(context).primaryColor,
@@ -50,17 +61,6 @@ class ScheduleItemTakeButton extends StatelessWidget {
                 ),
               ],
             ),
-            // if (model.isTaken)
-            //   Padding(
-            //     padding: const EdgeInsets.only(left: 8.0),
-            //     child: Icon(
-            //       Icons.check_circle,
-            //       size: 30,
-            //       color: model.isTaken
-            //           ? Theme.of(context).primaryColorDark
-            //           : Colors.white,
-            //     ),
-            //   ),
           ],
         ),
       ),
