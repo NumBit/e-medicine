@@ -72,6 +72,8 @@ class EditSchedulePlan extends StatelessWidget {
                     DosageField(dosageController: dosageController),
                     CountField(countController: countController),
                     OptionDivider(),
+                    NotificationOption(notification: notification),
+                    OptionDivider(),
                     RepeatSelection(repeat: repeat),
                     OptionDivider(),
                     DatePickers(
@@ -157,17 +159,19 @@ class EditSchedulePlan extends StatelessWidget {
       scheduleRepo.deleteAll(oldSchedulerKey!);
 
       var scheduler = SchedulerModel(
-          id: schedulerId,
-          schedulerKey: schedulerKey,
-          repeatTimes: repeatHours,
-          repeatType: repeat.value,
-          name: drugNameController.text,
-          dosage: dosageController.text,
-          count: int.parse(countController.text),
-          dayFrom: Timestamp.fromDate(startDate),
-          dayTo: Timestamp.fromDate(endDate),
-          timeFrom: startTime,
-          timeTo: endTime);
+        id: schedulerId,
+        schedulerKey: schedulerKey,
+        repeatTimes: repeatHours,
+        repeatType: repeat.value,
+        name: drugNameController.text,
+        dosage: dosageController.text,
+        count: int.parse(countController.text),
+        dayFrom: Timestamp.fromDate(startDate),
+        dayTo: Timestamp.fromDate(endDate),
+        timeFrom: startTime,
+        timeTo: endTime,
+        notify: notification,
+      );
       SchedulerRepository().update(scheduler);
       createRepeatingSchedules(
           repeat,

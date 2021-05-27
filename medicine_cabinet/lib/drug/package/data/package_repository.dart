@@ -59,6 +59,22 @@ class PackageRepository extends Repository<PackageModel> {
     return count;
   }
 
+  Stream<int> countPillsStream() {
+    var count = collection
+        .where("drug_id", isEqualTo: drugId)
+        .snapshots()
+        .map((element) {
+      element = element as QuerySnapshot<Map<String, dynamic>>;
+      int pills = 0;
+      element.docs.forEach((e) {
+        var package = PackageModel.fromMap(e);
+        pills += package.count ?? 0;
+      });
+      return pills;
+    });
+    return count;
+  }
+
   Future<int> countPills() async {
     var count = await collection
         .where("drug_id", isEqualTo: drugId)

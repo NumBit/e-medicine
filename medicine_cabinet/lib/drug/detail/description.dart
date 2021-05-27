@@ -63,7 +63,7 @@ class _DescriptionState extends State<Description> {
                     ),
                     Text(
                       widget.description!,
-                      maxLines: 5,
+                      maxLines: 8,
                       overflow: TextOverflow.fade,
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),

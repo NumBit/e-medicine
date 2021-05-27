@@ -5,6 +5,7 @@ import 'package:medicine_cabinet/firebase/repository.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 
 import 'drug_model.dart';
+import 'drug_photo_repository.dart';
 
 class DrugRepository extends Repository<DrugModel> {
   final String? cabinetId;
@@ -29,6 +30,7 @@ class DrugRepository extends Repository<DrugModel> {
   Stream<List<DrugModel>> streamModels({String filter = ""}) {
     return collection
         .where("cabinet_id", isEqualTo: cabinetId)
+        .orderBy("created_at")
         .snapshots()
         .map((snap) {
       return snap.docs
@@ -44,6 +46,17 @@ class DrugRepository extends Repository<DrugModel> {
     });
   }
 
+  void delete(String? docId) {
+    collection
+        .doc(docId)
+        .delete()
+        .then((value) => print("Operation success."))
+        .catchError(
+            (error) => snackBarMessage("Operation failed", "Nothing removed"));
+    PackageRepository(docId).deleteAllDrugPackages();
+    DrugPhotoRepository(docId).deleteAllDrugPhotos();
+  }
+
   void deleteAllDrugsInCabinet() {
     collection
         .where("cabinet_id", isEqualTo: cabinetId)
@@ -54,16 +67,6 @@ class DrugRepository extends Repository<DrugModel> {
         PackageRepository(e.id).deleteAllDrugPackages();
       });
     });
-  }
-
-  void delete(String? docId) {
-    collection
-        .doc(docId)
-        .delete()
-        .then((value) => print("Operation success."))
-        .catchError(
-            (error) => snackBarMessage("Operation failed", "Nothing removed"));
-    PackageRepository(docId).deleteAllDrugPackages();
   }
 
   Future<int> count() async {

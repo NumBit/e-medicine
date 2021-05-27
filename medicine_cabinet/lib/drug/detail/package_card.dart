@@ -43,13 +43,13 @@ class PackageCardExpanded extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               InkWell(
-                onTap: () {
-                  PackageRepository(model.drugId).increase(model);
-                },
                 borderRadius: BorderRadius.circular(50),
+                onTap: () {
+                  PackageRepository(model.drugId).decrease(model);
+                },
                 child: Icon(
-                  Icons.add,
-                  color: Theme.of(context).errorColor,
+                  Icons.remove,
+                  color: Theme.of(context).primaryColorDark,
                   size: 50,
                 ),
               ),
@@ -62,13 +62,13 @@ class PackageCardExpanded extends StatelessWidget {
                 ),
               ),
               InkWell(
-                borderRadius: BorderRadius.circular(50),
                 onTap: () {
-                  PackageRepository(model.drugId).decrease(model);
+                  PackageRepository(model.drugId).increase(model);
                 },
+                borderRadius: BorderRadius.circular(50),
                 child: Icon(
-                  Icons.remove,
-                  color: Theme.of(context).primaryColorDark,
+                  Icons.add,
+                  color: Theme.of(context).errorColor,
                   size: 50,
                 ),
               ),

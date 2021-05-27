@@ -19,6 +19,13 @@ class UserCabinetModel extends Model {
         cabinetId = snapshot.data()["cabinet_id"] ?? "",
         admin = snapshot.data()["admin"] ?? false;
 
+  UserCabinetModel.fromJson(Map<String, dynamic> data)
+      : id = data["id"] ?? "",
+        userId = data["user_id"] ?? "",
+        userEmail = data["user_email"] ?? "",
+        cabinetId = data["cabinet_id"] ?? "",
+        admin = data["admin"] ?? false;
+
   @override
   Map<String, dynamic> toJson() => {
         if (userId != null) "user_id": userId,
