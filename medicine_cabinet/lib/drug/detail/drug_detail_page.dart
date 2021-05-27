@@ -127,9 +127,8 @@ class Carousel extends StatelessWidget {
                                   ),
                                   onPressed: () async {
                                     Get.back();
-                                    await Storage().deleteFile(e.path!);
-                                    DrugPhotoRepository(e.drugId)
-                                        .delete(e.path!);
+                                    await Storage().deleteFile(e.path);
+                                    DrugPhotoRepository(e.drugId).delete(e.id);
                                   },
                                 ))
                           ],

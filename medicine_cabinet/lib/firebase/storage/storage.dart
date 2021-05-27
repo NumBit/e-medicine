@@ -26,8 +26,7 @@ class Storage {
           .ref(filePath)
           .getDownloadURL();
     } on firebase_core.FirebaseException catch (e) {
-      snackBarMessage("Download failed", "Please try again later");
-      print("Download failed: " + e.toString());
+      print("Getting link failed: " + e.toString());
       return "https://firebasestorage.googleapis.com/v0/b/e-medicine-3338c.appspot.com/o/empty.jpg?alt=media&token=53f714f3-ebe5-4146-bd07-d0f47a30fcba";
     }
     return ref;
@@ -47,7 +46,8 @@ class Storage {
     return true;
   }
 
-  Future<bool> deleteFile(String filePath) async {
+  Future<bool> deleteFile(String? filePath) async {
+    if (filePath == null) return false;
     try {
       await firebase_storage.FirebaseStorage.instance.ref(filePath).delete();
     } on firebase_core.FirebaseException catch (e) {

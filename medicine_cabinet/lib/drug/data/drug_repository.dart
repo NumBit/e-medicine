@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:medicine_cabinet/drug/data/drug_photo_model.dart';
 import 'package:medicine_cabinet/drug/package/data/package_repository.dart';
 import 'package:medicine_cabinet/firebase/constants/collections.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
