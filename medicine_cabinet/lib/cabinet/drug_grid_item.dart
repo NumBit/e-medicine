@@ -10,6 +10,7 @@ import 'package:medicine_cabinet/drug/detail/drug_detail_page.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/error/loading_widget.dart';
 import 'package:medicine_cabinet/firebase/storage/storage.dart';
+import 'package:medicine_cabinet/drug/package/data/package_repository.dart';
 
 class DrugGridItem extends StatelessWidget {
   final List<String> categories = ["Fever"];
@@ -38,11 +39,7 @@ class DrugGridItem extends StatelessWidget {
                 children: [
                   CardIcon(model: model),
                   CardName(model: model),
-                  CardStats(
-                    categories: categories,
-                    count: count,
-                    substance: model.substance,
-                  ),
+                  CardStats(model: model),
                 ],
               ),
             ),
@@ -59,14 +56,10 @@ class DrugGridItem extends StatelessWidget {
 class CardStats extends StatelessWidget {
   const CardStats({
     Key? key,
-    required this.categories,
-    required this.count,
-    this.substance,
+    required this.model,
   }) : super(key: key);
 
-  final List<String> categories;
-  final int count;
-  final String? substance;
+  final DrugModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -75,12 +68,20 @@ class CardStats extends StatelessWidget {
       children: [
         Flexible(
           child: Text(
-            substance ?? "Not set",
+            model.substance ?? "Not set",
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
           ),
         ),
-        getCounterText(count)
+        // Text(
+        //   categories.first,
+        //   textScaleFactor: 1.2,
+        // ),
+        StreamBuilder<int>(
+            stream: PackageRepository(model.id).countPillsStream(),
+            builder: (context, snapshot) {
+              return getCounterText(snapshot.data ?? 0);
+            })
       ],
     );
   }
