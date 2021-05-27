@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:medicine_cabinet/drug/package/data/package_repository.dart';
 import 'package:medicine_cabinet/firebase/constants/collections.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
-import 'package:medicine_cabinet/main/snack_bar_message.dart';
 
 import 'drug_photo_model.dart';
 
