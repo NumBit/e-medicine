@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,7 +33,6 @@ class DrugDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserState userState = Get.find();
-    final items = (<Widget>[]).obs;
     return StreamBuilder<DrugModel>(
         stream: DrugRepository(userState.openCabinetId.value).streamModel(id),
         initialData: DrugModel(
@@ -46,11 +46,6 @@ class DrugDetailPage extends StatelessWidget {
           if (snapshot.data == null)
             return Center(child: Container(child: Text("Please go back")));
           var drug = snapshot.data!;
-          items.value = [];
-          items.add(Container(
-              width: MediaQuery.of(context).size.width,
-              child: DrugHeader(model: drug)));
-          items.add(AddPhoto(items: items));
           return Scaffold(
             backgroundColor: Theme.of(context).primaryColor,
             body: CustomScrollView(
@@ -60,7 +55,7 @@ class DrugDetailPage extends StatelessWidget {
                 ),
                 SliverList(
                     delegate: SliverChildListDelegate([
-                  Carousel(drugId: drug.id),
+                  Carousel(drug: drug),
                   Description(description: drug.description),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -89,10 +84,10 @@ class DrugDetailPage extends StatelessWidget {
 class Carousel extends StatelessWidget {
   const Carousel({
     Key? key,
-    required this.drugId,
+    required this.drug,
   }) : super(key: key);
 
-  final String drugId;
+  final DrugModel drug;
 
   @override
   Widget build(BuildContext context) {
@@ -100,13 +95,61 @@ class Carousel extends StatelessWidget {
     return Container(
         color: Colors.white,
         child: StreamBuilder<List<DrugPhotoModel>>(
-            stream: DrugPhotoRepository(drugId).streamModels(),
+            stream: DrugPhotoRepository(drug.id).streamModels(),
             initialData: [],
             builder: (context, snapshot) {
               if (snapshot.data == null) return LoadingWidget();
-              final items = snapshot.data!
-                  .map((e) => NetworkImage("") as Widget)
-                  .toList();
+              List<Widget> items;
+              items = snapshot.data!.map((e) {
+                return FutureBuilder<String>(
+                  future: Storage().getLink(e.path!),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return LoadingWidget();
+                    return InkWell(
+                      child: Image.network(snapshot.data!),
+                      onTap: () => Get.dialog(Dialog(
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: 5000,
+                              child: Image.network(
+                                snapshot.data!,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.delete_forever,
+                                    color: Theme.of(context).errorColor,
+                                  ),
+                                  onPressed: () async {
+                                    Get.back();
+                                    await Storage().deleteFile(e.path!);
+                                    DrugPhotoRepository(e.drugId)
+                                        .delete(e.path!);
+                                  },
+                                ))
+                          ],
+                        ),
+                      )),
+                    );
+                  },
+                );
+              }).toList();
+              var newItems = [
+                Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: DrugHeader(model: drug)),
+                ...items,
+                AddPhoto(
+                  items: items,
+                  drugId: drug.id,
+                )
+              ];
+              items = newItems;
               return Column(children: [
                 CarouselSlider(
                   items: items,
@@ -117,7 +160,7 @@ class Carousel extends StatelessWidget {
                     onPageChanged: (index, reason) => current.value = index,
                   ),
                 ),
-                CarouselIndicator(items: items, current: current),
+                CarouselIndicator(items: items, current: current)
               ]);
             }));
   }
@@ -127,12 +170,11 @@ class CarouselIndicator extends StatelessWidget {
   const CarouselIndicator({
     Key? key,
     required this.items,
-    required RxInt current,
-  })   : _current = current,
-        super(key: key);
+    required this.current,
+  }) : super(key: key);
 
   final List<Widget> items;
-  final RxInt _current;
+  final RxInt current;
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +188,7 @@ class CarouselIndicator extends StatelessWidget {
               margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _current.value == index
+                color: current.value == index
                     ? Theme.of(context).primaryColorDark
                     : Theme.of(context).primaryColorDark.withOpacity(0.4),
               ),
@@ -157,8 +199,10 @@ class CarouselIndicator extends StatelessWidget {
 }
 
 class AddPhoto extends StatelessWidget {
-  final RxList<Widget> items;
-  const AddPhoto({Key? key, required this.items}) : super(key: key);
+  final String drugId;
+  final List<Widget> items;
+  const AddPhoto({Key? key, required this.items, required this.drugId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -182,37 +226,13 @@ class AddPhoto extends StatelessWidget {
         onPressed: () async {
           var pickedFile =
               await ImagePicker().getImage(source: ImageSource.gallery);
-          if (pickedFile != null)
-            items.value = [
-              ...items.sublist(0, items.length - 1),
-              InkWell(
-                child: Image.file(File(pickedFile.path)),
-                onTap: () => Get.dialog(Dialog(
-                    child: Stack(
-                  children: [
-                    Container(
-                      width: 50000,
-                      child: Image.file(
-                        File(pickedFile.path),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: IconButton(
-                        icon: Icon(Icons.delete),
-                        color: Colors.red,
-                        onPressed: () {
-                          // TODO: remove
-                        },
-                      ),
-                    )
-                  ],
-                ))),
-              ),
-              AddPhoto(items: items)
-            ];
+          if (pickedFile != null) {
+            await Storage().uploadFile(pickedFile.path, pickedFile.path);
+            DrugPhotoRepository(drugId).add(DrugPhotoModel(
+                drugId: drugId,
+                path: pickedFile.path,
+                createdAt: Timestamp.now()));
+          }
         },
         tooltip: "Add Picture",
       ),

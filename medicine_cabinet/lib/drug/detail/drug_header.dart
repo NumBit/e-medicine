@@ -3,6 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
+import 'package:medicine_cabinet/drug/data/drug_photo_model.dart';
+import 'package:medicine_cabinet/drug/data/drug_photo_repository.dart';
+import 'package:medicine_cabinet/error/loading_widget.dart';
+import 'package:medicine_cabinet/firebase/storage/storage.dart';
 
 class DrugHeader extends StatelessWidget {
   // final List<String> categories;
@@ -41,12 +45,41 @@ class DrugHeader extends StatelessWidget {
               // DrugCategories(categories: categories)
             ],
           ),
-          if (drug.icon!.isNotEmpty)
-            Icon(
-              deserializeIcon(jsonDecode(drug.icon!)),
-              color: Theme.of(context).primaryColorDark,
-              size: 100,
-            ),
+          StreamBuilder<List<DrugPhotoModel>>(
+              stream: DrugPhotoRepository(model.id).streamModels(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return LoadingWidget();
+                var photos = snapshot.data!;
+                return Center(
+                    child: photos.length == 0
+                        ? Icon(
+                            deserializeIcon(jsonDecode(model.icon!)),
+                            color: Theme.of(context).primaryColorDark,
+                            size: 50,
+                          )
+                        : FutureBuilder<String>(
+                            future: Storage().getLink(photos.first.path!),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) return LoadingWidget();
+                              return Container(
+                                width: 120,
+                                height: 120,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(40),
+                                    child: Image.network(
+                                      snapshot.data!,
+                                      fit: BoxFit.cover,
+                                    )),
+                              );
+                            },
+                          ));
+              })
+
+          // Icon(
+          //   deserializeIcon(jsonDecode(drug.icon!)),
+          //   color: Theme.of(context).primaryColorDark,
+          //   size: 100,
+          // ),
         ],
       ),
     );

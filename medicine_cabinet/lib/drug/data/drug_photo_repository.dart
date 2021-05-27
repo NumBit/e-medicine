@@ -54,15 +54,6 @@ class DrugPhotoRepository extends Repository<DrugPhotoModel> {
             .toList());
   }
 
-  void delete(String? docId) {
-    collection
-        .doc(docId)
-        .delete()
-        .then((value) => print("Operation success."))
-        .catchError(
-            (error) => snackBarMessage("Operation failed", "Nothing removed"));
-  }
-
   void deleteAllDrugPhotos() {
     collection
         .where("drug_id", isEqualTo: drugId)
@@ -70,7 +61,6 @@ class DrugPhotoRepository extends Repository<DrugPhotoModel> {
         .forEach((element) {
       element.docs.forEach((e) {
         delete(e.id);
-        PackageRepository(e.id).deleteAllDrugPackages();
       });
     });
   }

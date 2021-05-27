@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
 import 'package:medicine_cabinet/error/loading_widget.dart';
+import 'package:medicine_cabinet/firebase/storage/storage.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
@@ -83,9 +84,15 @@ class ProfilePage extends StatelessWidget {
                               "assets/avatar.png",
                               fit: BoxFit.cover,
                             )
-                          : Image.file(
-                              File(path),
-                              fit: BoxFit.cover,
+                          : FutureBuilder<String>(
+                              future: Storage().getLink(path),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) return LoadingWidget();
+                                return Image.network(
+                                  snapshot.data!,
+                                  fit: BoxFit.cover,
+                                );
+                              },
                             ),
                     ),
                     //  asset("assets/avatar.png"),

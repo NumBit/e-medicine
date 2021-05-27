@@ -4,8 +4,12 @@ import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:medicine_cabinet/drug/data/drug_photo_model.dart';
+import 'package:medicine_cabinet/drug/data/drug_photo_repository.dart';
 import 'package:medicine_cabinet/drug/detail/drug_detail_page.dart';
 import 'package:medicine_cabinet/drug/data/drug_model.dart';
+import 'package:medicine_cabinet/error/loading_widget.dart';
+import 'package:medicine_cabinet/firebase/storage/storage.dart';
 
 class DrugGridItem extends StatelessWidget {
   final List<String> categories = ["Fever"];
@@ -92,13 +96,35 @@ class CardIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Icon(
-        deserializeIcon(jsonDecode(model.icon!)),
-        color: Theme.of(context).primaryColorDark,
-        size: 50,
-      ),
-    );
+    return StreamBuilder<List<DrugPhotoModel>>(
+        stream: DrugPhotoRepository(model.id).streamModels(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return LoadingWidget();
+          var photos = snapshot.data!;
+          return Center(
+              child: photos.length == 0
+                  ? Icon(
+                      deserializeIcon(jsonDecode(model.icon!)),
+                      color: Theme.of(context).primaryColorDark,
+                      size: 50,
+                    )
+                  : FutureBuilder<String>(
+                      future: Storage().getLink(photos.first.path!),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) return LoadingWidget();
+                        return Container(
+                          width: 100,
+                          height: 70,
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: Image.network(
+                                snapshot.data!,
+                                fit: BoxFit.cover,
+                              )),
+                        );
+                      },
+                    ));
+        });
   }
 }
 
