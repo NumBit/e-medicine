@@ -6,11 +6,9 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        child: SpinKitWave(
-          color: Color(0xff12263A),
-        ),
+    return const Center(
+      child: SpinKitWave(
+        color: Color(0xff12263A),
       ),
     );
   }

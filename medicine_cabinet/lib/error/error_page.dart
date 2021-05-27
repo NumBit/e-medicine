@@ -10,15 +10,13 @@ class ErrorPage extends StatelessWidget {
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
-              backgroundColor: Color(0xff06BCC1),
-              title: Text('Something went wrong'),
+              backgroundColor: const Color(0xff06BCC1),
+              title: const Text('Something went wrong'),
             ),
-            body: Center(
+            body: const Center(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  child: Text("No connection from Firebase"),
-                ),
+                padding: EdgeInsets.all(8.0),
+                child: Text("No connection from Firebase"),
               ),
             )));
   }

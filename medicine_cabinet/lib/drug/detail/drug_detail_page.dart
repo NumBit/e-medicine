@@ -33,7 +33,7 @@ class DrugDetailPage extends StatelessWidget {
     final UserState userState = Get.find();
     return StreamBuilder<DrugModel>(
         stream: DrugRepository(userState.openCabinetId.value).streamModel(id),
-        initialData: DrugModel(
+        initialData: const DrugModel(
           description: "",
           icon: "",
           substance: "",

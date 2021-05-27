@@ -5,6 +5,6 @@ void snackBarMessage(String title, String message, {int timeout = 3}) {
   Get.snackbar(title, message,
       snackPosition: SnackPosition.TOP,
       backgroundColor: Colors.black,
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       duration: Duration(seconds: timeout));
 }

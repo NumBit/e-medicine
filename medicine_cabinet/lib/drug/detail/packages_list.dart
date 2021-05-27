@@ -16,10 +16,10 @@ class PackagesList extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<List<PackageModel>>(
         stream: PackageRepository(model.id).streamModels(),
-        initialData: [],
+        initialData: const [],
         builder: (context, snapshot) {
-          if (snapshot.data == null) return SliverToBoxAdapter();
-          var packages = snapshot.data!
+          if (snapshot.data == null) return const SliverToBoxAdapter();
+          final packages = snapshot.data!
               .map((package) => PackageCard(model: package))
               .toList();
           packages.sort(

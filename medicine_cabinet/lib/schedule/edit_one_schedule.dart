@@ -21,39 +21,39 @@ class EditOneSchedule extends StatelessWidget {
     final drugNameController = TextEditingController(text: model.name);
     final dosageController = TextEditingController(text: model.dosage);
     final countController = TextEditingController(text: model.count.toString());
-    var startTime = TimeOfDay(
+    final startTime = TimeOfDay(
       hour: model.timestamp!.toDate().hour,
       minute: model.timestamp!.toDate().minute,
     ).obs;
-    var startDate = DateTime(
+    final startDate = DateTime(
       model.timestamp!.toDate().year,
       model.timestamp!.toDate().month,
       model.timestamp!.toDate().day,
     ).obs;
-    var notification = false.obs;
+    final notification = false.obs;
     if (model.notify != null) notification.value = model.notify!;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Edit schedule"),
+        title: const Text("Edit schedule"),
       ),
       body: SingleChildScrollView(
         child: Form(
           key: formKey,
           child: Column(
             children: [
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               DrugNameField(drugNameController: drugNameController),
               DosageField(dosageController: dosageController),
               CountField(countController: countController),
-              OptionDivider(),
+              const OptionDivider(),
               NotificationOption(notification: notification),
-              OptionDivider(),
+              const OptionDivider(),
               StartTimeField(startTime: startTime),
-              OptionDivider(),
+              const OptionDivider(),
               StartDateField(date: startDate),
-              OptionDivider(),
+              const OptionDivider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -65,7 +65,7 @@ class EditOneSchedule extends StatelessWidget {
                     },
                     style: ElevatedButton.styleFrom(
                         primary: Theme.of(context).errorColor),
-                    child: Text("Delete"),
+                    child: const Text("Delete"),
                   ),
                   ElevatedButton(
                       onPressed: () {
@@ -79,7 +79,7 @@ class EditOneSchedule extends StatelessWidget {
                             model,
                             notification.value);
                       },
-                      child: Text("Edit")),
+                      child: const Text("Edit")),
                 ],
               ),
             ],
@@ -89,7 +89,7 @@ class EditOneSchedule extends StatelessWidget {
     );
   }
 
-  void editSchedule(
+  Future<void> editSchedule(
       GlobalKey<FormState> formKey,
       TextEditingController drugNameController,
       TextEditingController countController,
@@ -99,8 +99,8 @@ class EditOneSchedule extends StatelessWidget {
       ScheduleModel model,
       bool notification) async {
     if (formKey.currentState!.validate()) {
-      NavigationState nav = Get.find();
-      var date = DateTime(
+      final NavigationState nav = Get.find();
+      final date = DateTime(
         startDate.year,
         startDate.month,
         startDate.day,
@@ -108,13 +108,14 @@ class EditOneSchedule extends StatelessWidget {
         startTime.minute,
       );
       if (model.notifyId != null) cancelNotification(model.notifyId!);
-      var notificationId = await UserRepository().getNextNotifyId();
-      if (notification)
+      final notificationId = await UserRepository().getNextNotifyId();
+      if (notification) {
         createNotification(
           notificationId,
           "Time to take ${countController.text}x ${drugNameController.text}.",
           date,
         );
+      }
       ScheduleRepository().update(ScheduleModel(
         id: model.id,
         name: drugNameController.text,

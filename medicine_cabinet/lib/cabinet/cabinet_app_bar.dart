@@ -15,7 +15,7 @@ class CabinetAppBar extends StatelessWidget {
     return Obx(
       () => StreamBuilder<CabinetModel>(
         stream: CabinetRepository().streamModel(userState.openCabinetId.value),
-        initialData: CabinetModel(id: "", name: ""),
+        initialData: const CabinetModel(id: "", name: ""),
         builder: (context, snapshot) => SliverAppBar(
           leading: InkWell(
             onTap: () {

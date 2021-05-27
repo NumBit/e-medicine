@@ -24,7 +24,7 @@ class TabState extends State<TabNavigation>
 
   @override
   void initState() {
-    var nav = Get.put(NavigationState());
+    final nav = Get.put(NavigationState());
     super.initState();
     controller = TabController(length: 3, vsync: this);
     controller!.addListener(() {
@@ -34,10 +34,10 @@ class TabState extends State<TabNavigation>
 
   @override
   Widget build(BuildContext context) {
-    NavigationState nav = Get.find();
+    final NavigationState nav = Get.find();
     return WillPopScope(
       onWillPop: () async {
-        var isFirst = !await Get.nestedKey(nav.navigatorId.value)!
+        final isFirst = !await Get.nestedKey(nav.navigatorId.value)!
             .currentState!
             .maybePop();
         return isFirst;
@@ -45,13 +45,13 @@ class TabState extends State<TabNavigation>
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: TabBarView(
+          controller: controller,
           // physics: NeverScrollableScrollPhysics(),
           children: [
             CabinetNavigatorPage(navigatorKey: Get.nestedKey(0)),
             ScheduleNavigatorPage(navigatorKey: Get.nestedKey(1)),
             ProfileNNavigatorPage(navigatorKey: Get.nestedKey(2))
           ],
-          controller: controller,
         ),
         bottomNavigationBar: BottomTabBar(controller: controller),
       ),
@@ -75,7 +75,7 @@ class BottomTabBar extends StatelessWidget {
       child: TabBar(
         labelColor: Colors.white,
         indicatorColor: Colors.white,
-        tabs: [
+        tabs: const [
           Tab(
             icon: Icon(Icons.medical_services),
             text: "Cabinet",
@@ -112,7 +112,7 @@ class ProfileNNavigatorPage extends StatelessWidget {
       key: navigatorKey,
       onGenerateRoute: (routeSettings) {
         return MaterialPageRoute(
-          builder: (context) => ProfilePage(),
+          builder: (context) => const ProfilePage(),
         );
       },
     );
@@ -140,20 +140,21 @@ class _ScheduleNavigatorPageState extends State<ScheduleNavigatorPage>
       initialRoute: "/",
       key: widget.navigatorKey,
       onGenerateRoute: (routeSettings) {
-        if (routeSettings.name == "/")
-          return GetPageRoute(page: () => SchedulePage());
-        else if (routeSettings.name == "/create_schedule")
-          return GetPageRoute(page: () => CreateSchedule());
-        else if (routeSettings.name == "/edit_one_schedule")
+        if (routeSettings.name == "/") {
+          return GetPageRoute(page: () => const SchedulePage());
+        } else if (routeSettings.name == "/create_schedule") {
+          return GetPageRoute(page: () => const CreateSchedule());
+        } else if (routeSettings.name == "/edit_one_schedule") {
           return GetPageRoute(
               page: () => EditOneSchedule(
                   model: routeSettings.arguments == null
-                      ? ScheduleModel()
-                      : routeSettings.arguments as ScheduleModel));
-        else if (routeSettings.name == "/edit_schedule_plan")
+                      ? const ScheduleModel()
+                      : routeSettings.arguments! as ScheduleModel));
+        } else if (routeSettings.name == "/edit_schedule_plan") {
           return GetPageRoute(
               page: () => EditSchedulePlan(
                   schedulerId: routeSettings.arguments as String?));
+        }
         return GetPageRoute(
             page: () => Container(
                   color: Colors.deepOrange,
@@ -200,20 +201,21 @@ class _CabinetNavigatorPageState extends State<CabinetNavigatorPage>
       initialRoute: "/",
       key: widget.navigatorKey,
       onGenerateRoute: (routeSettings) {
-        if (routeSettings.name == "/")
+        if (routeSettings.name == "/") {
           return GetPageRoute(
-            page: () => CabinetPage(),
+            page: () => const CabinetPage(),
           );
-        else if (routeSettings.name == "/add_drug")
-          return GetPageRoute(page: () => AddDrug());
-        else if (routeSettings.name == "/cabinets")
-          return GetPageRoute(page: () => CabinetsListPage());
-        else if (routeSettings.name == "/edit_drug")
+        } else if (routeSettings.name == "/add_drug") {
+          return GetPageRoute(page: () => const AddDrug());
+        } else if (routeSettings.name == "/cabinets") {
+          return GetPageRoute(page: () => const CabinetsListPage());
+        } else if (routeSettings.name == "/edit_drug") {
           return GetPageRoute(
               page: () => EditDrug(
                   model: routeSettings.arguments == null
-                      ? DrugModel()
-                      : routeSettings.arguments as DrugModel));
+                      ? const DrugModel()
+                      : routeSettings.arguments! as DrugModel));
+        }
         return GetPageRoute(
             page: () => Container(
                   color: Colors.deepOrange,

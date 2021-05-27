@@ -25,7 +25,7 @@ class TimePickers extends StatelessWidget {
           child: StartTimeField(startTime: startTime),
         ),
         Obx(() {
-          if (repeat.value != Repeating.XHours) return Container();
+          if (repeat.value != Repeating.xHours) return Container();
           return Flexible(
             child: EndTimeField(endTime: endTime, startTime: startTime),
           );
@@ -51,8 +51,9 @@ class EndTimeField extends StatelessWidget {
         label: "Last time",
         time: endTime,
         validator: (value) {
-          if (toDouble(endTime.value) < toDouble(startTime.value))
+          if (toDouble(endTime.value) < toDouble(startTime.value)) {
             return "End time must be after start time";
+          }
           return null;
         });
   }
@@ -97,7 +98,7 @@ class DatePickers extends StatelessWidget {
           ),
         ),
         Obx(() {
-          if (repeat.value == Repeating.Never) return Container();
+          if (repeat.value == Repeating.never) return Container();
           return Flexible(
             child: EndDateField(endDate: endDate, startDate: startDate.value),
           );
@@ -123,8 +124,9 @@ class EndDateField extends StatelessWidget {
       date: endDate,
       label: "End Day",
       validator: (value) {
-        if (endDate.value.isBefore(startDate))
+        if (endDate.value.isBefore(startDate)) {
           return "End date must be after start date";
+        }
         return null;
       },
     );
@@ -158,7 +160,7 @@ class RepeatSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var repeatController = TextEditingController(text: repeat.value);
+    final repeatController = TextEditingController(text: repeat.value);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -169,11 +171,11 @@ class RepeatSelection extends StatelessWidget {
               value: repeat.value,
               onChanged: (value) => repeat.value = value!,
               items: <String>[
-                Repeating.Never,
-                Repeating.XHours,
-                Repeating.Day,
-                Repeating.XDays,
-                Repeating.Week
+                Repeating.never,
+                Repeating.xHours,
+                Repeating.day,
+                Repeating.xDays,
+                Repeating.week
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -185,21 +187,22 @@ class RepeatSelection extends StatelessWidget {
                   labelStyle: TextStyle(
                     color: Theme.of(context).primaryColorDark,
                   ),
-                  border: OutlineInputBorder()),
+                  border: const OutlineInputBorder()),
             ),
           ),
         ),
         Obx(() {
-          if (repeat.value != Repeating.XHours &&
-              repeat.value != Repeating.XDays) return Container();
+          if (repeat.value != Repeating.xHours &&
+              repeat.value != Repeating.xDays) return Container();
           return Expanded(
             child: CustomFormField(
               label: "X",
               controller: repeatController,
               inputType: TextInputType.number,
               validator: (value) {
-                if (value == null || !GetUtils.isNumericOnly(value))
+                if (value == null || !GetUtils.isNumericOnly(value)) {
                   return "Must input whole number";
+                }
                 if (int.parse(value) == 0) return "Cannot select 0";
                 return null;
               },
@@ -310,7 +313,7 @@ class OptionDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Divider(
+    return const Divider(
       indent: 8,
       endIndent: 8,
       thickness: 1,

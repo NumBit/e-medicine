@@ -11,9 +11,9 @@ class LoadingPage extends StatelessWidget {
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
-              backgroundColor: Color(0xff06BCC1),
-              title: Text("Loading"),
+              backgroundColor: const Color(0xff06BCC1),
+              title: const Text("Loading"),
             ),
-            body: LoadingWidget()));
+            body: const LoadingWidget()));
   }
 }
