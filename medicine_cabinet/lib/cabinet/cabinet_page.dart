@@ -7,7 +7,6 @@ import 'package:medicine_cabinet/drug/data/drug_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
 import 'package:medicine_cabinet/error/loading_widget.dart';
 import 'package:medicine_cabinet/main/state/filter_state.dart';
-import 'package:medicine_cabinet/main/menu.dart';
 import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 
@@ -19,7 +18,6 @@ class CabinetPage extends StatelessWidget {
     Get.put(FilterState());
     return const Scaffold(
       resizeToAvoidBottomInset: false,
-      drawer: Menu(),
       body: CustomScrollView(
         slivers: [
           CabinetAppBar(),

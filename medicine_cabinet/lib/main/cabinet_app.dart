@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:medicine_cabinet/experiment/experiment_page.dart';
 import 'package:medicine_cabinet/main/main_page.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
 import 'package:medicine_cabinet/profile/register_page.dart';
@@ -26,7 +25,6 @@ class CabinetApp extends StatelessWidget {
         "/": (context) => const MainPage(),
         "/login": (context) => const LoginPage(),
         "/register": (context) => const RegisterPage(),
-        "/experiment": (context) => const ExperimentPage(),
       },
     );
   }
