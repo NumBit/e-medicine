@@ -60,7 +60,12 @@ class DrugHeader extends StatelessWidget {
                         : FutureBuilder<String>(
                             future: Storage().getLink(photos.first.path!),
                             builder: (context, snapshot) {
-                              if (!snapshot.hasData) return LoadingWidget();
+                              if (!snapshot.hasData)
+                                return Icon(
+                                  deserializeIcon(jsonDecode(model.icon!)),
+                                  color: Theme.of(context).primaryColorDark,
+                                  size: 50,
+                                );
                               return Container(
                                 width: 120,
                                 height: 120,
