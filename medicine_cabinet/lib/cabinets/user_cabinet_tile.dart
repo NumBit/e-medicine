@@ -18,7 +18,7 @@ class UserCabinetTile extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(50),
           onTap: () {
-            UserState user = Get.find();
+            final UserState user = Get.find();
             if (model.cabinetId == user.openCabinetId.value &&
                 user.userId.value == model.userId) {
               snackBarMessage(
@@ -30,8 +30,8 @@ class UserCabinetTile extends StatelessWidget {
               UserCabinetRepository().delete(model.id);
             }
           },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Icon(Icons.cancel),
           ),
         ),

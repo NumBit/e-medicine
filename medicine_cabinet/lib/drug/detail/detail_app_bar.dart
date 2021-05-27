@@ -24,7 +24,7 @@ class DetailAppBar extends StatelessWidget {
             color: Theme.of(context).primaryColorDark,
           ),
           onPressed: () {
-            NavigationState nav = Get.find();
+            final NavigationState nav = Get.find();
             Get.toNamed(
               "/edit_drug",
               arguments: model,

@@ -30,20 +30,20 @@ class DrugDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserState userState = Get.find();
+    final UserState userState = Get.find();
     return StreamBuilder<DrugModel>(
         stream: DrugRepository(userState.openCabinetId.value).streamModel(id),
         initialData: DrugModel(
-          id: "",
           description: "",
           icon: "",
           substance: "",
           name: "",
         ),
         builder: (context, snapshot) {
-          if (snapshot.data == null)
-            return Center(child: Container(child: Text("Please go back")));
-          var drug = snapshot.data!;
+          if (snapshot.data == null) {
+            return const Center(child: Text("Please go back"));
+          }
+          final drug = snapshot.data!;
           return Scaffold(
             backgroundColor: Theme.of(context).primaryColor,
             body: CustomScrollView(
@@ -66,7 +66,7 @@ class DrugDetailPage extends StatelessWidget {
                             onPressed: () {
                               Get.dialog(AddPackage(drugId: drug.id));
                             },
-                            child: Text("Add Package")),
+                            child: const Text("Add Package")),
                       ],
                     ),
                   ),
@@ -94,21 +94,20 @@ class Carousel extends StatelessWidget {
         color: Colors.white,
         child: StreamBuilder<List<DrugPhotoModel>>(
             stream: DrugPhotoRepository(drug.id).streamModels(),
-            initialData: [],
+            initialData: const [],
             builder: (context, snapshot) {
-              if (snapshot.data == null) return LoadingWidget();
+              if (snapshot.data == null) return const LoadingWidget();
               List<Widget> items;
               items = snapshot.data!.map((e) {
                 return FutureBuilder<String>(
                   future: Storage().getLink(e.path!),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) return LoadingWidget();
+                    if (!snapshot.hasData) return const LoadingWidget();
                     return InkWell(
-                      child: Image.network(snapshot.data!),
                       onTap: () => Get.dialog(Dialog(
                         child: Stack(
                           children: [
-                            Container(
+                            SizedBox(
                               width: 5000,
                               child: Image.network(
                                 snapshot.data!,
@@ -132,12 +131,13 @@ class Carousel extends StatelessWidget {
                           ],
                         ),
                       )),
+                      child: Image.network(snapshot.data!),
                     );
                   },
                 );
               }).toList();
-              var newItems = [
-                Container(
+              final newItems = [
+                SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: DrugHeader(model: drug)),
                 ...items,
@@ -178,11 +178,12 @@ class CarouselIndicator extends StatelessWidget {
     return Obx(() => Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: items.map((obj) {
-            int index = items.indexOf(obj);
+            final int index = items.indexOf(obj);
             return Container(
               width: 8.0,
               height: 8.0,
-              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+              margin:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: current.value == index
@@ -204,7 +205,7 @@ class AddPhoto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       width: 70,
       height: 70,
       decoration: BoxDecoration(
@@ -221,7 +222,7 @@ class AddPhoto extends StatelessWidget {
           color: Theme.of(context).primaryColorDark,
         ),
         onPressed: () async {
-          var pickedFile =
+          final pickedFile =
               await ImagePicker().getImage(source: ImageSource.gallery);
           if (pickedFile != null) {
             await Storage().uploadFile(pickedFile.path, pickedFile.path);

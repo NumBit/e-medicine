@@ -19,9 +19,9 @@ class DrugHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var drug = model;
+    final drug = model;
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 15),
+      padding: const EdgeInsets.symmetric(vertical: 15),
       color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -36,7 +36,7 @@ class DrugHeader extends StatelessWidget {
                   drug.substance!,
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w200,
                   ),
@@ -48,10 +48,10 @@ class DrugHeader extends StatelessWidget {
           StreamBuilder<List<DrugPhotoModel>>(
               stream: DrugPhotoRepository(model.id).streamModels(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return LoadingWidget();
-                var photos = snapshot.data!;
+                if (!snapshot.hasData) return const LoadingWidget();
+                final photos = snapshot.data!;
                 return Center(
-                    child: photos.length == 0
+                    child: photos.isEmpty
                         ? Icon(
                             deserializeIcon(jsonDecode(model.icon!)
                                 as Map<String, dynamic>),
@@ -61,14 +61,15 @@ class DrugHeader extends StatelessWidget {
                         : FutureBuilder<String>(
                             future: Storage().getLink(photos.first.path!),
                             builder: (context, snapshot) {
-                              if (!snapshot.hasData)
+                              if (!snapshot.hasData) {
                                 return Icon(
                                   deserializeIcon(jsonDecode(model.icon!)
                                       as Map<String, dynamic>),
                                   color: Theme.of(context).primaryColorDark,
                                   size: 50,
                                 );
-                              return Container(
+                              }
+                              return SizedBox(
                                 width: 120,
                                 height: 120,
                                 child: ClipRRect(

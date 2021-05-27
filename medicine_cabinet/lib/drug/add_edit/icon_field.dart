@@ -32,7 +32,7 @@ class IconField extends StatelessWidget {
                   if (value != null) icon.icon.value = value;
                 });
               },
-              child: Text("Pick icon")),
+              child: const Text("Pick icon")),
         ],
       ),
     );

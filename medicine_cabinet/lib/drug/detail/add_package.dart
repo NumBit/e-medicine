@@ -15,9 +15,9 @@ class AddPackage extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
     final dosageController = TextEditingController(text: "");
     final countController = TextEditingController();
-    var expiration = DateTime.now().obs;
+    final expiration = DateTime.now().obs;
     return SimpleDialog(
-      title: Text("Add package"),
+      title: const Text("Add package"),
       children: [
         Padding(
           padding: const EdgeInsets.all(5.0),
@@ -35,15 +35,16 @@ class AddPackage extends StatelessWidget {
                   controller: countController,
                   inputType: TextInputType.number,
                   validator: (value) {
-                    if (value == null || !GetUtils.isNum(value))
+                    if (value == null || !GetUtils.isNum(value)) {
                       return "Must input number";
+                    }
                     return null;
                   },
                 ),
                 ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        var model = PackageModel(
+                        final model = PackageModel(
                             count: int.parse(countController.text),
                             dosage: dosageController.text,
                             drugId: drugId,
@@ -52,7 +53,7 @@ class AddPackage extends StatelessWidget {
                         Get.back();
                       }
                     },
-                    child: Text("Add"))
+                    child: const Text("Add"))
               ],
             ),
           ),

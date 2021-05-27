@@ -16,16 +16,16 @@ class ShareCabinet extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
     final emailController = TextEditingController();
     return SimpleDialog(
-      title: Center(child: Text("Current users")),
+      title: const Center(child: Text("Current users")),
       children: [
         StreamBuilder<List<UserCabinetModel>>(
           stream: UserCabinetRepository().getCabinetUsers(model.id),
-          initialData: [],
+          initialData: const [],
           builder: (context, snapshot) {
-            if (snapshot.data == null) return LoadingWidget();
+            if (snapshot.data == null) return const LoadingWidget();
 
-            var emailCount = snapshot.data!.length;
-            return Container(
+            final emailCount = snapshot.data!.length;
+            return SizedBox(
                 height: emailCount < 3 ? 60 * emailCount.toDouble() : 180,
                 width: 600,
                 child: ListView(
@@ -62,7 +62,7 @@ class ShareCabinet extends StatelessWidget {
                         //emailController.text = "";
                       }
                     },
-                    child: Text("Share")),
+                    child: const Text("Share")),
               ],
             )),
       ],

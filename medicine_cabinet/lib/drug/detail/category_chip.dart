@@ -15,7 +15,7 @@ class CategoryChip extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColorDark,
       label: Text(
         category ?? "Not set",
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),

@@ -56,7 +56,7 @@ class PackageCardExpanded extends StatelessWidget {
               SizedBox(
                 width: 150,
                 child: Text(
-                  model.count.toString() + " pcs",
+                  "${model.count} pcs",
                   textScaleFactor: 1.8,
                   textAlign: TextAlign.center,
                 ),
@@ -80,8 +80,8 @@ class PackageCardExpanded extends StatelessWidget {
           onTap: () {
             Get.dialog(DeletePackage(model: model));
           },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Icon(
               Icons.delete,
               color: Colors.grey,
@@ -112,7 +112,7 @@ class PackageCardTitle extends StatelessWidget {
           child: Text(
             model.dosage ?? "Not set",
             textAlign: TextAlign.start,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -130,9 +130,9 @@ class PackageCardTitle extends StatelessWidget {
         SizedBox(
           width: 70,
           child: Text(
-            model.count.toString() + " pcs",
+            "${model.count} pcs",
             textAlign: TextAlign.end,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -153,7 +153,7 @@ class DeletePackage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-        title: Center(child: Text("Delete this package?")),
+        title: const Center(child: Text("Delete this package?")),
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -161,7 +161,7 @@ class DeletePackage extends StatelessWidget {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(primary: Colors.grey),
                   onPressed: () => Get.back(),
-                  child: Text("Cancel")),
+                  child: const Text("Cancel")),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).errorColor),
@@ -169,7 +169,7 @@ class DeletePackage extends StatelessWidget {
                     PackageRepository(model.drugId).delete(model.id);
                     Get.back();
                   },
-                  child: Text("Delete"))
+                  child: const Text("Delete"))
             ],
           )
         ]);
