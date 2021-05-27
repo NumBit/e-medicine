@@ -11,15 +11,14 @@ class UserModel extends Model {
   final int? notifyCounter;
   //final List<String> cabinets;
 
-  UserModel(
+  const UserModel(
       {this.id,
       this.userId,
       this.name,
       this.email,
       this.profilePicture,
       this.openCabinetId,
-      this.notifyCounter})
-      : super(id: id);
+      this.notifyCounter});
 
   UserModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
@@ -41,4 +40,9 @@ class UserModel extends Model {
         if (notifyCounter != null) "notify_counter": notifyCounter,
         //if (cabinets != null) "cabinets": cabinets,
       };
+
+  @override
+  String? getId() {
+    return id;
+  }
 }

@@ -7,7 +7,7 @@ class DrugPhotoModel extends Model {
   final String? path;
   final Timestamp? createdAt;
 
-  DrugPhotoModel({this.id = "", this.drugId, this.path, this.createdAt});
+  const DrugPhotoModel({this.id = "", this.drugId, this.path, this.createdAt});
 
   DrugPhotoModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
@@ -22,4 +22,9 @@ class DrugPhotoModel extends Model {
         if (path != null) "path": path,
         if (createdAt != null) "created_at": createdAt,
       };
+
+  @override
+  String? getId() {
+    return id;
+  }
 }

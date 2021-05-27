@@ -6,7 +6,7 @@ class CabinetModel extends Model {
   final String? name;
   final String? ownerId;
 
-  CabinetModel({this.id, this.name, this.ownerId}) : super(id: id);
+  const CabinetModel({this.id, this.name, this.ownerId});
 
   CabinetModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
@@ -18,4 +18,9 @@ class CabinetModel extends Model {
         if (name != null) "name": name,
         if (ownerId != null) "owner_id": ownerId,
       };
+
+  @override
+  String? getId() {
+    return id;
+  }
 }

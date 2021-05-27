@@ -1,6 +1,5 @@
 abstract class Model {
-  final String? id;
-
-  Model({this.id = ""});
-  toJson();
+  const Model();
+  String? getId();
+  Map<String, dynamic> toJson();
 }

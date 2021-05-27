@@ -13,7 +13,7 @@ class UserRepository extends Repository<UserModel> {
 
   @override
   Stream<UserModel> streamModel(String? id) {
-    if (id == null) return Stream.empty();
+    if (id == null) return const Stream.empty();
     return collection.snapshots().map((snap) => snap.docs
         .map((e) =>
             UserModel.fromMap(e as QueryDocumentSnapshot<Map<String, dynamic>>))
@@ -26,11 +26,11 @@ class UserRepository extends Repository<UserModel> {
   }
 
   Stream<UserModel?> getMyUser() {
-    var user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      return Stream.empty();
+      return const Stream.empty();
     }
-    var myUid = user.uid;
+    final myUid = user.uid;
     return collection
         .where("user_id", isEqualTo: myUid)
         .snapshots()
@@ -67,16 +67,16 @@ class UserRepository extends Repository<UserModel> {
         .snapshots()
         .forEach((snap) {
       snap.docs.forEach((e) {
-        update(UserModel(openCabinetId: ""));
+        update(const UserModel(openCabinetId: ""));
       });
     });
   }
 
   Future<int> getNextNotifyId() async {
-    var user = await getMyUser().first;
+    final user = await getMyUser().first;
     if (user == null) return 0;
     int counter = user.notifyCounter ?? 0;
-    int res = counter;
+    final res = counter;
     counter++;
     if (counter == (2 ^ 32 - 2)) counter = 0;
     update(UserModel(id: user.id, notifyCounter: counter));

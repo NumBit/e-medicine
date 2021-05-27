@@ -8,8 +8,8 @@ class PackageModel extends Model {
   final Timestamp? expiration;
   final int? count;
 
-  PackageModel({this.id, this.drugId, this.dosage, this.expiration, this.count})
-      : super(id: id);
+  const PackageModel(
+      {this.id, this.drugId, this.dosage, this.expiration, this.count});
 
   PackageModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
@@ -26,4 +26,9 @@ class PackageModel extends Model {
         if (expiration != null) "expiration": expiration,
         if (count != null && count! >= 0) "count": count,
       };
+
+  @override
+  String? getId() {
+    return id;
+  }
 }

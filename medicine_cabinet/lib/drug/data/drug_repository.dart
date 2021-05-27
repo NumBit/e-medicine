@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/drug/package/data/package_repository.dart';
 import 'package:medicine_cabinet/firebase/constants/collections.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
@@ -9,15 +10,14 @@ import 'drug_photo_repository.dart';
 
 class DrugRepository extends Repository<DrugModel> {
   final String? cabinetId;
-  DrugRepository(String? cabinetId)
-      : this.cabinetId = cabinetId,
-        super(
+  DrugRepository(this.cabinetId)
+      : super(
           FirebaseFirestore.instance.collection(Collections.drugs),
         );
 
   @override
   Stream<DrugModel> streamModel(String? id) {
-    if (id == null) return Stream.empty();
+    if (id == null) return const Stream.empty();
     return collection
         .where("cabinet_id", isEqualTo: cabinetId)
         .snapshots()
@@ -46,11 +46,12 @@ class DrugRepository extends Repository<DrugModel> {
     });
   }
 
+  @override
   void delete(String? docId) {
     collection
         .doc(docId)
         .delete()
-        .then((value) => print("Operation success."))
+        .then((value) => debugPrint("Operation success."))
         .catchError(
             (error) => snackBarMessage("Operation failed", "Nothing removed"));
     PackageRepository(docId).deleteAllDrugPackages();
@@ -70,7 +71,7 @@ class DrugRepository extends Repository<DrugModel> {
   }
 
   Future<int> count() async {
-    var count = await collection
+    final count = await collection
         .where("cabinet_id", isEqualTo: cabinetId)
         .get()
         .then((value) => value.size);

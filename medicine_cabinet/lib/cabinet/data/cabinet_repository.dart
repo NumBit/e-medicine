@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_model.dart';
 import 'package:medicine_cabinet/drug/data/drug_repository.dart';
@@ -29,10 +30,9 @@ class CabinetRepository extends Repository<CabinetModel> {
   @override
   Future<String?> add(CabinetModel model) async {
     DocumentReference cabinet;
-
-    model = CabinetModel(name: model.name);
+    final nameModel = CabinetModel(name: model.name);
     try {
-      cabinet = await collection.add(model.toJson());
+      cabinet = await collection.add(nameModel.toJson());
     } catch (e) {
       snackBarMessage("Something went wrong", "Try again later");
       return null;
@@ -46,7 +46,7 @@ class CabinetRepository extends Repository<CabinetModel> {
     collection
         .doc(docId)
         .delete()
-        .then((value) => print("Operation success."))
+        .then((value) => debugPrint("Operation success."))
         .catchError(
             (error) => snackBarMessage("Operation failed", "Nothing removed"));
     UserCabinetRepository().deleteAll(docId);
@@ -54,7 +54,7 @@ class CabinetRepository extends Repository<CabinetModel> {
 
   Future<String?> addToAuthUser(CabinetModel model) async {
     DocumentReference cabinet;
-    var user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;
     try {
       cabinet = await collection.add(model.toJson());
@@ -71,8 +71,8 @@ class CabinetRepository extends Repository<CabinetModel> {
   }
 
   Stream<List<CabinetModel>> streamModels() {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) return Stream.empty();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return const Stream.empty();
     return collection
         .where("owner_id", isEqualTo: user.uid)
         .snapshots()
@@ -88,8 +88,8 @@ class CabinetRepository extends Repository<CabinetModel> {
   }
 
   Stream<int> cabinetCount() {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) return Stream.empty();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return const Stream.empty();
     return UserCabinetRepository()
         .collection
         .where("user_id", isEqualTo: user.uid)
@@ -100,9 +100,9 @@ class CabinetRepository extends Repository<CabinetModel> {
   }
 
   void drugCount() {
-    var user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
-    UserState userState = Get.find();
+    final UserState userState = Get.find();
     UserCabinetRepository()
         .collection
         .where("user_id", isEqualTo: user.uid)
@@ -111,8 +111,8 @@ class CabinetRepository extends Repository<CabinetModel> {
       int count = 0;
       element = element as QuerySnapshot<Map<String, dynamic>>;
       element.docs.forEach((e) async {
-        var userCabinet = UserCabinetModel.fromMap(e);
-        var tmpCount = await DrugRepository(userCabinet.cabinetId).count();
+        final userCabinet = UserCabinetModel.fromMap(e);
+        final tmpCount = await DrugRepository(userCabinet.cabinetId).count();
         count += tmpCount;
         userState.drugsCount.value = count;
       });
@@ -120,9 +120,9 @@ class CabinetRepository extends Repository<CabinetModel> {
   }
 
   void pillCount() {
-    var user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
-    UserState userState = Get.find();
+    final UserState userState = Get.find();
     userState.pillCount.value = 0;
     UserCabinetRepository()
         .collection
@@ -131,10 +131,10 @@ class CabinetRepository extends Repository<CabinetModel> {
         .forEach((element) {
       element = element as QuerySnapshot<Map<String, dynamic>>;
       element.docs.forEach((e) async {
-        var userCabinet = UserCabinetModel.fromMap(e);
+        final userCabinet = UserCabinetModel.fromMap(e);
         DrugRepository(userCabinet.cabinetId).streamModels().forEach((drugs) {
           drugs.forEach((drug) async {
-            var pills = await PackageRepository(drug.id).countPills();
+            final pills = await PackageRepository(drug.id).countPills();
             userState.pillCount.value += pills;
           });
         });
