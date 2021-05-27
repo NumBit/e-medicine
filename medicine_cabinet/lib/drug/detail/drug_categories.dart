@@ -18,7 +18,6 @@ class DrugCategories extends StatelessWidget {
         width: MediaQuery.of(context).size.width * 0.5,
         child: Wrap(
           spacing: 5,
-          direction: Axis.horizontal,
           children: categories
               .map(
                 (category) => CategoryChip(

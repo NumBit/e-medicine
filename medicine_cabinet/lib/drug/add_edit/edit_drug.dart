@@ -25,14 +25,15 @@ class EditDrug extends StatelessWidget {
     final substanceController = TextEditingController(text: model.substance);
     final descriptionController =
         TextEditingController(text: model.description);
-    SelectedIcon icon = Get.put(SelectedIcon());
-    icon.icon.value = deserializeIcon(jsonDecode(model.icon!));
-    UserState userState = Get.find();
-    return Container(
+    final SelectedIcon icon = Get.put(SelectedIcon());
+    icon.icon.value =
+        deserializeIcon(jsonDecode(model.icon!) as Map<String, dynamic>);
+    final UserState userState = Get.find();
+    return SizedBox(
       child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: Text("Edit drug"),
+            title: const Text("Edit drug"),
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -47,8 +48,9 @@ class EditDrug extends StatelessWidget {
                         helper: "Required",
                         maxLength: 40,
                         validator: (String? value) {
-                          if (value == null || value.isBlank!)
+                          if (value == null || value.isBlank!) {
                             return 'Name cannot be empty';
+                          }
                           return null;
                         }),
                     CustomFormField(
@@ -67,8 +69,7 @@ class EditDrug extends StatelessWidget {
                       children: [
                         ElevatedButton(
                             onPressed: () {
-                              NavigationState nav = Get.find();
-                              print(Get.key.currentState!.bucket.toString());
+                              final NavigationState nav = Get.find();
                               Get.offNamedUntil("/", ModalRoute.withName("/"),
                                   id: nav.navigatorId.value);
                               DrugRepository(userState.openCabinetId.value)
@@ -76,13 +77,13 @@ class EditDrug extends StatelessWidget {
                             },
                             style: ElevatedButton.styleFrom(
                                 primary: Theme.of(context).errorColor),
-                            child: Text("Delete")),
+                            child: const Text("Delete")),
                         ElevatedButton(
                             onPressed: () {
-                              NavigationState nav = Get.find();
+                              final NavigationState nav = Get.find();
 
                               if (formKey.currentState!.validate()) {
-                                var drug = DrugModel(
+                                final drug = DrugModel(
                                   id: model.id,
                                   name: nameController.text,
                                   substance: substanceController.text,
@@ -95,7 +96,7 @@ class EditDrug extends StatelessWidget {
                                 Get.back(id: nav.navigatorId.value);
                               }
                             },
-                            child: Text("Save")),
+                            child: const Text("Save")),
                       ],
                     )
                   ],

@@ -162,7 +162,7 @@ class _MyExpansionTileState extends State<MyExpansionTile>
   final ColorTween _backgroundColorTween = ColorTween();
 
   late AnimationController _controller;
-  // ignore: unused_field
+  // ignore: unused_field, use_late_for_private_fields_and_variables
   Animation<double>? _iconTurns;
   late Animation<double> _heightFactor;
   late Animation<Color?> _borderColor;
@@ -210,8 +210,9 @@ class _MyExpansionTileState extends State<MyExpansionTile>
       }
       PageStorage.of(context)?.writeState(context, _isExpanded);
     });
-    if (widget.onExpansionChanged != null)
+    if (widget.onExpansionChanged != null) {
       widget.onExpansionChanged!(_isExpanded);
+    }
   }
 
   Widget _buildChildren(BuildContext context, Widget? child) {
@@ -275,18 +276,19 @@ class _MyExpansionTileState extends State<MyExpansionTile>
     final bool shouldRemoveChildren = closed && !widget.maintainState;
 
     final Widget result = Offstage(
-        child: TickerMode(
-          child: Padding(
-            padding: widget.childrenPadding ?? EdgeInsets.zero,
-            child: Column(
-              crossAxisAlignment: widget.expandedCrossAxisAlignment ??
-                  CrossAxisAlignment.center,
-              children: widget.children,
-            ),
+      offstage: closed,
+      child: TickerMode(
+        enabled: !closed,
+        child: Padding(
+          padding: widget.childrenPadding ?? EdgeInsets.zero,
+          child: Column(
+            crossAxisAlignment:
+                widget.expandedCrossAxisAlignment ?? CrossAxisAlignment.center,
+            children: widget.children,
           ),
-          enabled: !closed,
         ),
-        offstage: closed);
+      ),
+    );
 
     return AnimatedBuilder(
       animation: _controller.view,

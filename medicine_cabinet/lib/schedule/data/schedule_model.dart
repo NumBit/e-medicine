@@ -14,7 +14,7 @@ class ScheduleModel extends Model {
   final bool? notify;
   final int? notifyId;
 
-  ScheduleModel(
+  const ScheduleModel(
       {this.id,
       this.ownerId,
       this.schedulerId,
@@ -25,21 +25,21 @@ class ScheduleModel extends Model {
       this.timestamp,
       this.isTaken,
       this.notify,
-      this.notifyId})
-      : super(id: id);
+      this.notifyId});
 
   ScheduleModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
-        ownerId = snapshot.data()["owner_id"] ?? "",
-        schedulerId = snapshot.data()["scheduler_id"] ?? "",
-        schedulerKey = snapshot.data()["scheduler_key"] ?? "",
-        name = snapshot.data()["name"] ?? "",
-        dosage = snapshot.data()["dosage"] ?? "",
-        count = snapshot.data()["count"] ?? 0,
-        timestamp = snapshot.data()["timestamp"] ?? "" as Timestamp?,
-        isTaken = snapshot.data()["is_taken"] ?? false,
-        notify = snapshot.data()["notify"] ?? false,
-        notifyId = snapshot.data()["notify_id"] ?? 0;
+        ownerId = snapshot.data()["owner_id"] as String? ?? "",
+        schedulerId = snapshot.data()["scheduler_id"] as String? ?? "",
+        schedulerKey = snapshot.data()["scheduler_key"] as String? ?? "",
+        name = snapshot.data()["name"] as String? ?? "",
+        dosage = snapshot.data()["dosage"] as String? ?? "",
+        count = snapshot.data()["count"] as int? ?? 0,
+        timestamp =
+            snapshot.data()["timestamp"] as Timestamp? ?? "" as Timestamp?,
+        isTaken = snapshot.data()["is_taken"] as bool? ?? false,
+        notify = snapshot.data()["notify"] as bool? ?? false,
+        notifyId = snapshot.data()["notify_id"] as int? ?? 0;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -54,4 +54,9 @@ class ScheduleModel extends Model {
         if (notify != null) "notify": notify,
         if (notifyId != null) "notify_id": notifyId,
       };
+
+  @override
+  String? getId() {
+    return id;
+  }
 }

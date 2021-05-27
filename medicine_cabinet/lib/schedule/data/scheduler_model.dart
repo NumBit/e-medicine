@@ -17,7 +17,7 @@ class SchedulerModel extends Model {
   final TimeOfDay? timeTo;
   final bool? notify;
 
-  SchedulerModel(
+  const SchedulerModel(
       {this.id,
       this.ownerId,
       this.schedulerKey,
@@ -30,27 +30,26 @@ class SchedulerModel extends Model {
       this.dayTo,
       this.timeFrom,
       this.timeTo,
-      this.notify})
-      : super(id: id);
+      this.notify});
 
   SchedulerModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
-        ownerId = snapshot.data()["owner_id"] ?? "",
-        schedulerKey = snapshot.data()["scheduler_key"] ?? "",
-        name = snapshot.data()["name"] ?? "",
-        dosage = snapshot.data()["dosage"] ?? "",
-        count = snapshot.data()["count"] ?? 0,
-        repeatType = snapshot.data()["repeat_type"] ?? "",
-        repeatTimes = snapshot.data()["repeat_times"] ?? 0,
-        notify = snapshot.data()["notify"] ?? false,
-        dayFrom = snapshot.data()["dayFrom"] ?? "" as Timestamp?,
-        dayTo = snapshot.data()["dayTo"] ?? "" as Timestamp?,
+        ownerId = snapshot.data()["owner_id"] as String? ?? "",
+        schedulerKey = snapshot.data()["scheduler_key"] as String? ?? "",
+        name = snapshot.data()["name"] as String? ?? "",
+        dosage = snapshot.data()["dosage"] as String? ?? "",
+        count = snapshot.data()["count"] as int? ?? 0,
+        repeatType = snapshot.data()["repeat_type"] as String? ?? "",
+        repeatTimes = snapshot.data()["repeat_times"] as int? ?? 0,
+        notify = snapshot.data()["notify"] as bool? ?? false,
+        dayFrom = snapshot.data()["dayFrom"] as Timestamp? ?? "" as Timestamp?,
+        dayTo = snapshot.data()["dayTo"] as Timestamp? ?? "" as Timestamp?,
         timeFrom = TimeOfDay(
-            hour: snapshot.data()["timeFromH"] ?? 0,
-            minute: snapshot.data()["timeFromM"] ?? 0),
+            hour: snapshot.data()["timeFromH"] as int? ?? 0,
+            minute: snapshot.data()["timeFromM"] as int? ?? 0),
         timeTo = TimeOfDay(
-          hour: snapshot.data()["timeToH"] ?? 0,
-          minute: snapshot.data()["timeToM"] ?? 0,
+          hour: snapshot.data()["timeToH"] as int? ?? 0,
+          minute: snapshot.data()["timeToM"] as int? ?? 0,
         );
 
   @override
@@ -71,4 +70,9 @@ class SchedulerModel extends Model {
         if (timeTo != null) "timeToM": timeTo!.minute,
         if (notify != null) "notify": notify,
       };
+
+  @override
+  String? getId() {
+    return id;
+  }
 }

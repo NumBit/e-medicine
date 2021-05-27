@@ -1,12 +1,12 @@
 class Collections {
-  static final String cabinets = "cabinets";
-  static final String drugs = "drugs";
-  static final String drugPhotos = "drug_photos";
-  static final String packages = "packages";
-  static final String categories = "categories";
-  static final String users = "users";
-  static final String userCabinet = "user_cabinet";
-  static final String owners = "owners";
-  static final String schedules = "schedules";
-  static final String scheduler = "scheduler";
+  static const String cabinets = "cabinets";
+  static const String drugs = "drugs";
+  static const String drugPhotos = "drug_photos";
+  static const String packages = "packages";
+  static const String categories = "categories";
+  static const String users = "users";
+  static const String userCabinet = "user_cabinet";
+  static const String owners = "owners";
+  static const String schedules = "schedules";
+  static const String scheduler = "scheduler";
 }

@@ -10,7 +10,7 @@ class DrugModel extends Model {
   final String? icon;
   final Timestamp? createdAt;
 
-  DrugModel(
+  const DrugModel(
       {this.id = "",
       this.cabinetId,
       this.name,
@@ -21,13 +21,14 @@ class DrugModel extends Model {
 
   DrugModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
-        cabinetId = snapshot.data()["cabinet_id"] ?? "",
-        name = snapshot.data()["name"] ?? "",
-        substance = snapshot.data()["substance"] ?? "",
-        description = snapshot.data()["description"] ?? "",
-        icon = snapshot.data()["icon"] ??
-            "{\"codePoint\":60518,\"fontFamily\":\"MaterialIcons\",\"fontPackage\":null,\"matchTextDirection\":false}",
-        createdAt = snapshot.data()["created_at"] ?? "" as Timestamp?;
+        cabinetId = snapshot.data()["cabinet_id"] as String? ?? "",
+        name = snapshot.data()["name"] as String? ?? "",
+        substance = snapshot.data()["substance"] as String? ?? "",
+        description = snapshot.data()["description"] as String? ?? "",
+        icon = snapshot.data()["icon"] as String? ??
+            '{"codePoint":60518,"fontFamily":"MaterialIcons","fontPackage":null,"matchTextDirection":false}',
+        createdAt =
+            snapshot.data()["created_at"] as Timestamp? ?? "" as Timestamp?;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -39,4 +40,9 @@ class DrugModel extends Model {
         if (createdAt != null) "created_at": createdAt,
         "edited_at": Timestamp.now(),
       };
+
+  @override
+  String? getId() {
+    return id;
+  }
 }

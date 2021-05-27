@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/firebase/constants/collections.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 import 'package:medicine_cabinet/firebase/user/user_cabinet_model.dart';
@@ -21,8 +22,8 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
   }
 
   Stream<List<UserCabinetModel>> getMyCabinets() {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) return Stream.empty();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return const Stream.empty();
     return collection
         .where("user_id", isEqualTo: user.uid)
         .snapshots()
@@ -38,7 +39,7 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
   }
 
   Stream<List<UserCabinetModel>> getCabinetUsers(String? cabinetId) {
-    if (cabinetId == null) return Stream.empty();
+    if (cabinetId == null) return const Stream.empty();
     return collection
         .where("cabinet_id", isEqualTo: cabinetId)
         .snapshots()
@@ -55,7 +56,7 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
 
   Future<bool> isCabinetUser(String? cabinetId, String? userId) async {
     if (cabinetId == null || userId == null) return false;
-    var res = await collection
+    final res = await collection
         .where("cabinet_id", isEqualTo: cabinetId)
         .where("user_id", isEqualTo: userId)
         .get()
@@ -67,13 +68,12 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
 
   Future<bool> addByEmail(String? email, String? cabinetId) async {
     if (email == null || cabinetId == null) return false;
-    var user = await UserRepository().getByEmail(email);
+    final user = await UserRepository().getByEmail(email);
     if (user == null) {
       snackBarMessage("User not found", "Check email format");
       return false;
     }
-    var isShared = await isCabinetUser(cabinetId, user.userId ?? "");
-    print(isShared);
+    final isShared = await isCabinetUser(cabinetId, user.userId ?? "");
     if (isShared) {
       snackBarMessage("Already shared", email);
       return false;
@@ -88,7 +88,7 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
   }
 
   void deleteAll(String? cabinetId) {
-    if (cabinetId == null) return null;
+    if (cabinetId == null) return;
     collection
         .where("cabinet_id", isEqualTo: cabinetId)
         .snapshots()
@@ -101,10 +101,10 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
 
   Future<UserCabinetModel?> get(String? docId) async {
     if (docId == null) return null;
-    var res = await collection.doc(docId).get().then((e) {
+    final Future<UserCabinetModel?>? res =
+        await collection.doc(docId).get().then((e) {
       if (e.data() == null) return null;
-      print("Exists: " + e.exists.toString());
-      UserCabinetModel.fromJson(e.data() as Map<String, dynamic>);
+      UserCabinetModel.fromJson(e.data()! as Map<String, dynamic>);
     });
     return res;
   }
@@ -112,15 +112,14 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
   @override
   Future<void> delete(String? docId) async {
     if (docId == null) return;
-    print("To get: " + docId.toString());
-    var doc = await get(docId);
+    final doc = await get(docId);
     collection
         .doc(docId)
         .delete()
-        .then((value) => print("Operation success."))
+        .then((value) => debugPrint("Operation success."))
         .catchError(
             (error) => snackBarMessage("Operation failed", "Nothing removed"));
-    var userRepo = UserRepository();
+    final userRepo = UserRepository();
     userRepo.setEmptyCabinet(doc?.cabinetId ?? "");
   }
 }

@@ -17,7 +17,7 @@ class EditCabinet extends StatelessWidget {
     final nameController = TextEditingController();
     nameController.text = model.name ?? "Not set";
     return SimpleDialog(
-      title: Text("Edit Cabinet"),
+      title: const Text("Edit Cabinet"),
       children: [
         Form(
             key: formKey,
@@ -36,7 +36,7 @@ class EditCabinet extends StatelessWidget {
                         labelStyle: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                         ),
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                       ),
                       controller: nameController,
                       validator: (value) {
@@ -51,7 +51,7 @@ class EditCabinet extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        UserState user = Get.find();
+                        final UserState user = Get.find();
                         if (model.id == user.openCabinetId.value) {
                           snackBarMessage("Cannot delete opened cabinet",
                               "Open other cabinet first");
@@ -63,7 +63,7 @@ class EditCabinet extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).errorColor),
-                      child: Text("Delete"),
+                      child: const Text("Delete"),
                     ),
                     ElevatedButton(
                         onPressed: () {
@@ -74,7 +74,7 @@ class EditCabinet extends StatelessWidget {
                             Get.back();
                           }
                         },
-                        child: Text("Save")),
+                        child: const Text("Save")),
                   ],
                 ),
               ],

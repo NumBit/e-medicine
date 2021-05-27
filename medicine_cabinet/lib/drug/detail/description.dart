@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Description extends StatefulWidget {
-  Description({Key? key, this.description}) : super(key: key);
+  const Description({Key? key, this.description}) : super(key: key);
   final String? description;
 
   @override
@@ -15,13 +15,11 @@ class _DescriptionState extends State<Description> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.white,
-              blurRadius: 0.0,
-              spreadRadius: 0.0,
               offset: Offset(0, -2),
             ),
           ],
@@ -32,12 +30,10 @@ class _DescriptionState extends State<Description> {
             boxShadow: [
               BoxShadow(
                 color: Theme.of(context).primaryColor,
-                blurRadius: 0.0,
-                spreadRadius: 0.0,
-                offset: Offset(0, 2),
+                offset: const Offset(0, 2),
               ),
             ],
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(50),
               topRight: Radius.circular(50),
             ),
@@ -50,25 +46,23 @@ class _DescriptionState extends State<Description> {
                   DescriptionDialog(widget: widget),
                 );
               },
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      "Description",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      widget.description!,
-                      maxLines: 8,
-                      overflow: TextOverflow.fade,
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    "Description",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    widget.description!,
+                    maxLines: 8,
+                    overflow: TextOverflow.fade,
+                    style: const TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ],
               ),
             ),
           ),
@@ -90,12 +84,12 @@ class DescriptionDialog extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("Description"),
+          const Text("Description"),
           InkWell(
             borderRadius: BorderRadius.circular(50),
             onTap: () => Get.back(),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Icon(
                 Icons.cancel,
                 color: Colors.grey,
@@ -105,16 +99,14 @@ class DescriptionDialog extends StatelessWidget {
         ],
       ),
       children: [
-        Container(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.all(10.0),
-              width: 2000,
-              child: Text(
-                widget.description!,
-                style: TextStyle(
-                    color: Theme.of(context).primaryColorDark, fontSize: 18),
-              ),
+        SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(10.0),
+            width: 2000,
+            child: Text(
+              widget.description!,
+              style: TextStyle(
+                  color: Theme.of(context).primaryColorDark, fontSize: 18),
             ),
           ),
         ),

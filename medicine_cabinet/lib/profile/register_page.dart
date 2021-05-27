@@ -25,10 +25,10 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text("Medicine cabinet"),
+          title: const Text("Medicine cabinet"),
         ),
         body: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 50),
             child: Form(
               key: formKey,
               child: Column(children: [
@@ -45,8 +45,9 @@ class RegisterPage extends StatelessWidget {
                   controller: email,
                   inputType: TextInputType.emailAddress,
                   validator: (value) {
-                    if (value == null || value.isEmpty)
+                    if (value == null || value.isEmpty) {
                       return "Email cannot be empty";
+                    }
                     if (!GetUtils.isEmail(value)) return 'Wrong email format';
                     return null;
                   },
@@ -55,14 +56,19 @@ class RegisterPage extends StatelessWidget {
                   label: "Password",
                   controller: pass,
                   validator: (value) {
-                    if (value == null || value.isEmpty)
+                    if (value == null || value.isEmpty) {
                       return "Password cannot be empty";
-                    if (value.length < 6)
+                    }
+                    if (value.length < 6) {
                       return "Password must be at leat 6 char. long";
-                    if (!value.contains(RegExp(r"[0-9]")))
+                    }
+                    // ignore: unnecessary_raw_strings
+                    if (!value.contains(RegExp(r"[0-9]"))) {
                       return "Password must have at least 1 number";
-                    if (value != passSecond.text)
+                    }
+                    if (value != passSecond.text) {
                       return "Passwords needs to match";
+                    }
                     return null;
                   },
                 ),
@@ -70,12 +76,16 @@ class RegisterPage extends StatelessWidget {
                   label: "Repeat password",
                   controller: passSecond,
                   validator: (value) {
-                    if (value == null || value.isEmpty)
+                    if (value == null || value.isEmpty) {
                       return "Password cannot be empty";
-                    if (value.length < 6)
+                    }
+                    if (value.length < 6) {
                       return "Password must be at leat 6 char. long";
-                    if (!value.contains(RegExp(r"[0-9]")))
+                    }
+                    // ignore: unnecessary_raw_strings
+                    if (!value.contains(RegExp(r"[0-9]"))) {
                       return "Password must have at least 1 number";
+                    }
                     if (value != pass.text) return "Passwords needs to match";
                     return null;
                   },
@@ -95,7 +105,8 @@ class RegisterPage extends StatelessWidget {
             )));
   }
 
-  void _register(context, String email, String pass, String passSecond) async {
+  Future<void> _register(
+      context, String email, String pass, String passSecond) async {
     if (email.isEmpty || pass.isEmpty || passSecond.isEmpty) {
       snackBarMessage("Empty field", "Fill all fields");
       return;
@@ -110,24 +121,20 @@ class RegisterPage extends StatelessWidget {
     }
 
     try {
-      var userDoc = await FirebaseAuth.instance
+      final userDoc = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: pass);
-      print("firebase OK");
-      var cabId =
-          await CabinetRepository().add(CabinetModel(name: "Default cabinet"));
-      print("cabinet OK");
+      final cabId = await CabinetRepository()
+          .add(const CabinetModel(name: "Default cabinet"));
       UserRepository().add(UserModel(
           userId: userDoc.user!.uid,
           name: "Your Name",
           email: email,
           openCabinetId: cabId));
-      print("userRepo OK");
       UserCabinetRepository().add(UserCabinetModel(
           cabinetId: cabId,
           userId: userDoc.user!.uid,
           userEmail: userDoc.user!.email,
           admin: true));
-      print("userCab OK");
       Get.back();
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
@@ -140,8 +147,8 @@ class RegisterPage extends StatelessWidget {
         return;
       }
     } catch (e) {
-      print("Error occured in register:");
-      print(e);
+      debugPrint("Error occured in register:");
+      debugPrint(e.toString());
       snackBarMessage("Unknown error occured", "Try again later");
       return;
     }

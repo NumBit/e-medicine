@@ -13,7 +13,7 @@ class ExperimentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Experiment'),
+        title: const Text('Experiment'),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -24,30 +24,25 @@ class ExperimentPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Container(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: null, //CabinetRepository(context).getStream(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return Text('Something went wrong');
-                }
+          StreamBuilder<QuerySnapshot>(
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return const Text('Something went wrong');
+              }
 
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Text("Loading");
-                } else {
-                  return Container(
-                    child: ElevatedButton(
-                      child: Text("Add user"),
-                      onPressed: () {
-                        //UserRepository(context)
-                        //.add(UserModel(cabinets: ["abc", "def"]));
-                      },
-                    ),
-                  );
-                }
-              },
-            ),
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Text("Loading");
+              } else {
+                return ElevatedButton(
+                  onPressed: () {
+                    //UserRepository(context)
+                    //.add(UserModel(cabinets: ["abc", "def"]));
+                  },
+                  child: const Text("Add user"),
+                );
+              }
+            },
           ),
           ElevatedButton(
               onPressed: () async {
@@ -55,9 +50,7 @@ class ExperimentPage extends StatelessWidget {
                     androidPlatformChannelSpecifics =
                     AndroidNotificationDetails('your channel id',
                         'Medicine Cabinet', 'your channel description',
-                        importance: Importance.low,
-                        priority: Priority.high,
-                        showWhen: true);
+                        importance: Importance.low, priority: Priority.high);
                 const NotificationDetails platformChannelSpecifics =
                     NotificationDetails(
                         android: androidPlatformChannelSpecifics);
@@ -65,7 +58,7 @@ class ExperimentPage extends StatelessWidget {
                     0, 'plain title', 'plain body', platformChannelSpecifics,
                     payload: 'item x');
               },
-              child: Text("Notify")),
+              child: const Text("Notify")),
           ElevatedButton(
               onPressed: () async {
                 await flutterLocalNotificationsPlugin.zonedSchedule(
@@ -81,7 +74,7 @@ class ExperimentPage extends StatelessWidget {
                     uiLocalNotificationDateInterpretation:
                         UILocalNotificationDateInterpretation.absoluteTime);
               },
-              child: Text("Notify timed"))
+              child: const Text("Notify timed"))
         ],
       ),
     );

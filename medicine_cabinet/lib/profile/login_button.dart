@@ -14,20 +14,21 @@ class LoginButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Theme.of(context).primaryColorDark,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(500.0),
-            ),
+        style: ElevatedButton.styleFrom(
+          primary: Theme.of(context).primaryColorDark,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(500.0),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Text(
-              text,
-              style: TextStyle(fontSize: 20),
-            ),
+        ),
+        onPressed: onPressed as void Function()?,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Text(
+            text,
+            style: const TextStyle(fontSize: 20),
           ),
-          onPressed: onPressed as void Function()?),
+        ),
+      ),
     );
   }
 }

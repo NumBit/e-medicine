@@ -23,6 +23,7 @@ environment:
 dependencies:
     flutter:
         sdk: flutter
+        
     animations: ^2.0.0
     carousel_slider: ^4.0.0-nullsafety.0
     cloud_firestore: ^2.2.0
@@ -37,6 +38,7 @@ dependencies:
     get: ^4.1.4
     image_picker: ^0.7.5+2
     intl: ^0.17.0
+    lint: ^1.5.3
     rxdart: ^0.27.0
     select_form_field: ^2.0.0
     table_calendar: ^3.0.0

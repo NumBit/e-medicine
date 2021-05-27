@@ -22,13 +22,11 @@ class DrugGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OpenContainer<bool>(
-        useRootNavigator: false,
         tappable: false,
         closedShape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         closedElevation: 5,
-        transitionType: ContainerTransitionType.fade,
-        transitionDuration: Duration(milliseconds: 500),
+        transitionDuration: const Duration(milliseconds: 500),
         closedBuilder: (context, action) {
           return InkWellOverlay(
             openContainer: action,
@@ -100,20 +98,21 @@ class CardIcon extends StatelessWidget {
     return StreamBuilder<List<DrugPhotoModel>>(
         stream: DrugPhotoRepository(model.id).streamModels(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return LoadingWidget();
-          var photos = snapshot.data!;
+          if (!snapshot.hasData) return const LoadingWidget();
+          final photos = snapshot.data!;
           return Center(
-              child: photos.length == 0
+              child: photos.isEmpty
                   ? Icon(
-                      deserializeIcon(jsonDecode(model.icon!)),
+                      deserializeIcon(
+                          jsonDecode(model.icon!) as Map<String, dynamic>),
                       color: Theme.of(context).primaryColorDark,
                       size: 50,
                     )
                   : FutureBuilder<String>(
                       future: Storage().getLink(photos.first.path!),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData) return LoadingWidget();
-                        return Container(
+                        if (!snapshot.hasData) return const LoadingWidget();
+                        return SizedBox(
                           width: 100,
                           height: 70,
                           child: ClipRRect(
@@ -156,7 +155,7 @@ class CardName extends StatelessWidget {
 }
 
 Widget getCounterText(int count) {
-  return Text(count == 0 ? "Empty" : count.toString() + " ks",
+  return Text(count == 0 ? "Empty" : "$count ks",
       textScaleFactor: 1.2,
       style: TextStyle(
         color: Color(count <= 3 ? 0xffc33149 : 0xff12263a),

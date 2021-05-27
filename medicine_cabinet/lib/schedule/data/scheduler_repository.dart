@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/firebase/repository.dart';
 import 'package:medicine_cabinet/firebase/constants/collections.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
@@ -22,10 +23,10 @@ class SchedulerRepository extends Repository<SchedulerModel> {
 
   @override
   Future<String?> add(SchedulerModel model) async {
-    var user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;
     DocumentReference cabinet;
-    var item = SchedulerModel(
+    final item = SchedulerModel(
         ownerId: user.uid,
         schedulerKey: model.schedulerKey,
         name: model.name,
@@ -52,14 +53,14 @@ class SchedulerRepository extends Repository<SchedulerModel> {
     collection
         .doc(docId)
         .delete()
-        .then((value) => print("Operation success."))
+        .then((value) => debugPrint("Operation success."))
         .catchError(
             (error) => snackBarMessage("Operation failed", "Nothing removed"));
   }
 
   Stream<List<SchedulerModel>> streamModels() {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) return Stream.empty();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return const Stream.empty();
     return collection
         .where("owner_id", isEqualTo: user.uid)
         .snapshots()

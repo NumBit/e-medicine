@@ -13,7 +13,7 @@ class ScheduleRepository extends Repository<ScheduleModel> {
 
   @override
   Stream<ScheduleModel?> streamModel(String? id) {
-    if (id == null) return Stream.empty();
+    if (id == null) return const Stream.empty();
     return collection.snapshots().map((snap) => snap.docs
         .where((element) => element.id == id)
         .map((e) => ScheduleModel.fromMap(
@@ -23,10 +23,10 @@ class ScheduleRepository extends Repository<ScheduleModel> {
 
   @override
   Future<String?> add(ScheduleModel model) async {
-    var user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;
     DocumentReference cabinet;
-    var item = ScheduleModel(
+    final item = ScheduleModel(
         ownerId: user.uid,
         schedulerId: model
             .schedulerId, // WARNING, SET THIS IN FRONTEND (id from SchedulerRepo.Add)
@@ -48,8 +48,8 @@ class ScheduleRepository extends Repository<ScheduleModel> {
   }
 
   Stream<List<ScheduleModel>> streamModels() {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) return Stream.empty();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return const Stream.empty();
     return collection
         .where("owner_id", isEqualTo: user.uid)
         .snapshots()
@@ -71,7 +71,6 @@ class ScheduleRepository extends Repository<ScheduleModel> {
         .snapshots()
         .forEach((snap) {
       snap.docs.forEach((e) {
-        print(e.id);
         super.delete(e.id);
       });
     });

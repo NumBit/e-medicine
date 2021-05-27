@@ -38,7 +38,7 @@ class CustomFormField extends StatelessWidget {
               labelStyle: TextStyle(
                 color: Theme.of(context).primaryColorDark,
               ),
-              border: OutlineInputBorder()),
+              border: const OutlineInputBorder()),
           controller: controller,
           validator: validator,
         ));

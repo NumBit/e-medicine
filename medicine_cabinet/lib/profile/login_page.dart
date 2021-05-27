@@ -20,17 +20,18 @@ class LoginPage extends StatelessWidget {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Medicine cabinet'),
+              const Text('Medicine cabinet'),
               ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).primaryColorDark),
-                  child: Text('Register'),
-                  onPressed: () => Get.toNamed("/register")),
+                style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).primaryColorDark),
+                onPressed: () => Get.toNamed("/register"),
+                child: const Text('Register'),
+              ),
             ],
           ),
         ),
         body: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 50),
             child: Form(
               key: formKey,
               child: Column(children: [
@@ -47,8 +48,9 @@ class LoginPage extends StatelessWidget {
                   controller: email,
                   inputType: TextInputType.emailAddress,
                   validator: (value) {
-                    if (value == null || value.isEmpty)
+                    if (value == null || value.isEmpty) {
                       return "Email cannot be empty";
+                    }
                     if (!RegExp(
                             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                         .hasMatch(value)) return 'Wrong email format';
@@ -59,12 +61,16 @@ class LoginPage extends StatelessWidget {
                   label: "Password",
                   controller: pass,
                   validator: (value) {
-                    if (value == null || value.isEmpty)
+                    if (value == null || value.isEmpty) {
                       return "Password cannot be empty";
-                    if (value.length < 6)
+                    }
+                    if (value.length < 6) {
                       return "Password must be at leat 6 char. long";
-                    if (!value.contains(RegExp(r"[0-9]")))
+                    }
+                    // ignore: unnecessary_raw_strings
+                    if (!value.contains(RegExp(r"[0-9]"))) {
                       return "Password must have at least 1 number";
+                    }
                     return null;
                   },
                 ),
@@ -97,8 +103,8 @@ class LoginPage extends StatelessWidget {
         return false;
       }
     } catch (e) {
-      print("Error occured in login:");
-      print(e);
+      debugPrint("Error occured in login:");
+      debugPrint(e.toString());
       snackBarMessage("Unknown error occured", "Try again later");
       return false;
     }

@@ -5,15 +5,14 @@ import 'package:medicine_cabinet/firebase/repository.dart';
 
 class PackageRepository extends Repository<PackageModel> {
   final String? drugId;
-  PackageRepository(String? drugId)
-      : this.drugId = drugId,
-        super(
+  PackageRepository(this.drugId)
+      : super(
           FirebaseFirestore.instance.collection(Collections.packages),
         );
 
   @override
   Stream<PackageModel?> streamModel(String? id) {
-    if (id == null) return Stream.empty();
+    if (id == null) return const Stream.empty();
     return collection
         .where("drug_id", isEqualTo: drugId)
         .snapshots()
@@ -52,7 +51,7 @@ class PackageRepository extends Repository<PackageModel> {
   }
 
   Future<int> count() async {
-    var count = await collection
+    final count = await collection
         .where("drug_id", isEqualTo: drugId)
         .get()
         .then((value) => value.size);
@@ -60,14 +59,14 @@ class PackageRepository extends Repository<PackageModel> {
   }
 
   Stream<int> countPillsStream() {
-    var count = collection
+    final count = collection
         .where("drug_id", isEqualTo: drugId)
         .snapshots()
         .map((element) {
       element = element as QuerySnapshot<Map<String, dynamic>>;
       int pills = 0;
       element.docs.forEach((e) {
-        var package = PackageModel.fromMap(e);
+        final package = PackageModel.fromMap(e);
         pills += package.count ?? 0;
       });
       return pills;
@@ -76,14 +75,14 @@ class PackageRepository extends Repository<PackageModel> {
   }
 
   Future<int> countPills() async {
-    var count = await collection
+    final count = await collection
         .where("drug_id", isEqualTo: drugId)
         .get()
         .then((element) {
       element = element as QuerySnapshot<Map<String, dynamic>>;
       int pills = 0;
       element.docs.forEach((e) {
-        var package = PackageModel.fromMap(e);
+        final package = PackageModel.fromMap(e);
         pills += package.count ?? 0;
       });
       return pills;

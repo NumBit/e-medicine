@@ -13,15 +13,15 @@ class SchedulePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var date = Get.put(SelectedDate());
+    final date = Get.put(SelectedDate());
     return Scaffold(
       appBar: _buildSchedulePageAppBar(context),
-      floatingActionButton: AddScheduleButton(),
+      floatingActionButton: const AddScheduleButton(),
       body: StreamBuilder<List<ScheduleModel>>(
           stream: ScheduleRepository().streamModels(),
           builder: (context, schedules) {
-            if (!schedules.hasData) return LoadingWidget();
-            var events = schedules.data;
+            if (!schedules.hasData) return const LoadingWidget();
+            final events = schedules.data;
             return Column(
               children: [
                 WeekCalendar(events: events),
@@ -61,21 +61,19 @@ class SchedulesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Container(
-        child: Obx(() {
-          var selectedDay = date.date.value;
-          var schedulesList = events!
-              .where((element) =>
-                  getDateOnly(element.timestamp!.toDate()) == selectedDay)
-              .map((e) => ScheduleItem(model: e))
-              .toList();
-          schedulesList
-              .sort((a, b) => a.model.timestamp!.compareTo(b.model.timestamp!));
-          return ListView(
-            children: schedulesList,
-          );
-        }),
-      ),
+      child: Obx(() {
+        final selectedDay = date.date.value;
+        final schedulesList = events!
+            .where((element) =>
+                getDateOnly(element.timestamp!.toDate()) == selectedDay)
+            .map((e) => ScheduleItem(model: e))
+            .toList();
+        schedulesList
+            .sort((a, b) => a.model.timestamp!.compareTo(b.model.timestamp!));
+        return ListView(
+          children: schedulesList,
+        );
+      }),
     );
   }
 }
@@ -88,13 +86,13 @@ class AddScheduleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      child: Icon(Icons.add),
       backgroundColor: Theme.of(context).primaryColor,
       onPressed: () {
-        NavigationState nav = Get.find();
+        final NavigationState nav = Get.find();
 
         Get.toNamed("/create_schedule", id: nav.navigatorId.value);
       },
+      child: const Icon(Icons.add),
     );
   }
 }

@@ -20,12 +20,12 @@ class CabinetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserState userState = Get.find();
+    final UserState userState = Get.find();
     return StreamBuilder<CabinetModel>(
       stream: CabinetRepository().streamModel(model.cabinetId),
       builder: (context, snapshot) {
-        if (snapshot.data == null) return LoadingWidget();
-        var cabinet = snapshot.data!;
+        if (snapshot.data == null) return const LoadingWidget();
+        final cabinet = snapshot.data!;
         return Padding(
           padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
           child: Card(
@@ -43,7 +43,7 @@ class CabinetCard extends StatelessWidget {
                     child: Text(
                       cabinet.name ?? "Not set",
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 20),
+                      style: const TextStyle(fontSize: 20),
                     ),
                   ),
                   if (userState.openCabinetId.value == cabinet.id)
@@ -81,7 +81,7 @@ class CabinetCard extends StatelessWidget {
                         )),
                     TextButton(
                         onPressed: () {
-                          NavigationState nav = Get.find();
+                          final NavigationState nav = Get.find();
                           userState.openCabinetId.value = cabinet.id ?? "";
                           UserRepository().update(UserModel(
                             id: userState.id.value,

@@ -1,14 +1,16 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'dart:async';
+import 'package:rxdart/subjects.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
 import 'error/error_page.dart';
 import 'error/loading_page.dart';
-import 'package:rxdart/subjects.dart';
 import 'main/cabinet_app.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -59,7 +61,7 @@ Future<void> main() async {
         id: id, title: title, body: body, payload: payload));
   });
 
-  final MacOSInitializationSettings initializationSettingsMacOS =
+  const MacOSInitializationSettings initializationSettingsMacOS =
       MacOSInitializationSettings();
 
   final InitializationSettings initializationSettings = InitializationSettings(
@@ -88,13 +90,12 @@ class MedicineCabinetApp extends StatelessWidget {
       future: _initialization,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ErrorPage();
+          return const ErrorPage();
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          print("Firebase.initializeApp() return DONE");
-          return CabinetApp();
+          return const CabinetApp();
         }
-        return LoadingPage();
+        return const LoadingPage();
       },
     );
   }

@@ -21,11 +21,11 @@ class AddDrug extends StatelessWidget {
     final nameController = TextEditingController();
     final substanceController = TextEditingController();
     final descriptionController = TextEditingController();
-    SelectedIcon icon = Get.put(SelectedIcon());
+    final SelectedIcon icon = Get.put(SelectedIcon());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Add new drug"),
+        title: const Text("Add new drug"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -40,8 +40,9 @@ class AddDrug extends StatelessWidget {
                     helper: "Required",
                     maxLength: 40,
                     validator: (String? value) {
-                      if (value == null || value.isBlank!)
+                      if (value == null || value.isBlank!) {
                         return 'Name cannot be empty';
+                      }
                       return null;
                     }),
                 CustomFormField(
@@ -51,7 +52,6 @@ class AddDrug extends StatelessWidget {
                 CustomFormField(
                   controller: descriptionController,
                   label: "Description",
-                  minLines: 1,
                   maxLines: 8,
                   maxLength: 2000,
                 ),
@@ -59,9 +59,9 @@ class AddDrug extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
-                      NavigationState nav = Get.find();
-                      UserState userState = Get.find();
-                      var drug = DrugModel(
+                      final NavigationState nav = Get.find();
+                      final UserState userState = Get.find();
+                      final drug = DrugModel(
                         cabinetId: userState.openCabinetId.value,
                         name: nameController.text,
                         substance: substanceController.text,
@@ -73,7 +73,7 @@ class AddDrug extends StatelessWidget {
                       Get.back(id: nav.navigatorId.value);
                     }
                   },
-                  child: Text("Create"),
+                  child: const Text("Create"),
                 )
               ],
             ),

@@ -16,7 +16,7 @@ class DatePickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = TextEditingController(
+    final controller = TextEditingController(
         text: DateFormat("dd.MM.yyyy").format(date.value));
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -41,12 +41,11 @@ class DatePickerField extends StatelessWidget {
             labelStyle: TextStyle(
               color: Theme.of(context).primaryColorDark,
             ),
-            border: OutlineInputBorder(),
-            disabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 1, color: Colors.grey)),
+            border: const OutlineInputBorder(),
+            disabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey)),
             errorBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(width: 1, color: Theme.of(context).errorColor)),
+                borderSide: BorderSide(color: Theme.of(context).errorColor)),
             errorStyle: TextStyle(
               color: Theme.of(context).errorColor, // or any other color
             ),

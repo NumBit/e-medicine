@@ -10,36 +10,37 @@ class CabinetsListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final streamBuilder = StreamBuilder<List<UserCabinetModel>>(
+        stream: UserCabinetRepository().getMyCabinets(),
+        initialData: const [],
+        builder: (context, cabinets) {
+          if (cabinets.data == null) return ListView();
+          return ListView(
+              children: cabinets.data!
+                  .map((cab) => CabinetCard(
+                        model: cab,
+                      ))
+                  .toList());
+        });
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: Text('My Cabinets')),
+      appBar: AppBar(title: const Text('My Cabinets')),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             createCabinet(context);
           },
           backgroundColor: Theme.of(context).primaryColor,
           tooltip: 'Add cabinet',
-          child: Icon(
+          child: const Icon(
             Icons.add,
             size: 30,
           )),
-      body: StreamBuilder<List<UserCabinetModel>>(
-          stream: UserCabinetRepository().getMyCabinets(),
-          initialData: [],
-          builder: (context, cabinets) {
-            if (cabinets.data == null) return ListView();
-            return ListView(
-                children: cabinets.data!
-                    .map((cab) => CabinetCard(
-                          model: cab,
-                        ))
-                    .toList());
-          }),
+      body: streamBuilder,
     );
   }
 }
 
-Future<void> createCabinet(context) async {
+Future<void> createCabinet(BuildContext context) async {
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   return showDialog(

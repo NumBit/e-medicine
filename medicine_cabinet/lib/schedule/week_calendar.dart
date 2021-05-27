@@ -47,14 +47,14 @@ class _WeekCalendarState extends State<WeekCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedDate = Get.put(SelectedDate());
+    final selectedDate = Get.put(SelectedDate());
     initializeDateFormatting("sk");
     return Material(
       elevation: 10,
       child: Container(
           decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30),
                 topRight: Radius.circular(30),
               )),
@@ -67,7 +67,7 @@ class _WeekCalendarState extends State<WeekCalendar> {
                 locale: "sk",
                 startingDayOfWeek: StartingDayOfWeek.monday,
                 calendarFormat: CalendarFormat.week,
-                availableCalendarFormats: {CalendarFormat.week: 'Week'},
+                availableCalendarFormats: const {CalendarFormat.week: 'Week'},
                 rowHeight: 80,
                 eventLoader: (date) => widget.events!
                     .where((e) =>
@@ -76,18 +76,18 @@ class _WeekCalendarState extends State<WeekCalendar> {
                     .toList(),
                 calendarBuilders:
                     CalendarBuilders(markerBuilder: (context, day, events) {
-                  if (events.length <= 0) return null;
+                  if (events.isEmpty) return null;
                   return Padding(
                     padding: const EdgeInsets.only(right: 3, bottom: 10),
                     child: Container(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Theme.of(context).errorColor),
                       child: Text(
                         events.length.toString(),
                         textScaleFactor: 0.8,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   );
@@ -108,7 +108,7 @@ class _WeekCalendarState extends State<WeekCalendar> {
                     defaultTextStyle: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).primaryColorDark),
-                    selectedTextStyle: TextStyle(
+                    selectedTextStyle: const TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.white),
                     weekendTextStyle: TextStyle(
                       color: Theme.of(context).errorColor,
@@ -121,7 +121,8 @@ class _WeekCalendarState extends State<WeekCalendar> {
                         color: Theme.of(context).primaryColorDark,
                       ),
                     ),
-                    todayTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                    todayTextStyle:
+                        const TextStyle(fontWeight: FontWeight.bold),
                     selectedDecoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Theme.of(context).primaryColorDark,
@@ -141,7 +142,7 @@ class _WeekCalendarState extends State<WeekCalendar> {
                   });
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               )
             ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ChipFilter extends StatefulWidget {
   final String? name;
-  ChipFilter({
+  const ChipFilter({
     Key? key,
     this.name,
   }) : super(key: key);
@@ -21,7 +21,7 @@ class _ChipFilterState extends State<ChipFilter> {
       child: FilterChip(
         elevation: 3,
         backgroundColor: Colors.white,
-        selectedColor: Color(0x6006BCC1),
+        selectedColor: const Color(0x6006BCC1),
         label: Text(widget.name ?? "Empty"),
         selected: active,
         onSelected: (bool value) {

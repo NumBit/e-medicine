@@ -16,17 +16,17 @@ class CabinetApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Medicine cabinet',
       theme: ThemeData(
-          primaryColor: Color(0xff06BCC1),
-          primaryColorDark: Color(0xff12263A),
-          errorColor: Color(0xffc33149),
+          primaryColor: const Color(0xff06BCC1),
+          primaryColorDark: const Color(0xff12263A),
+          errorColor: const Color(0xffc33149),
           primarySwatch: Colors.teal,
-          iconTheme: IconThemeData(color: Colors.white)),
+          iconTheme: const IconThemeData(color: Colors.white)),
       initialRoute: "/",
       routes: {
-        "/": (context) => MainPage(),
-        "/login": (context) => LoginPage(),
-        "/register": (context) => RegisterPage(),
-        "/experiment": (context) => ExperimentPage(),
+        "/": (context) => const MainPage(),
+        "/login": (context) => const LoginPage(),
+        "/register": (context) => const RegisterPage(),
+        "/experiment": (context) => const ExperimentPage(),
       },
     );
   }

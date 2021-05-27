@@ -9,7 +9,7 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FilterState filter = Get.find();
+    final FilterState filter = Get.find();
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: TextField(
@@ -20,23 +20,22 @@ class SearchBar extends StatelessWidget {
           filled: true,
           fillColor: Colors.white,
           focusColor: Colors.white,
-          suffixIcon: Padding(
-            padding: const EdgeInsets.only(right: 10.0),
+          suffixIcon: const Padding(
+            padding: EdgeInsets.only(right: 10.0),
             child: Icon(
               Icons.search,
               size: 35,
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(color: Theme.of(context).primaryColorDark, width: 1),
+            borderSide: BorderSide(color: Theme.of(context).primaryColorDark),
             borderRadius: BorderRadius.circular(50),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white, width: 1),
+            borderSide: const BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(50),
           ),
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
       ),
     );

@@ -49,14 +49,14 @@ class ScheduleActions extends StatelessWidget {
                   arguments: model,
                   id: Get.find<NavigationState>().navigatorId.value);
             },
-            child: Text("Edit")),
+            child: const Text("Edit")),
         TextButton(
             onPressed: () {
               Get.toNamed("/edit_schedule_plan",
                   arguments: model.schedulerId,
                   id: Get.find<NavigationState>().navigatorId.value);
             },
-            child: Text("Reschedule"))
+            child: const Text("Reschedule"))
       ],
     );
   }
@@ -104,7 +104,7 @@ class DosageAndCount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      model.dosage! + " x " + model.count.toString(),
+      "${model.dosage!} x ${model.count}",
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
           color: Theme.of(context).primaryColorDark,

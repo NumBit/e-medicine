@@ -1,7 +1,7 @@
 class Repeating {
-  static const String Never = "Never";
-  static const String XHours = "X hours";
-  static const String Day = "Day";
-  static const String XDays = "X days";
-  static const String Week = "Week";
+  static const String never = "Never";
+  static const String xHours = "X hours";
+  static const String day = "Day";
+  static const String xDays = "X days";
+  static const String week = "Week";
 }

@@ -11,7 +11,7 @@ class Menu extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-          DrawerHeader(child: Text("Menu")),
+          const DrawerHeader(child: Text("Menu")),
           // ListTile(
           //   title: Text("Profile"),
           //   onTap: () => Get.toNamed("/profile"),
@@ -25,7 +25,7 @@ class Menu extends StatelessWidget {
           //   onTap: () => Get.toNamed("/cabinets_list"),
           // ),
           ListTile(
-            title: Text("Experiment"),
+            title: const Text("Experiment"),
             onTap: () => Get.toNamed("/experiment"),
           ),
           // ListTile(

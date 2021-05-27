@@ -6,15 +6,14 @@ import 'drug_photo_model.dart';
 
 class DrugPhotoRepository extends Repository<DrugPhotoModel> {
   final String? drugId;
-  DrugPhotoRepository(String? drugId)
-      : this.drugId = drugId,
-        super(
+  DrugPhotoRepository(this.drugId)
+      : super(
           FirebaseFirestore.instance.collection(Collections.drugPhotos),
         );
 
   @override
   Stream<DrugPhotoModel> streamModel(String? id) {
-    if (id == null) return Stream.empty();
+    if (id == null) return const Stream.empty();
     return collection
         .where("drug_id", isEqualTo: drugId)
         .orderBy("created_at")
@@ -64,7 +63,7 @@ class DrugPhotoRepository extends Repository<DrugPhotoModel> {
   }
 
   Future<int> count() async {
-    var count = await collection
+    final count = await collection
         .where("drug_id", isEqualTo: drugId)
         .get()
         .then((value) => value.size);

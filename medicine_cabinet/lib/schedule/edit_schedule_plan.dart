@@ -24,26 +24,26 @@ class EditSchedulePlan extends StatelessWidget {
     final dosageController = TextEditingController(text: "");
     final countController = TextEditingController();
     final repeatController = TextEditingController();
-    var startTime = TimeOfDay.now().obs;
-    var endTime = TimeOfDay.now().obs;
-    var startDate = DateTime(
+    final startTime = TimeOfDay.now().obs;
+    final endTime = TimeOfDay.now().obs;
+    final startDate = DateTime(
       DateTime.now().year,
       DateTime.now().month,
       DateTime.now().day,
     ).obs;
-    var endDate = DateTime(
+    final endDate = DateTime(
       DateTime.now().year,
       DateTime.now().month,
       DateTime.now().day,
     ).obs;
 
-    var repeat = "Never".obs;
-    var notification = false.obs;
+    final repeat = "Never".obs;
+    final notification = false.obs;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Edit schedule"),
+        title: const Text("Edit schedule"),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -51,8 +51,8 @@ class EditSchedulePlan extends StatelessWidget {
           child: StreamBuilder<SchedulerModel>(
               stream: SchedulerRepository().streamModel(schedulerId),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return LoadingWidget();
-                var scheduler = snapshot.data!;
+                if (!snapshot.hasData) return const LoadingWidget();
+                final scheduler = snapshot.data!;
                 drugNameController.text = scheduler.name!;
                 dosageController.text = scheduler.dosage!;
                 countController.text = scheduler.count.toString();
@@ -62,39 +62,40 @@ class EditSchedulePlan extends StatelessWidget {
                 endTime.value = scheduler.timeTo!;
                 startDate.value = scheduler.dayFrom!.toDate();
                 endDate.value = scheduler.dayTo!.toDate();
-                if (scheduler.notify != null)
+                if (scheduler.notify != null) {
                   notification.value = scheduler.notify!;
+                }
 
                 return Column(
                   children: [
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     DrugNameField(drugNameController: drugNameController),
                     DosageField(dosageController: dosageController),
                     CountField(countController: countController),
-                    OptionDivider(),
+                    const OptionDivider(),
                     NotificationOption(notification: notification),
-                    OptionDivider(),
+                    const OptionDivider(),
                     RepeatSelection(repeat: repeat),
-                    OptionDivider(),
+                    const OptionDivider(),
                     DatePickers(
                       repeat: repeat,
                       endDate: endDate,
                       startDate: startDate,
                     ),
-                    OptionDivider(),
+                    const OptionDivider(),
                     TimePickers(
                       startTime: startTime,
                       repeat: repeat,
                       endTime: endTime,
                     ),
-                    OptionDivider(),
+                    const OptionDivider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         ElevatedButton(
                           onPressed: () {
                             ScheduleRepository()
-                                .deleteAll(scheduler.schedulerKey!);
+                                .deleteAll(scheduler.schedulerKey);
                             Get.back(
                                 id: Get.find<NavigationState>()
                                     .navigatorId
@@ -102,7 +103,7 @@ class EditSchedulePlan extends StatelessWidget {
                           },
                           style: ElevatedButton.styleFrom(
                               primary: Theme.of(context).errorColor),
-                          child: Text("Delete"),
+                          child: const Text("Delete"),
                         ),
                         ElevatedButton(
                             onPressed: () {
@@ -121,7 +122,7 @@ class EditSchedulePlan extends StatelessWidget {
                                 notification.value,
                               );
                             },
-                            child: Text("Edit")),
+                            child: const Text("Edit")),
                       ],
                     ),
                   ],
@@ -132,7 +133,7 @@ class EditSchedulePlan extends StatelessWidget {
     );
   }
 
-  void editSchedules(
+  Future<void> editSchedules(
     GlobalKey<FormState> formKey,
     RxString repeat,
     TextEditingController drugNameController,
@@ -147,18 +148,18 @@ class EditSchedulePlan extends StatelessWidget {
     bool notification,
   ) async {
     if (formKey.currentState!.validate()) {
-      var repeatHours = int.parse(repeatController.text);
-      var count = int.parse(countController.text);
-      NavigationState nav = Get.find();
-      var schedulerKey = Uuid().v4();
-      var scheduleRepo = ScheduleRepository();
-      var schedules = await scheduleRepo.listByKey(oldSchedulerKey);
+      final repeatHours = int.parse(repeatController.text);
+      final count = int.parse(countController.text);
+      final NavigationState nav = Get.find();
+      final schedulerKey = const Uuid().v4();
+      final scheduleRepo = ScheduleRepository();
+      final schedules = await scheduleRepo.listByKey(oldSchedulerKey);
       schedules.forEach((element) {
         if (element.notifyId != null) cancelNotification(element.notifyId!);
       });
-      scheduleRepo.deleteAll(oldSchedulerKey!);
+      scheduleRepo.deleteAll(oldSchedulerKey);
 
-      var scheduler = SchedulerModel(
+      final scheduler = SchedulerModel(
         id: schedulerId,
         schedulerKey: schedulerKey,
         repeatTimes: repeatHours,

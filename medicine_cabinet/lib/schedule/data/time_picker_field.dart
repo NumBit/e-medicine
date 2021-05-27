@@ -15,13 +15,12 @@ class TimePickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = TextEditingController(text: time.value.format(context));
+    final controller = TextEditingController(text: time.value.format(context));
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
           showTimePicker(
-            initialEntryMode: TimePickerEntryMode.dial,
             initialTime: time.value,
             context: context,
           ).then((value) {
@@ -38,12 +37,11 @@ class TimePickerField extends StatelessWidget {
             labelStyle: TextStyle(
               color: Theme.of(context).primaryColorDark,
             ),
-            border: OutlineInputBorder(),
-            disabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 1, color: Colors.grey)),
+            border: const OutlineInputBorder(),
+            disabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey)),
             errorBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(width: 1, color: Theme.of(context).errorColor)),
+                borderSide: BorderSide(color: Theme.of(context).errorColor)),
             errorStyle: TextStyle(
               color: Theme.of(context).errorColor, // or any other color
             ),
