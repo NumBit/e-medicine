@@ -1,19 +1,20 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
+import 'package:flutter/material.dart';
 
 import '../../main/snack_bar_message.dart';
 
 class Storage {
   Future<bool> uploadFile(String filePath, String fileTarget) async {
-    File file = File(filePath);
+    final File file = File(filePath);
     try {
       await firebase_storage.FirebaseStorage.instance
           .ref(fileTarget)
           .putFile(file);
     } on firebase_core.FirebaseException catch (e) {
       snackBarMessage("Upload failed", "Please try again later");
-      print("Upload failed: " + e.toString());
+      debugPrint("Upload failed: $e");
       return false;
     }
     return true;
@@ -26,21 +27,21 @@ class Storage {
           .ref(filePath)
           .getDownloadURL();
     } on firebase_core.FirebaseException catch (e) {
-      print("Getting link failed: " + e.toString());
+      debugPrint("Getting link failed: $e");
       return "https://firebasestorage.googleapis.com/v0/b/e-medicine-3338c.appspot.com/o/empty.jpg?alt=media&token=53f714f3-ebe5-4146-bd07-d0f47a30fcba";
     }
     return ref;
   }
 
   Future<bool> downloadFile(String filePath, String fileTarget) async {
-    File downloadToFile = File(fileTarget);
+    final File downloadToFile = File(fileTarget);
     try {
       await firebase_storage.FirebaseStorage.instance
           .ref(filePath)
           .writeToFile(downloadToFile);
     } on firebase_core.FirebaseException catch (e) {
       snackBarMessage("Download failed", "Please try again later");
-      print("Download failed: " + e.toString());
+      debugPrint("Download failed: $e");
       return false;
     }
     return true;
@@ -52,7 +53,7 @@ class Storage {
       await firebase_storage.FirebaseStorage.instance.ref(filePath).delete();
     } on firebase_core.FirebaseException catch (e) {
       snackBarMessage("Delete failed", "Please try again later");
-      print("Delete failed: " + e.toString());
+      debugPrint("Delete failed: $e");
       return false;
     }
     return true;

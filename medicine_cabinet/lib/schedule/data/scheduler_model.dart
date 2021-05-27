@@ -17,7 +17,7 @@ class SchedulerModel extends Model {
   final TimeOfDay? timeTo;
   final bool? notify;
 
-  SchedulerModel(
+  const SchedulerModel(
       {this.id,
       this.ownerId,
       this.schedulerKey,
@@ -30,8 +30,7 @@ class SchedulerModel extends Model {
       this.dayTo,
       this.timeFrom,
       this.timeTo,
-      this.notify})
-      : super(id: id);
+      this.notify});
 
   SchedulerModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
@@ -71,4 +70,9 @@ class SchedulerModel extends Model {
         if (timeTo != null) "timeToM": timeTo!.minute,
         if (notify != null) "notify": notify,
       };
+
+  @override
+  String? getId() {
+    return id;
+  }
 }

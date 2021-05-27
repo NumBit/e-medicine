@@ -14,7 +14,7 @@ class ScheduleModel extends Model {
   final bool? notify;
   final int? notifyId;
 
-  ScheduleModel(
+  const ScheduleModel(
       {this.id,
       this.ownerId,
       this.schedulerId,
@@ -25,8 +25,7 @@ class ScheduleModel extends Model {
       this.timestamp,
       this.isTaken,
       this.notify,
-      this.notifyId})
-      : super(id: id);
+      this.notifyId});
 
   ScheduleModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
@@ -55,4 +54,9 @@ class ScheduleModel extends Model {
         if (notify != null) "notify": notify,
         if (notifyId != null) "notify_id": notifyId,
       };
+
+  @override
+  String? getId() {
+    return id;
+  }
 }

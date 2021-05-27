@@ -8,9 +8,8 @@ class UserCabinetModel extends Model {
   final String? cabinetId;
   final bool? admin;
 
-  UserCabinetModel(
-      {this.id, this.userId, this.cabinetId, this.userEmail, this.admin})
-      : super(id: id);
+  const UserCabinetModel(
+      {this.id, this.userId, this.cabinetId, this.userEmail, this.admin});
 
   UserCabinetModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
@@ -33,4 +32,9 @@ class UserCabinetModel extends Model {
         if (cabinetId != null) "cabinet_id": cabinetId,
         if (admin != null) "admin": admin,
       };
+
+  @override
+  String? getId() {
+    return id;
+  }
 }
