@@ -20,15 +20,15 @@ class TabNavigation extends StatefulWidget {
 
 class TabState extends State<TabNavigation>
     with SingleTickerProviderStateMixin {
-  TabController? _controller;
+  TabController? controller;
 
   @override
   void initState() {
     var nav = Get.put(NavigationState());
     super.initState();
-    _controller = TabController(length: 3, vsync: this);
-    _controller!.addListener(() {
-      nav.navigatorId.value = _controller!.index;
+    controller = TabController(length: 3, vsync: this);
+    controller!.addListener(() {
+      nav.navigatorId.value = controller!.index;
     });
   }
 
@@ -51,9 +51,9 @@ class TabState extends State<TabNavigation>
             ScheduleNavigatorPage(navigatorKey: Get.nestedKey(1)),
             ProfileNNavigatorPage(navigatorKey: Get.nestedKey(2))
           ],
-          controller: _controller,
+          controller: controller,
         ),
-        bottomNavigationBar: BottomTabBar(controller: _controller),
+        bottomNavigationBar: BottomTabBar(controller: controller),
       ),
     );
   }
@@ -62,11 +62,10 @@ class TabState extends State<TabNavigation>
 class BottomTabBar extends StatelessWidget {
   const BottomTabBar({
     Key? key,
-    required controller,
-  })   : _controller = controller,
-        super(key: key);
+    required this.controller,
+  }) : super(key: key);
 
-  final TabController? _controller;
+  final TabController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +92,7 @@ class BottomTabBar extends StatelessWidget {
             iconMargin: EdgeInsets.only(bottom: 5),
           ),
         ],
-        controller: _controller,
+        controller: controller,
       ),
     );
   }

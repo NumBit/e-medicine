@@ -159,7 +159,7 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-Widget _getColumn(context, String text, int? number) {
+Widget _getColumn(BuildContext context, String text, int? number) {
   return Material(
     elevation: 5,
     color: Colors.white,

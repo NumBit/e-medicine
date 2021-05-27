@@ -26,7 +26,8 @@ class EditDrug extends StatelessWidget {
     final descriptionController =
         TextEditingController(text: model.description);
     SelectedIcon icon = Get.put(SelectedIcon());
-    icon.icon.value = deserializeIcon(jsonDecode(model.icon!));
+    icon.icon.value =
+        deserializeIcon(jsonDecode(model.icon!) as Map<String, dynamic>);
     UserState userState = Get.find();
     return Container(
       child: Scaffold(

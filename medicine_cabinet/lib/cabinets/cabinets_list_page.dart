@@ -39,7 +39,7 @@ class CabinetsListPage extends StatelessWidget {
   }
 }
 
-Future<void> createCabinet(context) async {
+Future<void> createCabinet(BuildContext context) async {
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   return showDialog(

@@ -10,8 +10,8 @@ class CabinetModel extends Model {
 
   CabinetModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
-        name = snapshot.data()["name"] ?? "",
-        ownerId = snapshot.data()["owner_id"] ?? "";
+        name = snapshot.data()["name"] as String? ?? "",
+        ownerId = snapshot.data()["owner_id"] as String? ?? "";
 
   @override
   Map<String, dynamic> toJson() => {

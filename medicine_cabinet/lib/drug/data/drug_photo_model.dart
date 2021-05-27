@@ -11,9 +11,10 @@ class DrugPhotoModel extends Model {
 
   DrugPhotoModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
-        drugId = snapshot.data()["drug_id"] ?? "",
-        path = snapshot.data()["path"] ?? "",
-        createdAt = snapshot.data()["created_at"] ?? "" as Timestamp?;
+        drugId = snapshot.data()["drug_id"] as String? ?? "",
+        path = snapshot.data()["path"] as String? ?? "",
+        createdAt =
+            snapshot.data()["created_at"] as Timestamp? ?? "" as Timestamp?;
 
   @override
   Map<String, dynamic> toJson() => {

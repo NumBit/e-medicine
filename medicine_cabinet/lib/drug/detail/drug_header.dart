@@ -53,7 +53,8 @@ class DrugHeader extends StatelessWidget {
                 return Center(
                     child: photos.length == 0
                         ? Icon(
-                            deserializeIcon(jsonDecode(model.icon!)),
+                            deserializeIcon(jsonDecode(model.icon!)
+                                as Map<String, dynamic>),
                             color: Theme.of(context).primaryColorDark,
                             size: 50,
                           )
@@ -62,7 +63,8 @@ class DrugHeader extends StatelessWidget {
                             builder: (context, snapshot) {
                               if (!snapshot.hasData)
                                 return Icon(
-                                  deserializeIcon(jsonDecode(model.icon!)),
+                                  deserializeIcon(jsonDecode(model.icon!)
+                                      as Map<String, dynamic>),
                                   color: Theme.of(context).primaryColorDark,
                                   size: 50,
                                 );

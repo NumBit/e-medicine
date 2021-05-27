@@ -24,7 +24,7 @@ abstract class Repository<T extends Model> {
   void update(T model) {
     collection
         .doc(model.id)
-        .update(model.toJson())
+        .update(model.toJson() as Map<String, Object?>)
         .then((value) => print("Operation success."))
         .catchError(
             (error) => snackBarMessage("Operation failed", "Nothing updated"));

@@ -13,10 +13,11 @@ class PackageModel extends Model {
 
   PackageModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
-        drugId = snapshot.data()["drug_id"] ?? "",
-        dosage = snapshot.data()["dosage"] ?? "",
-        expiration = snapshot.data()["expiration"] ?? "" as Timestamp?,
-        count = snapshot.data()["count"] ?? 0;
+        drugId = snapshot.data()["drug_id"] as String? ?? "",
+        dosage = snapshot.data()["dosage"] as String? ?? "",
+        expiration =
+            snapshot.data()["expiration"] as Timestamp? ?? "" as Timestamp?,
+        count = snapshot.data()["count"] as int? ?? 0;
 
   @override
   Map<String, dynamic> toJson() => {

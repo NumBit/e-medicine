@@ -101,7 +101,8 @@ class UserCabinetRepository extends Repository<UserCabinetModel> {
 
   Future<UserCabinetModel?> get(String? docId) async {
     if (docId == null) return null;
-    var res = await collection.doc(docId).get().then((e) {
+    Future<UserCabinetModel?>? res =
+        await collection.doc(docId).get().then((e) {
       if (e.data() == null) return null;
       print("Exists: " + e.exists.toString());
       UserCabinetModel.fromJson(e.data() as Map<String, dynamic>);

@@ -23,12 +23,12 @@ class UserModel extends Model {
 
   UserModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
-        userId = snapshot.data()["user_id"] ?? "",
-        name = snapshot.data()["name"] ?? "",
-        email = snapshot.data()["email"] ?? "",
-        profilePicture = snapshot.data()["profile_picture"] ?? "",
-        openCabinetId = snapshot.data()["default_cabinet"] ?? "",
-        notifyCounter = snapshot.data()["notify_counter"] ?? 0;
+        userId = snapshot.data()["user_id"] as String? ?? "",
+        name = snapshot.data()["name"] as String? ?? "",
+        email = snapshot.data()["email"] as String? ?? "",
+        profilePicture = snapshot.data()["profile_picture"] as String? ?? "",
+        openCabinetId = snapshot.data()["default_cabinet"] as String? ?? "",
+        notifyCounter = snapshot.data()["notify_counter"] as int? ?? 0;
   //cabinets = snapshot.data()["cabinets"] ?? "";
 
   @override

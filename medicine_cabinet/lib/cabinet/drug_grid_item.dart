@@ -105,7 +105,8 @@ class CardIcon extends StatelessWidget {
           return Center(
               child: photos.length == 0
                   ? Icon(
-                      deserializeIcon(jsonDecode(model.icon!)),
+                      deserializeIcon(
+                          jsonDecode(model.icon!) as Map<String, dynamic>),
                       color: Theme.of(context).primaryColorDark,
                       size: 50,
                     )

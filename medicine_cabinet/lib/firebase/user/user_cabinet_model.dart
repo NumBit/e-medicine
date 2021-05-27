@@ -14,17 +14,17 @@ class UserCabinetModel extends Model {
 
   UserCabinetModel.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
-        userId = snapshot.data()["user_id"] ?? "",
-        userEmail = snapshot.data()["user_email"] ?? "",
-        cabinetId = snapshot.data()["cabinet_id"] ?? "",
-        admin = snapshot.data()["admin"] ?? false;
+        userId = snapshot.data()["user_id"] as String? ?? "",
+        userEmail = snapshot.data()["user_email"] as String? ?? "",
+        cabinetId = snapshot.data()["cabinet_id"] as String? ?? "",
+        admin = snapshot.data()["admin"] as bool? ?? false;
 
   UserCabinetModel.fromJson(Map<String, dynamic> data)
-      : id = data["id"] ?? "",
-        userId = data["user_id"] ?? "",
-        userEmail = data["user_email"] ?? "",
-        cabinetId = data["cabinet_id"] ?? "",
-        admin = data["admin"] ?? false;
+      : id = data["id"] as String? ?? "",
+        userId = data["user_id"] as String? ?? "",
+        userEmail = data["user_email"] as String? ?? "",
+        cabinetId = data["cabinet_id"] as String? ?? "",
+        admin = data["admin"] as bool? ?? false;
 
   @override
   Map<String, dynamic> toJson() => {
