@@ -19,7 +19,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // var picture = Get.put(ProfilePicture());
-    UserState userModel = Get.find();
+    final UserState userModel = Get.find();
     CabinetRepository().drugCount();
     CabinetRepository().pillCount();
     return Scaffold(
@@ -53,9 +53,9 @@ class ProfilePage extends StatelessWidget {
         body: StreamBuilder<UserModel?>(
             stream: UserRepository().getMyUser(),
             builder: (context, snapshot) {
-              if (snapshot.data == null) return LoadingWidget();
-              var user = snapshot.data!;
-              var path = user.profilePicture;
+              if (snapshot.data == null) return const LoadingWidget();
+              final user = snapshot.data!;
+              final path = user.profilePicture;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -65,8 +65,8 @@ class ProfilePage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(500),
-                      border: Border.all(color: Color(0x66EDB88B)),
-                      boxShadow: [
+                      border: Border.all(color: const Color(0x66EDB88B)),
+                      boxShadow: const [
                         BoxShadow(
                           color: Color(0xffEDB88B),
                           offset: Offset(2, 4),
@@ -87,7 +87,9 @@ class ProfilePage extends StatelessWidget {
                           : FutureBuilder<String>(
                               future: Storage().getLink(path),
                               builder: (context, snapshot) {
-                                if (!snapshot.hasData) return LoadingWidget();
+                                if (!snapshot.hasData) {
+                                  return const LoadingWidget();
+                                }
                                 return Image.network(
                                   snapshot.data!,
                                   fit: BoxFit.cover,
@@ -152,7 +154,7 @@ class ProfilePage extends StatelessWidget {
     // ignore: unused_local_variable
     UserState user = Get.find();
     // ignore: unused_local_variable
-    NavigationState nav = Get.find();
+    final NavigationState nav = Get.find();
     user = UserState();
     nav.navigatorId.value = 0;
     FirebaseAuth.instance.signOut();
@@ -164,22 +166,23 @@ Widget _getColumn(BuildContext context, String text, int? number) {
     elevation: 5,
     color: Colors.white,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-    child: Container(
+    child: SizedBox(
       width: 110,
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             width: 120,
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(20)),
             ),
             child: Center(
               child: Text(
                 text,
                 textScaleFactor: 1.2,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w500,
                 ),

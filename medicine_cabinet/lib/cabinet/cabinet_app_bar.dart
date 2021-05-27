@@ -11,7 +11,7 @@ class CabinetAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserState userState = Get.find();
+    final UserState userState = Get.find();
     return Obx(
       () => StreamBuilder<CabinetModel>(
         stream: CabinetRepository().streamModel(userState.openCabinetId.value),
@@ -19,10 +19,10 @@ class CabinetAppBar extends StatelessWidget {
         builder: (context, snapshot) => SliverAppBar(
           leading: InkWell(
             onTap: () {
-              NavigationState nav = Get.find();
+              final NavigationState nav = Get.find();
               Get.toNamed("/cabinets", id: nav.navigatorId.value);
             },
-            child: Icon(Icons.medical_services_outlined),
+            child: const Icon(Icons.medical_services_outlined),
           ),
           pinned: true,
           floating: true,
@@ -30,7 +30,7 @@ class CabinetAppBar extends StatelessWidget {
           title: Text(
             snapshot.data?.name ?? "No cabinet open",
             textScaleFactor: 1.23,
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
         ),
       ),

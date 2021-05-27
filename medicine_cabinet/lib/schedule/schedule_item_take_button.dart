@@ -20,14 +20,15 @@ class ScheduleItemTakeButton extends StatelessWidget {
         ScheduleRepository()
             .update(ScheduleModel(id: model.id, isTaken: taken));
         if (model.notify!) {
-          if (taken)
+          if (taken) {
             cancelNotification(model.notifyId!);
-          else
+          } else {
             createNotification(
               model.notifyId!,
               "Time to take ${model.count}x ${model.name}.",
               model.timestamp!.toDate(),
             );
+          }
         }
       },
       elevation: 5,
@@ -43,7 +44,6 @@ class ScheduleItemTakeButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
