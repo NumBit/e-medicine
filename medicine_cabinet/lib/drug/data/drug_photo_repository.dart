@@ -70,7 +70,6 @@ class DrugPhotoRepository extends Repository<DrugPhotoModel> {
         .forEach((element) {
       element.docs.forEach((e) {
         delete(e.id);
-        PackageRepository(e.id).deleteAllDrugPackages();
       });
     });
   }
