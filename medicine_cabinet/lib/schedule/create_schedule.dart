@@ -55,7 +55,8 @@ class CreateSchedule extends StatelessWidget {
               const OptionDivider(),
               NotificationOption(notification: notification),
               const OptionDivider(),
-              RepeatSelection(repeat: repeat),
+              RepeatSelection(
+                  repeat: repeat, repeatController: repeatController),
               const OptionDivider(),
               DatePickers(
                 repeat: repeat,
