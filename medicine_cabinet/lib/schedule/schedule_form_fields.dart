@@ -154,13 +154,14 @@ class RepeatSelection extends StatelessWidget {
   const RepeatSelection({
     Key? key,
     required this.repeat,
+    required this.repeatController,
   }) : super(key: key);
 
   final RxString repeat;
+  final TextEditingController repeatController;
 
   @override
   Widget build(BuildContext context) {
-    final repeatController = TextEditingController(text: repeat.value);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
