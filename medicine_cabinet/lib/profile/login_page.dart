@@ -108,7 +108,15 @@ class LoginPage extends StatelessWidget {
       snackBarMessage("Unknown error occured", "Try again later");
       return false;
     }
-    Get.back();
+
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user != null && !user.emailVerified) {
+      await user.sendEmailVerification();
+      snackBarMessage(
+          "Email is not verified", "Check your inbox, new email was sent");
+      return false;
+    }
+    //Get.back();
     return true;
   }
 }

@@ -135,7 +135,15 @@ class RegisterPage extends StatelessWidget {
           userId: userDoc.user!.uid,
           userEmail: userDoc.user!.email,
           admin: true));
-      Get.back();
+
+      // EMAIL VERIFICATION
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+        snackBarMessage(
+            "Email verification was sent", "Please verify your email");
+      }
+      //Get.back();
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
         snackBarMessage(
