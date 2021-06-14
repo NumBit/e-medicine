@@ -162,8 +162,8 @@ class RegisterPage extends StatelessWidget {
       return;
     }
     FirebaseAuth.instance.signOut();
+    Get.back();
     snackBarMessage("Email verification was sent", "Please verify your email",
         timeout: 10);
-    Get.back();
   }
 }
