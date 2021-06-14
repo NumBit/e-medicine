@@ -47,6 +47,34 @@ class UserRepository extends Repository<UserModel> {
     });
   }
 
+  Future<UserModel?> getMyUserModel() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
+    final myUid = user.uid;
+    final res =
+        await collection.where("user_id", isEqualTo: myUid).get().then((value) {
+      if (value.size > 0) {
+        return value.docs
+            .map((e) => UserModel.fromMap(
+                e as QueryDocumentSnapshot<Map<String, dynamic>>))
+            .toList()
+            .first;
+      } else {
+        return null;
+      }
+    });
+    return res;
+  }
+
+  /*
+  Future<int> count() async {
+    final count = await collection
+        .where("drug_id", isEqualTo: drugId)
+        .get()
+        .then((value) => value.size);
+    return count;
+  }
+*/
   Future<UserModel?> getByEmail(String email) {
     return collection.where("email", isEqualTo: email).get().then((value) {
       if (value.size > 0) {

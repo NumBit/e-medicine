@@ -94,6 +94,14 @@ class LoginPage extends StatelessWidget {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: pass);
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+        snackBarMessage(
+            "Email is not verified", "Check your inbox, new email was sent");
+        FirebaseAuth.instance.signOut();
+        return false;
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
         snackBarMessage("Account not found", "Try again");
@@ -108,15 +116,6 @@ class LoginPage extends StatelessWidget {
       snackBarMessage("Unknown error occured", "Try again later");
       return false;
     }
-
-    final User? user = FirebaseAuth.instance.currentUser;
-    if (user != null && !user.emailVerified) {
-      await user.sendEmailVerification();
-      snackBarMessage(
-          "Email is not verified", "Check your inbox, new email was sent");
-      return false;
-    }
-    //Get.back();
     return true;
   }
 }

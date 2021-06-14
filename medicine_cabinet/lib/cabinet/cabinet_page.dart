@@ -68,6 +68,7 @@ class DrugGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final UserState userState = Get.find();
     final FilterState filter = Get.find();
+    
     return Obx(() => StreamBuilder<List<DrugModel>>(
         stream: DrugRepository(userState.openCabinetId.value)
             .streamModels(filter: filter.filter.value),

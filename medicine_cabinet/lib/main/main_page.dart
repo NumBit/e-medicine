@@ -19,24 +19,20 @@ class MainPage extends StatelessWidget {
     return StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, user) {
-          return StreamBuilder<UserModel?>(
-              stream: UserRepository().getMyUser(),
+          return FutureBuilder<UserModel?>(
+              future: UserRepository().getMyUserModel(),
               builder: (context, userModel) {
-                if (FirebaseAuth.instance.currentUser == null) {
+                if (FirebaseAuth.instance.currentUser == null ||
+                    !FirebaseAuth.instance.currentUser!.emailVerified) {
                   return const LoginPage();
                 } else if (userModel.data == null) {
                   // TODO timeout back to login page after certain time (30s)
                   return const LoadingPage();
                 } else {
-                  final User? user = FirebaseAuth.instance.currentUser;
-                  if (user != null && user.emailVerified) {
-                    userState.fromModel(userModel.data!);
-                    return TabNavigation();
-                  }
-                  snackBarMessage("Email is not verified",
-                      "Check your inbox, new email was sent");
-                  FirebaseAuth.instance.signOut();
-                  return const LoginPage();
+                  print("FROM MAIN PAGE ----- userModel.data!.id");
+                  print(userModel.data!.id);
+                  userState.fromModel(userModel.data!);
+                  return TabNavigation();
                 }
               });
         });

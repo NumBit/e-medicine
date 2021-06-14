@@ -21,6 +21,8 @@ abstract class Repository<T extends Model> {
   }
 
   void update(T model) {
+    print("REPO UPDATE: model.getId() 9999999999999999999999999999999999");
+    print(model.getId());
     collection
         .doc(model.getId())
         .update(model.toJson())

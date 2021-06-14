@@ -123,6 +123,7 @@ class RegisterPage extends StatelessWidget {
     try {
       final userDoc = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: pass);
+
       final cabId = await CabinetRepository()
           .add(const CabinetModel(name: "Default cabinet"));
       UserRepository().add(UserModel(
@@ -141,9 +142,9 @@ class RegisterPage extends StatelessWidget {
       if (user != null && !user.emailVerified) {
         await user.sendEmailVerification();
         snackBarMessage(
-            "Email verification was sent", "Please verify your email");
+            "Email verification was sent", "Please verify your email",
+            timeout: 10);
       }
-      //Get.back();
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
         snackBarMessage(
@@ -160,5 +161,9 @@ class RegisterPage extends StatelessWidget {
       snackBarMessage("Unknown error occured", "Try again later");
       return;
     }
+    FirebaseAuth.instance.signOut();
+    snackBarMessage("Email verification was sent", "Please verify your email",
+        timeout: 10);
+    Get.back();
   }
 }

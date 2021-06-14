@@ -13,10 +13,10 @@ class UserState extends GetxController {
   Rx<bool> pillCountLock = false.obs;
 
   void fromModel(UserModel model) {
-    id = model.id!.obs;
-    userId = model.userId!.obs;
-    name = model.name!.obs;
-    email = model.email!.obs;
-    openCabinetId = model.openCabinetId!.obs;
+    id.value = model.id!;
+    userId.value = model.userId!;
+    name.value = model.name!;
+    email.value = model.email!;
+    openCabinetId.value = model.openCabinetId!;
   }
 }
