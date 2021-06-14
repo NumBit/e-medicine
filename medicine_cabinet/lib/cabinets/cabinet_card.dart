@@ -80,11 +80,25 @@ class CabinetCard extends StatelessWidget {
                               color: Theme.of(context).primaryColorDark),
                         )),
                     TextButton(
-                        onPressed: () {
+                        onPressed: () async {
                           final NavigationState nav = Get.find();
-                          userState.openCabinetId.value = cabinet.id ?? "";
+                          final UserState user = Get.find();
+                          user.openCabinetId.value = cabinet.id ?? "";
+                          if (user.id.value.isBlank ?? true) {
+                            final userDb =
+                                await UserRepository().getMyUserModel();
+                            UserRepository().update(UserModel(
+                              id: userDb?.id ?? "",
+                              openCabinetId: cabinet.id,
+                            ));
+                            Get.offAllNamed("/", id: nav.navigatorId.value);
+                            if (userDb != null) {
+                              user.fromModel(userDb);
+                            }
+                            return;
+                          }
                           UserRepository().update(UserModel(
-                            id: userState.id.value,
+                            id: user.id.value,
                             openCabinetId: cabinet.id,
                           ));
                           Get.offAllNamed("/", id: nav.navigatorId.value);

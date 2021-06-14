@@ -18,10 +18,11 @@ class MainPage extends StatelessWidget {
     return StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, user) {
-          return StreamBuilder<UserModel?>(
-              stream: UserRepository().getMyUser(),
+          return FutureBuilder<UserModel?>(
+              future: UserRepository().getMyUserModel(),
               builder: (context, userModel) {
-                if (FirebaseAuth.instance.currentUser == null) {
+                if (FirebaseAuth.instance.currentUser == null ||
+                    !FirebaseAuth.instance.currentUser!.emailVerified) {
                   return const LoginPage();
                 } else if (userModel.data == null) {
                   // TODO timeout back to login page after certain time (30s)

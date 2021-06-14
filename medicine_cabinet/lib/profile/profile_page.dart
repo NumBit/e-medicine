@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medicine_cabinet/cabinet/data/cabinet_repository.dart';
+import 'package:medicine_cabinet/drug/data/selected_icon.dart';
 import 'package:medicine_cabinet/error/loading_widget.dart';
 import 'package:medicine_cabinet/firebase/storage/storage.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
@@ -12,6 +13,7 @@ import 'package:medicine_cabinet/main/state/navigation_state.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 import 'package:medicine_cabinet/profile/edit_profile.dart';
 import 'package:medicine_cabinet/profile/login_button.dart';
+import 'package:medicine_cabinet/schedule/data/selected_date.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage();
@@ -151,12 +153,11 @@ class ProfilePage extends StatelessWidget {
   }
 
   void _signOut() {
-    // ignore: unused_local_variable
-    UserState user = Get.find();
-    // ignore: unused_local_variable
-    final NavigationState nav = Get.find();
-    user = UserState();
-    nav.navigatorId.value = 0;
+    Get.reset();
+    Get.put(UserState());
+    Get.put(NavigationState());
+    Get.put(SelectedDate());
+    Get.put(SelectedIcon());
     FirebaseAuth.instance.signOut();
   }
 }

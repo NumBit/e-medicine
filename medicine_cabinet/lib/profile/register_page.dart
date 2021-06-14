@@ -12,6 +12,8 @@ import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 import 'package:medicine_cabinet/profile/login_button.dart';
 
+import 'login_page.dart';
+
 class RegisterPage extends StatelessWidget {
   const RegisterPage();
 
@@ -105,8 +107,8 @@ class RegisterPage extends StatelessWidget {
             )));
   }
 
-  Future<void> _register(
-      context, String email, String pass, String passSecond) async {
+  Future<void> _register(BuildContext context, String email, String pass,
+      String passSecond) async {
     if (email.isEmpty || pass.isEmpty || passSecond.isEmpty) {
       snackBarMessage("Empty field", "Fill all fields");
       return;
@@ -123,6 +125,7 @@ class RegisterPage extends StatelessWidget {
     try {
       final userDoc = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: pass);
+
       final cabId = await CabinetRepository()
           .add(const CabinetModel(name: "Default cabinet"));
       UserRepository().add(UserModel(
@@ -135,7 +138,15 @@ class RegisterPage extends StatelessWidget {
           userId: userDoc.user!.uid,
           userEmail: userDoc.user!.email,
           admin: true));
-      Get.back();
+
+      // EMAIL VERIFICATION
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+        snackBarMessage(
+            "Email verification was sent", "Please verify your email",
+            timeout: 10);
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
         snackBarMessage(
@@ -152,5 +163,9 @@ class RegisterPage extends StatelessWidget {
       snackBarMessage("Unknown error occured", "Try again later");
       return;
     }
+    Get.offAll(const LoginPage());
+    FirebaseAuth.instance.signOut();
+    snackBarMessage("Email verification was sent", "Please verify your email",
+        timeout: 10);
   }
 }
