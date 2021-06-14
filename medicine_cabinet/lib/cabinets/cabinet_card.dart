@@ -84,12 +84,7 @@ class CabinetCard extends StatelessWidget {
                           final NavigationState nav = Get.find();
                           final UserState user = Get.find();
                           user.openCabinetId.value = cabinet.id ?? "";
-                          print("CABINET CARD userState.openCabinetId.value");
-                          print(user.openCabinetId.value);
-                          print("CABINET CARD userState.id.value");
-                          print(user.id.value.isBlank);
                           if (user.id.value.isBlank ?? true) {
-                            print("IN DB CALL FOR SAVEEEE");
                             final userDb =
                                 await UserRepository().getMyUserModel();
                             UserRepository().update(UserModel(

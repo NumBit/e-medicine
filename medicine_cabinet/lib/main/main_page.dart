@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:medicine_cabinet/error/loading_page.dart';
 import 'package:medicine_cabinet/firebase/user/user_model.dart';
 import 'package:medicine_cabinet/firebase/user/user_repository.dart';
-import 'package:medicine_cabinet/main/snack_bar_message.dart';
 import 'package:medicine_cabinet/main/state/user_state.dart';
 import 'package:medicine_cabinet/main/tab_navigation.dart';
 import 'package:medicine_cabinet/profile/login_page.dart';
@@ -29,8 +28,6 @@ class MainPage extends StatelessWidget {
                   // TODO timeout back to login page after certain time (30s)
                   return const LoadingPage();
                 } else {
-                  print("FROM MAIN PAGE ----- userModel.data!.id");
-                  print(userModel.data!.id);
                   userState.fromModel(userModel.data!);
                   return TabNavigation();
                 }
