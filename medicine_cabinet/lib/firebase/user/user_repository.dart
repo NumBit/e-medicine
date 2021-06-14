@@ -66,15 +66,6 @@ class UserRepository extends Repository<UserModel> {
     return res;
   }
 
-  /*
-  Future<int> count() async {
-    final count = await collection
-        .where("drug_id", isEqualTo: drugId)
-        .get()
-        .then((value) => value.size);
-    return count;
-  }
-*/
   Future<UserModel?> getByEmail(String email) {
     return collection.where("email", isEqualTo: email).get().then((value) {
       if (value.size > 0) {
