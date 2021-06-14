@@ -12,6 +12,8 @@ import 'package:medicine_cabinet/firebase/user/user_repository.dart';
 import 'package:medicine_cabinet/main/snack_bar_message.dart';
 import 'package:medicine_cabinet/profile/login_button.dart';
 
+import 'login_page.dart';
+
 class RegisterPage extends StatelessWidget {
   const RegisterPage();
 
@@ -105,8 +107,8 @@ class RegisterPage extends StatelessWidget {
             )));
   }
 
-  Future<void> _register(
-      context, String email, String pass, String passSecond) async {
+  Future<void> _register(BuildContext context, String email, String pass,
+      String passSecond) async {
     if (email.isEmpty || pass.isEmpty || passSecond.isEmpty) {
       snackBarMessage("Empty field", "Fill all fields");
       return;
@@ -161,8 +163,8 @@ class RegisterPage extends StatelessWidget {
       snackBarMessage("Unknown error occured", "Try again later");
       return;
     }
+    Get.offAll(const LoginPage());
     FirebaseAuth.instance.signOut();
-    Get.back();
     snackBarMessage("Email verification was sent", "Please verify your email",
         timeout: 10);
   }
