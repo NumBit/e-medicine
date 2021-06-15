@@ -84,19 +84,6 @@ class CabinetCard extends StatelessWidget {
                           final NavigationState nav = Get.find();
                           final UserState user = Get.find();
                           user.openCabinetId.value = cabinet.id ?? "";
-                          if (user.id.value.isBlank ?? true) {
-                            final userDb =
-                                await UserRepository().getMyUserModel();
-                            UserRepository().update(UserModel(
-                              id: userDb?.id ?? "",
-                              openCabinetId: cabinet.id,
-                            ));
-                            Get.offAllNamed("/", id: nav.navigatorId.value);
-                            if (userDb != null) {
-                              user.fromModel(userDb);
-                            }
-                            return;
-                          }
                           UserRepository().update(UserModel(
                             id: user.id.value,
                             openCabinetId: cabinet.id,

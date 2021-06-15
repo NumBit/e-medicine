@@ -22,16 +22,27 @@ class MainPage extends StatelessWidget {
               future: UserRepository().getMyUserModel(),
               builder: (context, userModel) {
                 if (FirebaseAuth.instance.currentUser == null ||
-                    !FirebaseAuth.instance.currentUser!.emailVerified) {
+                    (FirebaseAuth.instance.currentUser != null &&
+                        !FirebaseAuth.instance.currentUser!.emailVerified)) {
                   return const LoginPage();
                 } else if (userModel.data == null) {
                   // TODO timeout back to login page after certain time (30s)
                   return const LoadingPage();
                 } else {
                   userState.fromModel(userModel.data!);
+                  setUserState();
                   return TabNavigation();
                 }
               });
         });
   }
+}
+
+Future<bool> setUserState() async {
+  final UserState userState = Get.find<UserState>();
+  final userDb = await UserRepository().getMyUserModel();
+  if (userDb != null) {
+    userState.fromModel(userDb);
+  }
+  return true;
 }
