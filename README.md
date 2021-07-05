@@ -14,7 +14,7 @@ Flutter app for tracking your drugs in cabinets and sharing them in real time wi
 
 
 ## <a href="https://play.google.com/store" title="Google Play"><img src="https://github.com/get-icon/geticon/raw/master/icons/google-play-icon.svg" alt="Medicine Cabinet" width="21px" height="21px"></a> Google Play 
-[https://play.google.com/store](https://play.google.com/store)
+[https://play.google.com/store/apps/details?id=cz.pbmm.emedicine](https://play.google.com/store/apps/details?id=cz.pbmm.emedicine)
 
 ## Authors (name, UČO)
   - Peter Baltazarovič, 456213
