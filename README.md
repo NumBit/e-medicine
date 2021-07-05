@@ -4,8 +4,6 @@
 <a href="https://www.android.com/" title="Android"><img src="https://github.com/get-icon/geticon/raw/master/icons/android-icon.svg" alt="Android" width="30px" height="30px"></a>
 <a href="https://www.apple.com/ios/" title="iOS"><img src="https://github.com/get-icon/geticon/raw/master/icons/ios.svg" alt="iOS" width="30px" height="30px"></a>
 
-[![Flutter](https://github.com/NumBit/e-medicine/actions/workflows/flutter.yml/badge.svg)](https://github.com/NumBit/e-medicine/actions/workflows/flutter.yml)
-
 # Medicine cabinet
 Flutter app for tracking your drugs in cabinets and sharing them in real time with individual schedule notifier.
 
